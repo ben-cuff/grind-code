@@ -1,9 +1,11 @@
 import { SignOutButton } from "@/components/sign-out-button";
-import { SignedIn, SignedOut } from "@clerk/clerk-expo";
+import { SignedIn, SignedOut, useSession } from "@clerk/clerk-expo";
 import { Link } from "expo-router";
 import { Text, View } from "react-native";
 
 export default function Index() {
+  const session = useSession();
+  console.log(JSON.stringify(session.session?.user.id, null, 2));
   return (
     <View
       style={{
