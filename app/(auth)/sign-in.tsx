@@ -40,26 +40,45 @@ export default function Page() {
 
   return (
     <View style={{ flex: 1 }}>
-      <View style={{ fontSize: 40, alignSelf: "center" }}>
+      <Text style={{ fontSize: 40, alignSelf: "center" }}>Login</Text>
+      <View
+        style={{
+          flexDirection: "row",
+          marginTop: 10,
+          padding: 10,
+        }}
+      >
+        <Text style={{ fontSize: 20, padding: 5 }}>Email</Text>
         <TextInput
           autoCapitalize="none"
           value={emailAddress}
           placeholder="Enter email"
           onChangeText={(emailAddress) => setEmailAddress(emailAddress)}
+          style={{ fontSize: 20, borderWidth: 1, borderRadius: 5, flexGrow: 1 }}
         />
+      </View>
+      <View
+        style={{
+          flexDirection: "row",
+          marginTop: 10,
+          padding: 10,
+        }}
+      >
+        <Text style={{ fontSize: 20, padding: 5 }}>Password</Text>
         <TextInput
           value={password}
           placeholder="Enter password"
           secureTextEntry={true}
           onChangeText={(password) => setPassword(password)}
+          style={{ fontSize: 20, borderWidth: 1, borderRadius: 5, flexGrow: 1 }}
         />
-        <Button title="Sign in" onPress={onSignInPress} />
-        <View>
-          <Text>Don't have an account?</Text>
-          <Link href="/sign-up">
-            <Text>Sign up</Text>
-          </Link>
-        </View>
+      </View>
+      <Button title="Sign in" onPress={onSignInPress} />
+      <View style={{ alignItems: "center" }}>
+        <Text style={{ fontSize: 20, padding: 5 }}>Don't have an account?</Text>
+        <Link href="/sign-up">
+          <Text style={{ fontSize: 20, padding: 5 }}>Sign up</Text>
+        </Link>
       </View>
     </View>
   );

@@ -65,15 +65,16 @@ export default function SignUpScreen() {
 
   if (pendingVerification) {
     return (
-      <>
-        <Text>Verify your email</Text>
+      <View style={{ alignItems: "center" }}>
+        <Text style={{ fontSize: 20, padding: 5 }}>Verify your email</Text>
         <TextInput
           value={code}
           placeholder="Enter your verification code"
           onChangeText={(code) => setCode(code)}
+          style={{ fontSize: 20, borderWidth: 1, borderRadius: 5, flexGrow: 1 }}
         />
         <Button title="Verify" onPress={onVerifyPress} />
-      </>
+      </View>
     );
   }
 
