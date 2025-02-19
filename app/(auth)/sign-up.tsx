@@ -104,6 +104,7 @@ export default function SignUpScreen() {
 						<TextInput
 							value={code}
 							placeholder="Enter your verification code"
+							placeholderTextColor="#888"
 							onChangeText={setCode}
 							maxLength={6}
 							keyboardType="number-pad"
@@ -140,6 +141,7 @@ export default function SignUpScreen() {
 						value={emailAddress}
 						keyboardType="email-address"
 						placeholder="Enter email"
+						placeholderTextColor="#888"
 						onChangeText={(emailAddress) =>
 							setEmailAddress(emailAddress)
 						}
@@ -160,6 +162,7 @@ export default function SignUpScreen() {
 					<TextInput
 						value={password}
 						placeholder="Enter password"
+						placeholderTextColor="#888"
 						secureTextEntry={true}
 						onChangeText={(password) => setPassword(password)}
 						style={styles.input}
@@ -179,6 +182,7 @@ export default function SignUpScreen() {
 					<TextInput
 						value={confirmPassword}
 						placeholder="Enter password again"
+						placeholderTextColor="#888"
 						secureTextEntry={true}
 						onChangeText={(confirmPassword) =>
 							setConfirmPassword(confirmPassword)

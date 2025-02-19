@@ -72,6 +72,7 @@ export default function SignInPage() {
 						value={emailAddress}
 						keyboardType="email-address"
 						placeholder="Enter email"
+						placeholderTextColor="#888"
 						onChangeText={(emailAddress) =>
 							setEmailAddress(emailAddress)
 						}
@@ -92,6 +93,7 @@ export default function SignInPage() {
 					<TextInput
 						value={password}
 						placeholder="Enter password"
+						placeholderTextColor="#888"
 						secureTextEntry={true}
 						onChangeText={(password) => setPassword(password)}
 						style={styles.input}
