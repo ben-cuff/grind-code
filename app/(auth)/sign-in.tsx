@@ -3,7 +3,15 @@ import OAuthGoogle from "@/components/oauth-google";
 import { useSignIn } from "@clerk/clerk-expo";
 import { useRouter } from "expo-router";
 import React from "react";
-import { Button, Image, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+	Button,
+	Image,
+	KeyboardAvoidingView,
+	StyleSheet,
+	Text,
+	TextInput,
+	View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
@@ -49,34 +57,49 @@ export default function SignInPage() {
 				style={styles.logo}
 			/>
 			<Text style={styles.title}>Login</Text>
-			<View style={styles.inputContainer}>
-				<Ionicons name="mail-outline" size={25} style={styles.icon} />
-				<TextInput
-					autoCapitalize="none"
-					value={emailAddress}
-					keyboardType="email-address"
-					placeholder="Enter email"
-					onChangeText={(emailAddress) =>
-						setEmailAddress(emailAddress)
-					}
-					style={styles.input}
-				/>
-			</View>
-			<View style={styles.inputContainer}>
-				<Ionicons
-					name="lock-closed-outline"
-					size={25}
-					style={styles.icon}
-				/>
-				<TextInput
-					value={password}
-					placeholder="Enter password"
-					secureTextEntry={true}
-					onChangeText={(password) => setPassword(password)}
-					style={styles.input}
-				/>
-			</View>
-			<Button title="Sign in" onPress={onSignInPress} />
+			<KeyboardAvoidingView
+				behavior={"padding"}
+				keyboardVerticalOffset={20}
+			>
+				<View style={styles.inputContainer}>
+					<Ionicons
+						name="mail-outline"
+						size={25}
+						style={styles.icon}
+					/>
+					<TextInput
+						autoCapitalize="none"
+						value={emailAddress}
+						keyboardType="email-address"
+						placeholder="Enter email"
+						onChangeText={(emailAddress) =>
+							setEmailAddress(emailAddress)
+						}
+						style={styles.input}
+					/>
+				</View>
+			</KeyboardAvoidingView>
+			<KeyboardAvoidingView
+				behavior={"padding"}
+				keyboardVerticalOffset={20}
+			>
+				<View style={styles.inputContainer}>
+					<Ionicons
+						name="lock-closed-outline"
+						size={25}
+						style={styles.icon}
+					/>
+					<TextInput
+						value={password}
+						placeholder="Enter password"
+						secureTextEntry={true}
+						onChangeText={(password) => setPassword(password)}
+						style={styles.input}
+					/>
+				</View>
+
+				<Button title="Sign in" onPress={onSignInPress} />
+			</KeyboardAvoidingView>
 			<OAuthGoogle message="Sign in with Google" />
 			<OAuthGitHub message="Sign in with GitHub" />
 			<View style={{ alignItems: "center" }}>

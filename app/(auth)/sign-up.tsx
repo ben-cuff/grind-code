@@ -7,12 +7,14 @@ import {
 	Alert,
 	Button,
 	Image,
+	Keyboard,
+	KeyboardAvoidingView,
+	SafeAreaView,
 	StyleSheet,
 	Text,
 	TextInput,
 	View,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 export default function SignUpScreen() {
@@ -81,7 +83,7 @@ export default function SignUpScreen() {
 		} catch (err) {
 			// See https://clerk.com/docs/custom-flows/error-handling
 			// for more info on error handling
-			Alert.alert((err as any).errors[0].message);
+			Alert.alert((err as any).errors[0].longMessage);
 			console.error(JSON.stringify(err, null, 2));
 		}
 	};
@@ -94,17 +96,24 @@ export default function SignUpScreen() {
 					style={styles.logo}
 				/>
 				<Text style={styles.title}>Verify your email</Text>
-				<View style={styles.inputContainer}>
-					<TextInput
-						value={code}
-						placeholder="Enter your verification code"
-						onChangeText={(code) => setCode(code)}
-						maxLength={6}
-						keyboardType="numeric"
-						style={{ ...styles.input, textAlign: "center" }}
-					/>
-				</View>
-				<Button title="Verify" onPress={onVerifyPress} />
+				<KeyboardAvoidingView
+					behavior={"padding"}
+					keyboardVerticalOffset={20}
+				>
+					<View style={styles.inputContainer}>
+						<TextInput
+							value={code}
+							placeholder="Enter your verification code"
+							onChangeText={setCode}
+							maxLength={6}
+							keyboardType="number-pad"
+							returnKeyType="done"
+							onSubmitEditing={() => Keyboard.dismiss()}
+							style={{ ...styles.input, textAlign: "center" }}
+						/>
+					</View>
+					<Button title="Verify" onPress={onVerifyPress} />
+				</KeyboardAvoidingView>
 			</SafeAreaView>
 		);
 	}
@@ -116,50 +125,69 @@ export default function SignUpScreen() {
 				style={styles.logo}
 			/>
 			<Text style={styles.title}>Sign Up</Text>
-			<View style={styles.inputContainer}>
-				<Ionicons name="mail-outline" size={25} style={styles.icon} />
-				<TextInput
-					autoCapitalize="none"
-					value={emailAddress}
-					keyboardType="email-address"
-					placeholder="Enter email"
-					onChangeText={(emailAddress) =>
-						setEmailAddress(emailAddress)
-					}
-					style={styles.input}
-				/>
-			</View>
-			<View style={styles.inputContainer}>
-				<Ionicons
-					name="lock-closed-outline"
-					size={25}
-					style={styles.icon}
-				/>
-				<TextInput
-					value={password}
-					placeholder="Enter password"
-					secureTextEntry={true}
-					onChangeText={(password) => setPassword(password)}
-					style={styles.input}
-				/>
-			</View>
-			<View style={styles.inputContainer}>
-				<Ionicons
-					name="lock-closed-outline"
-					size={25}
-					style={styles.icon}
-				/>
-				<TextInput
-					value={confirmPassword}
-					placeholder="Enter password again"
-					secureTextEntry={true}
-					onChangeText={(confirmPassword) =>
-						setConfirmPassword(confirmPassword)
-					}
-					style={styles.input}
-				/>
-			</View>
-			<Button title="Continue" onPress={onSignUpPress} />
+			<KeyboardAvoidingView
+				behavior={"padding"}
+				keyboardVerticalOffset={20}
+			>
+				<View style={styles.inputContainer}>
+					<Ionicons
+						name="mail-outline"
+						size={25}
+						style={styles.icon}
+					/>
+					<TextInput
+						autoCapitalize="none"
+						value={emailAddress}
+						keyboardType="email-address"
+						placeholder="Enter email"
+						onChangeText={(emailAddress) =>
+							setEmailAddress(emailAddress)
+						}
+						style={styles.input}
+					/>
+				</View>
+			</KeyboardAvoidingView>
+			<KeyboardAvoidingView
+				behavior={"padding"}
+				keyboardVerticalOffset={20}
+			>
+				<View style={styles.inputContainer}>
+					<Ionicons
+						name="lock-closed-outline"
+						size={25}
+						style={styles.icon}
+					/>
+					<TextInput
+						value={password}
+						placeholder="Enter password"
+						secureTextEntry={true}
+						onChangeText={(password) => setPassword(password)}
+						style={styles.input}
+					/>
+				</View>
+			</KeyboardAvoidingView>
+			<KeyboardAvoidingView
+				behavior={"padding"}
+				keyboardVerticalOffset={20}
+			>
+				<View style={styles.inputContainer}>
+					<Ionicons
+						name="lock-closed-outline"
+						size={25}
+						style={styles.icon}
+					/>
+					<TextInput
+						value={confirmPassword}
+						placeholder="Enter password again"
+						secureTextEntry={true}
+						onChangeText={(confirmPassword) =>
+							setConfirmPassword(confirmPassword)
+						}
+						style={styles.input}
+					/>
+				</View>
+				<Button title="Continue" onPress={onSignUpPress} />
+			</KeyboardAvoidingView>
 			<OAuthGoogle message="Sign up with Google" />
 			<OAuthGitHub message="Sign up with GitHub" />
 		</SafeAreaView>
@@ -173,7 +201,6 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		backgroundColor: "#fff",
 		paddingHorizontal: 20,
-		marginBottom: 40,
 	},
 	logo: {
 		height: 200,
