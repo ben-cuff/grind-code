@@ -3,7 +3,15 @@ import OAuthGoogle from "@/components/oauth-google";
 import { useSignUp } from "@clerk/clerk-expo";
 import { useRouter } from "expo-router";
 import * as React from "react";
-import { Button, Image, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  Alert,
+  Button,
+  Image,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
@@ -36,7 +44,7 @@ export default function SignUpScreen() {
     } catch (err) {
       // See https://clerk.com/docs/custom-flows/error-handling
       // for more info on error handling
-      console.error(JSON.stringify(err, null, 2));
+      Alert.alert((err as any).errors[0].longMessage);
     }
   };
 
@@ -63,28 +71,40 @@ export default function SignUpScreen() {
     } catch (err) {
       // See https://clerk.com/docs/custom-flows/error-handling
       // for more info on error handling
+      Alert.alert((err as any).errors[0].message);
       console.error(JSON.stringify(err, null, 2));
     }
   };
 
   if (pendingVerification) {
     return (
-      <SafeAreaView style={{ alignItems: "center" }}>
-        <Text style={{ fontSize: 20, padding: 5 }}>Verify your email</Text>
-        <TextInput
-          value={code}
-          placeholder="Enter your verification code"
-          onChangeText={(code) => setCode(code)}
-          style={{ fontSize: 20, borderWidth: 1, borderRadius: 5, flexGrow: 1 }}
+      <SafeAreaView style={styles.container}>
+        <Image
+          source={require("@/assets/images/react-logo.png")}
+          style={styles.logo}
         />
+        <Text style={styles.title}>Verify your email</Text>
+        <View style={styles.inputContainer}>
+          <TextInput
+            value={code}
+            placeholder="Enter your verification code"
+            onChangeText={(code) => setCode(code)}
+            maxLength={6}
+            keyboardType="numeric"
+            style={{ ...styles.input, textAlign: "center" }}
+          />
+        </View>
         <Button title="Verify" onPress={onVerifyPress} />
       </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <Image style={styles.logo} />
+    <SafeAreaView style={styles.container}>
+      <Image
+        source={require("@/assets/images/react-logo.png")}
+        style={styles.logo}
+      />
       <Text style={styles.title}>Sign Up</Text>
       <View style={styles.inputContainer}>
         <Ionicons name="mail-outline" size={25} style={styles.icon} />
@@ -98,7 +118,7 @@ export default function SignUpScreen() {
         />
       </View>
       <View style={styles.inputContainer}>
-        <Ionicons name="lock-closed-outline" size={25} style={styles.icon} />{" "}
+        <Ionicons name="lock-closed-outline" size={25} style={styles.icon} />
         <TextInput
           value={password}
           placeholder="Enter password"
@@ -121,6 +141,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#fff",
     paddingHorizontal: 20,
+    marginBottom: 40,
   },
   logo: {
     height: 200,

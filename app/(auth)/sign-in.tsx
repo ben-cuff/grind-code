@@ -44,7 +44,10 @@ export default function SignInPage() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Image style={styles.logo} />
+      <Image
+        source={require("@/assets/images/react-logo.png")}
+        style={styles.logo}
+      />
       <Text style={styles.title}>Login</Text>
       <View style={styles.inputContainer}>
         <Ionicons name="mail-outline" size={25} style={styles.icon} />
@@ -58,7 +61,7 @@ export default function SignInPage() {
         />
       </View>
       <View style={styles.inputContainer}>
-        <Ionicons name="lock-closed-outline" size={25} style={styles.icon} />{" "}
+        <Ionicons name="lock-closed-outline" size={25} style={styles.icon} />
         <TextInput
           value={password}
           placeholder="Enter password"
