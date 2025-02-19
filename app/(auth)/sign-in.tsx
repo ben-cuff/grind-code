@@ -56,7 +56,13 @@ export default function Page() {
           value={emailAddress}
           placeholder="Enter email"
           onChangeText={(emailAddress) => setEmailAddress(emailAddress)}
-          style={{ fontSize: 20, borderWidth: 1, borderRadius: 5, flexGrow: 1 }}
+          style={{
+            fontSize: 20,
+            borderWidth: 1,
+            borderRadius: 5,
+            width: "80%",
+            marginLeft: "auto",
+          }}
         />
       </View>
       <View
@@ -72,7 +78,13 @@ export default function Page() {
           placeholder="Enter password"
           secureTextEntry={true}
           onChangeText={(password) => setPassword(password)}
-          style={{ fontSize: 20, borderWidth: 1, borderRadius: 5, flexGrow: 1 }}
+          style={{
+            fontSize: 20,
+            borderWidth: 1,
+            borderRadius: 5,
+            width: "80%",
+            marginLeft: "auto",
+          }}
         />
       </View>
       <Button title="Sign in" onPress={onSignInPress} />

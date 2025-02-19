@@ -96,7 +96,13 @@ export default function SignUpScreen() {
           value={emailAddress}
           placeholder="Enter email"
           onChangeText={(email) => setEmailAddress(email)}
-          style={{ fontSize: 20, borderWidth: 1, borderRadius: 5, flexGrow: 1 }}
+          style={{
+            fontSize: 20,
+            borderWidth: 1,
+            borderRadius: 5,
+            width: "80%",
+            marginLeft: "auto",
+          }}
         />
       </View>
       <View style={{ flexDirection: "row", padding: 10 }}>
@@ -106,7 +112,13 @@ export default function SignUpScreen() {
           placeholder="Enter password"
           secureTextEntry={true}
           onChangeText={(password) => setPassword(password)}
-          style={{ fontSize: 20, borderWidth: 1, borderRadius: 5, flexGrow: 1 }}
+          style={{
+            fontSize: 20,
+            borderWidth: 1,
+            borderRadius: 5,
+            width: "80%",
+            marginLeft: "auto",
+          }}
         />
       </View>
       <Button title="Continue" onPress={onSignUpPress} />
