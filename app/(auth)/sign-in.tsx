@@ -88,8 +88,8 @@ export default function Page() {
         />
       </View>
       <Button title="Sign in" onPress={onSignInPress} />
-      <OAuthGoogle message="Sign up with Google" />
-      <OAuthGitHub message="Sign up with GitHub" />
+      <OAuthGoogle message="Sign in with Google" />
+      <OAuthGitHub message="Sign in with GitHub" />
       <View style={{ alignItems: "center" }}>
         <Text style={{ fontSize: 20, padding: 5 }}>Don't have an account?</Text>
         <Button title="Sign Up" onPress={() => router.push("/sign-up")} />
