@@ -7,6 +7,7 @@ import {
 	Button,
 	Image,
 	KeyboardAvoidingView,
+	Platform,
 	StyleSheet,
 	Text,
 	TextInput,
@@ -58,7 +59,7 @@ export default function SignInPage() {
 			/>
 			<Text style={styles.title}>Login</Text>
 			<KeyboardAvoidingView
-				behavior={"padding"}
+				behavior={Platform.OS === "ios" ? "padding" : "height"}
 				keyboardVerticalOffset={20}
 			>
 				<View style={styles.inputContainer}>
@@ -81,7 +82,7 @@ export default function SignInPage() {
 				</View>
 			</KeyboardAvoidingView>
 			<KeyboardAvoidingView
-				behavior={"padding"}
+				behavior={Platform.OS === "ios" ? "padding" : "height"}
 				keyboardVerticalOffset={20}
 			>
 				<View style={styles.inputContainer}>

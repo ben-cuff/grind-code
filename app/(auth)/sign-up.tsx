@@ -9,6 +9,7 @@ import {
 	Image,
 	Keyboard,
 	KeyboardAvoidingView,
+	Platform,
 	SafeAreaView,
 	StyleSheet,
 	Text,
@@ -97,7 +98,7 @@ export default function SignUpScreen() {
 				/>
 				<Text style={styles.title}>Verify your email</Text>
 				<KeyboardAvoidingView
-					behavior={"padding"}
+					behavior={Platform.OS === "ios" ? "padding" : "height"}
 					keyboardVerticalOffset={20}
 				>
 					<View style={styles.inputContainer}>
@@ -127,7 +128,7 @@ export default function SignUpScreen() {
 			/>
 			<Text style={styles.title}>Sign Up</Text>
 			<KeyboardAvoidingView
-				behavior={"padding"}
+				behavior={Platform.OS === "ios" ? "padding" : "height"}
 				keyboardVerticalOffset={20}
 			>
 				<View style={styles.inputContainer}>
@@ -150,7 +151,7 @@ export default function SignUpScreen() {
 				</View>
 			</KeyboardAvoidingView>
 			<KeyboardAvoidingView
-				behavior={"padding"}
+				behavior={Platform.OS === "ios" ? "padding" : "height"}
 				keyboardVerticalOffset={20}
 			>
 				<View style={styles.inputContainer}>
@@ -170,7 +171,7 @@ export default function SignUpScreen() {
 				</View>
 			</KeyboardAvoidingView>
 			<KeyboardAvoidingView
-				behavior={"padding"}
+				behavior={Platform.OS === "ios" ? "padding" : "height"}
 				keyboardVerticalOffset={20}
 			>
 				<View style={styles.inputContainer}>
