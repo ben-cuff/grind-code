@@ -60,7 +60,6 @@ export default function OAuthGitHub({ message }: { message: string }) {
 						uri: "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png",
 					}}
 					style={styles.image}
-					resizeMode="contain"
 				/>
 			</View>
 		</Pressable>
@@ -80,6 +79,6 @@ const styles = StyleSheet.create({
 	image: {
 		width: 40,
 		height: 40,
-		resizeMode: "contain",
+		borderRadius: 360,
 	},
 });
