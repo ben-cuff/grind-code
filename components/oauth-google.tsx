@@ -3,7 +3,15 @@ import { useSSO } from "@clerk/clerk-expo";
 import * as AuthSession from "expo-auth-session";
 import * as WebBrowser from "expo-web-browser";
 import React, { useCallback, useEffect } from "react";
-import { Button, Image, Pressable, StyleSheet, View } from "react-native";
+import {
+	Button,
+	Image,
+	Platform,
+	Pressable,
+	StyleSheet,
+	Text,
+	View,
+} from "react-native";
 
 export const useWarmUpBrowser = () => {
 	useEffect(() => {
@@ -55,7 +63,11 @@ export default function OAuthGoogle({ message }: { message: string }) {
 	return (
 		<Pressable onPress={onPress}>
 			<View style={styles.container}>
-				<Button title={message} onPress={onPress} />
+				{Platform.OS === "ios" ? (
+					<Button title={message} onPress={onPress} />
+				) : (
+					<Text style={styles.button}>{message}</Text>
+				)}
 				<Image
 					source={googleLogo}
 					style={styles.image}
@@ -80,5 +92,13 @@ const styles = StyleSheet.create({
 		width: 40,
 		height: 40,
 		resizeMode: "contain",
+	},
+	button: {
+		paddingVertical: 10,
+		paddingHorizontal: 20,
+		textAlign: "center",
+		fontSize: 16,
+		color: "blue",
+		borderRadius: 6,
 	},
 });
