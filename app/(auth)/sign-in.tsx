@@ -1,5 +1,7 @@
+import OAuthGitHub from "@/components/oauth-github";
+import OAuthGoogle from "@/components/oauth-google";
 import { useSignIn } from "@clerk/clerk-expo";
-import { Link, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import React from "react";
 import { Button, Text, TextInput, View } from "react-native";
 
@@ -74,11 +76,11 @@ export default function Page() {
         />
       </View>
       <Button title="Sign in" onPress={onSignInPress} />
+      <OAuthGoogle message="Sign up with Google" />
+      <OAuthGitHub message="Sign up with GitHub" />
       <View style={{ alignItems: "center" }}>
         <Text style={{ fontSize: 20, padding: 5 }}>Don't have an account?</Text>
-        <Link href="/sign-up">
-          <Text style={{ fontSize: 20, padding: 5 }}>Sign up</Text>
-        </Link>
+        <Button title="Sign Up" onPress={() => router.push("/sign-up")} />
       </View>
     </View>
   );

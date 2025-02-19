@@ -1,3 +1,5 @@
+import OAuthGitHub from "@/components/oauth-github";
+import OAuthGoogle from "@/components/oauth-google";
 import { useSignUp } from "@clerk/clerk-expo";
 import { useRouter } from "expo-router";
 import * as React from "react";
@@ -108,6 +110,8 @@ export default function SignUpScreen() {
         />
       </View>
       <Button title="Continue" onPress={onSignUpPress} />
+      <OAuthGoogle message="Sign up with Google" />
+      <OAuthGitHub message="Sign up with GitHub" />
     </View>
   );
 }

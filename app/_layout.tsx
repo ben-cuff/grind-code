@@ -9,7 +9,7 @@ export default function RootLayout() {
       tokenCache={tokenCache}
     >
       <ClerkLoaded>
-        <Stack />
+        <Stack screenOptions={{ headerShown: false }} />
       </ClerkLoaded>
     </ClerkProvider>
   );
