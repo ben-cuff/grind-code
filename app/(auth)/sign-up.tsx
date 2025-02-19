@@ -78,23 +78,35 @@ export default function SignUpScreen() {
   }
 
   return (
-    <View>
-      <>
-        <Text>Sign up</Text>
+    <View style={{ flex: 1 }}>
+      <Text style={{ fontSize: 40, alignSelf: "center" }}>Sign up</Text>
+      <View
+        style={{
+          flexDirection: "row",
+          marginTop: 10,
+          padding: 10,
+        }}
+      >
+        <Text style={{ fontSize: 20, padding: 5 }}>Email</Text>
         <TextInput
           autoCapitalize="none"
           value={emailAddress}
           placeholder="Enter email"
           onChangeText={(email) => setEmailAddress(email)}
+          style={{ fontSize: 20, borderWidth: 1, borderRadius: 5, flexGrow: 1 }}
         />
+      </View>
+      <View style={{ flexDirection: "row", padding: 10 }}>
+        <Text style={{ fontSize: 20, padding: 5 }}>Password</Text>
         <TextInput
           value={password}
           placeholder="Enter password"
           secureTextEntry={true}
           onChangeText={(password) => setPassword(password)}
+          style={{ fontSize: 20, borderWidth: 1, borderRadius: 5, flexGrow: 1 }}
         />
-        <Button title="Continue" onPress={onSignUpPress} />
-      </>
+      </View>
+      <Button title="Continue" onPress={onSignUpPress} />
     </View>
   );
 }
