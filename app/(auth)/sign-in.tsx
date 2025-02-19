@@ -3,10 +3,11 @@ import OAuthGoogle from "@/components/oauth-google";
 import { useSignIn } from "@clerk/clerk-expo";
 import { useRouter } from "expo-router";
 import React from "react";
-import { Button, Text, TextInput, View } from "react-native";
+import { Button, Image, StyleSheet, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
-export default function Page() {
+export default function SignInPage() {
   const { signIn, setActive, isLoaded } = useSignIn();
   const router = useRouter();
 
@@ -42,59 +43,79 @@ export default function Page() {
   }, [isLoaded, emailAddress, password]);
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <Text style={{ fontSize: 40, alignSelf: "center" }}>Login</Text>
-      <View
-        style={{
-          flexDirection: "row",
-          marginTop: 10,
-          padding: 10,
-        }}
-      >
-        <Text style={{ fontSize: 20, padding: 5 }}>Email</Text>
+    <SafeAreaView style={styles.container}>
+      <Image style={styles.logo} />
+      <Text style={styles.title}>Login</Text>
+      <View style={styles.inputContainer}>
+        <Ionicons name="mail-outline" size={25} style={styles.icon} />
         <TextInput
           autoCapitalize="none"
           value={emailAddress}
+          keyboardType="email-address"
           placeholder="Enter email"
           onChangeText={(emailAddress) => setEmailAddress(emailAddress)}
-          style={{
-            fontSize: 20,
-            borderWidth: 1,
-            borderRadius: 5,
-            width: "80%",
-            marginLeft: "auto",
-          }}
+          style={styles.input}
         />
       </View>
-      <View
-        style={{
-          flexDirection: "row",
-          marginTop: 10,
-          padding: 10,
-        }}
-      >
-        <Text style={{ fontSize: 20, padding: 5 }}>Password</Text>
+      <View style={styles.inputContainer}>
+        <Ionicons name="lock-closed-outline" size={25} style={styles.icon} />{" "}
         <TextInput
           value={password}
           placeholder="Enter password"
           secureTextEntry={true}
           onChangeText={(password) => setPassword(password)}
-          style={{
-            fontSize: 20,
-            borderWidth: 1,
-            borderRadius: 5,
-            width: "80%",
-            marginLeft: "auto",
-          }}
+          style={styles.input}
         />
       </View>
       <Button title="Sign in" onPress={onSignInPress} />
       <OAuthGoogle message="Sign in with Google" />
       <OAuthGitHub message="Sign in with GitHub" />
       <View style={{ alignItems: "center" }}>
-        <Text style={{ fontSize: 20, padding: 5 }}>Don't have an account?</Text>
+        <Text style={{ fontSize: 20, marginTop: 20 }}>
+          Don't have an account?
+        </Text>
         <Button title="Sign Up" onPress={() => router.push("/sign-up")} />
       </View>
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#fff",
+    paddingHorizontal: 20,
+  },
+  logo: {
+    height: 200,
+    width: 200,
+    resizeMode: "contain",
+    marginBottom: 20,
+  },
+  title: {
+    fontSize: 32,
+    marginBottom: 40,
+    fontWeight: "bold",
+    color: "black",
+  },
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    width: "100%",
+    height: 50,
+    backgroundColor: "#f1f1f1",
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    marginBottom: 20,
+  },
+  icon: {
+    marginRight: 10,
+  },
+  input: {
+    flex: 1,
+    height: "100%",
+    fontSize: 20,
+  },
+});

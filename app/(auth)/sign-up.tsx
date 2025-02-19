@@ -3,8 +3,9 @@ import OAuthGoogle from "@/components/oauth-google";
 import { useSignUp } from "@clerk/clerk-expo";
 import { useRouter } from "expo-router";
 import * as React from "react";
-import { Button, Text, TextInput, View } from "react-native";
+import { Button, Image, StyleSheet, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 export default function SignUpScreen() {
   const { isLoaded, signUp, setActive } = useSignUp();
@@ -83,43 +84,27 @@ export default function SignUpScreen() {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <Text style={{ fontSize: 40, alignSelf: "center" }}>Sign up</Text>
-      <View
-        style={{
-          flexDirection: "row",
-          marginTop: 10,
-          padding: 10,
-        }}
-      >
-        <Text style={{ fontSize: 20, padding: 5 }}>Email</Text>
+      <Image style={styles.logo} />
+      <Text style={styles.title}>Sign Up</Text>
+      <View style={styles.inputContainer}>
+        <Ionicons name="mail-outline" size={25} style={styles.icon} />
         <TextInput
           autoCapitalize="none"
           value={emailAddress}
+          keyboardType="email-address"
           placeholder="Enter email"
-          onChangeText={(email) => setEmailAddress(email)}
-          style={{
-            fontSize: 20,
-            borderWidth: 1,
-            borderRadius: 5,
-            width: "80%",
-            marginLeft: "auto",
-          }}
+          onChangeText={(emailAddress) => setEmailAddress(emailAddress)}
+          style={styles.input}
         />
       </View>
-      <View style={{ flexDirection: "row", padding: 10 }}>
-        <Text style={{ fontSize: 20, padding: 5 }}>Password</Text>
+      <View style={styles.inputContainer}>
+        <Ionicons name="lock-closed-outline" size={25} style={styles.icon} />{" "}
         <TextInput
           value={password}
           placeholder="Enter password"
           secureTextEntry={true}
           onChangeText={(password) => setPassword(password)}
-          style={{
-            fontSize: 20,
-            borderWidth: 1,
-            borderRadius: 5,
-            width: "80%",
-            marginLeft: "auto",
-          }}
+          style={styles.input}
         />
       </View>
       <Button title="Continue" onPress={onSignUpPress} />
@@ -128,3 +113,43 @@ export default function SignUpScreen() {
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#fff",
+    paddingHorizontal: 20,
+  },
+  logo: {
+    height: 200,
+    width: 200,
+    resizeMode: "contain",
+    marginBottom: 20,
+  },
+  title: {
+    fontSize: 32,
+    marginBottom: 40,
+    fontWeight: "bold",
+    color: "black",
+  },
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    width: "100%",
+    height: 50,
+    backgroundColor: "#f1f1f1",
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    marginBottom: 20,
+  },
+  icon: {
+    marginRight: 10,
+  },
+  input: {
+    flex: 1,
+    height: "100%",
+    fontSize: 20,
+  },
+});
