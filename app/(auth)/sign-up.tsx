@@ -195,6 +195,15 @@ export default function SignUpScreen() {
 			</KeyboardAvoidingView>
 			<OAuthGoogle message="Sign up with Google" />
 			<OAuthGitHub message="Sign up with GitHub" />
+			<View style={{ alignItems: "center" }}>
+				<Text style={{ fontSize: 20, marginTop: 20 }}>
+					Already have an account?
+				</Text>
+				<Button
+					title="Sign In"
+					onPress={() => router.push("/sign-in")}
+				/>
+			</View>
 		</SafeAreaView>
 	);
 }
