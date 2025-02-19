@@ -4,6 +4,7 @@ import { useSignIn } from "@clerk/clerk-expo";
 import { useRouter } from "expo-router";
 import React from "react";
 import { Button, Text, TextInput, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Page() {
   const { signIn, setActive, isLoaded } = useSignIn();
@@ -41,7 +42,7 @@ export default function Page() {
   }, [isLoaded, emailAddress, password]);
 
   return (
-    <View style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1 }}>
       <Text style={{ fontSize: 40, alignSelf: "center" }}>Login</Text>
       <View
         style={{
@@ -94,6 +95,6 @@ export default function Page() {
         <Text style={{ fontSize: 20, padding: 5 }}>Don't have an account?</Text>
         <Button title="Sign Up" onPress={() => router.push("/sign-up")} />
       </View>
-    </View>
+    </SafeAreaView>
   );
 }

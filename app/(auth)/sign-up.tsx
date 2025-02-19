@@ -4,6 +4,7 @@ import { useSignUp } from "@clerk/clerk-expo";
 import { useRouter } from "expo-router";
 import * as React from "react";
 import { Button, Text, TextInput, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function SignUpScreen() {
   const { isLoaded, signUp, setActive } = useSignUp();
@@ -67,7 +68,7 @@ export default function SignUpScreen() {
 
   if (pendingVerification) {
     return (
-      <View style={{ alignItems: "center" }}>
+      <SafeAreaView style={{ alignItems: "center" }}>
         <Text style={{ fontSize: 20, padding: 5 }}>Verify your email</Text>
         <TextInput
           value={code}
@@ -76,12 +77,12 @@ export default function SignUpScreen() {
           style={{ fontSize: 20, borderWidth: 1, borderRadius: 5, flexGrow: 1 }}
         />
         <Button title="Verify" onPress={onVerifyPress} />
-      </View>
+      </SafeAreaView>
     );
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1 }}>
       <Text style={{ fontSize: 40, alignSelf: "center" }}>Sign up</Text>
       <View
         style={{
@@ -124,6 +125,6 @@ export default function SignUpScreen() {
       <Button title="Continue" onPress={onSignUpPress} />
       <OAuthGoogle message="Sign up with Google" />
       <OAuthGitHub message="Sign up with GitHub" />
-    </View>
+    </SafeAreaView>
   );
 }

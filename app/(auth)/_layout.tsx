@@ -1,5 +1,6 @@
-import { Redirect, Stack } from "expo-router";
 import { useAuth } from "@clerk/clerk-expo";
+import { Redirect, Stack } from "expo-router";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export default function AuthRoutesLayout() {
   const { isSignedIn } = useAuth();
@@ -8,5 +9,9 @@ export default function AuthRoutesLayout() {
     return <Redirect href={"/"} />;
   }
 
-  return <Stack />;
+  return (
+    <SafeAreaProvider>
+      <Stack screenOptions={{ headerShown: false }} />
+    </SafeAreaProvider>
+  );
 }
