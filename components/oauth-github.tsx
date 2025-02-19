@@ -54,7 +54,7 @@ export default function OAuthGitHub({ message }: { message: string }) {
 	return (
 		<Pressable onPress={onPress}>
 			<View style={styles.container}>
-				<Button title={message} />
+				<Button title={message} onPress={onPress} />
 				<Image
 					source={{
 						uri: "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png",

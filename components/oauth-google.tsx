@@ -55,7 +55,7 @@ export default function OAuthGoogle({ message }: { message: string }) {
 	return (
 		<Pressable onPress={onPress}>
 			<View style={styles.container}>
-				<Button title={message} />
+				<Button title={message} onPress={onPress} />
 				<Image
 					source={googleLogo}
 					style={styles.image}
