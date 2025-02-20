@@ -6,11 +6,13 @@ import React from "react";
 import {
 	Button,
 	Image,
+	Keyboard,
 	KeyboardAvoidingView,
 	Platform,
 	StyleSheet,
 	Text,
 	TextInput,
+	TouchableWithoutFeedback,
 	View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -52,69 +54,71 @@ export default function SignInPage() {
 	}, [isLoaded, emailAddress, password]);
 
 	return (
-		<SafeAreaView style={styles.container}>
-			<Image
-				source={require("@/assets/images/react-logo.png")}
-				style={styles.logo}
-			/>
-			<Text style={styles.title}>Login</Text>
-			<KeyboardAvoidingView
-				behavior={Platform.OS === "ios" ? "padding" : "height"}
-				keyboardVerticalOffset={20}
-			>
-				<View style={styles.inputContainer}>
-					<Ionicons
-						name="mail-outline"
-						size={25}
-						style={styles.icon}
-					/>
-					<TextInput
-						autoCapitalize="none"
-						value={emailAddress}
-						keyboardType="email-address"
-						placeholder="Enter email"
-						placeholderTextColor="#888"
-						onChangeText={(emailAddress) =>
-							setEmailAddress(emailAddress)
-						}
-						style={styles.input}
-					/>
-				</View>
-			</KeyboardAvoidingView>
-			<KeyboardAvoidingView
-				behavior={Platform.OS === "ios" ? "padding" : "height"}
-				keyboardVerticalOffset={20}
-			>
-				<View style={styles.inputContainer}>
-					<Ionicons
-						name="lock-closed-outline"
-						size={25}
-						style={styles.icon}
-					/>
-					<TextInput
-						value={password}
-						placeholder="Enter password"
-						placeholderTextColor="#888"
-						secureTextEntry={true}
-						onChangeText={(password) => setPassword(password)}
-						style={styles.input}
-					/>
-				</View>
-
-				<Button title="Sign in" onPress={onSignInPress} />
-			</KeyboardAvoidingView>
-			<OAuthGoogle message="Sign in with Google" />
-			<OAuthGitHub message="Sign in with GitHub" />
-			<View style={{ alignItems: "center" }}>
-				<Text style={{ fontSize: 20, marginTop: 20 }}>
-					Don't have an account?
-				</Text>
-				<Button
-					title="Sign Up"
-					onPress={() => router.push("/sign-up")}
+		<TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+			<SafeAreaView style={styles.container}>
+				<Image
+					source={require("@/assets/images/react-logo.png")}
+					style={styles.logo}
 				/>
-			</View>
-		</SafeAreaView>
+				<Text style={styles.title}>Login</Text>
+				<KeyboardAvoidingView
+					behavior={Platform.OS === "ios" ? "padding" : "height"}
+					keyboardVerticalOffset={20}
+				>
+					<View style={styles.inputContainer}>
+						<Ionicons
+							name="mail-outline"
+							size={25}
+							style={styles.icon}
+						/>
+
+						<TextInput
+							autoCapitalize="none"
+							value={emailAddress}
+							keyboardType="email-address"
+							placeholder="Enter email"
+							placeholderTextColor="#888"
+							onChangeText={(emailAddress) =>
+								setEmailAddress(emailAddress)
+							}
+							style={styles.input}
+						/>
+					</View>
+				</KeyboardAvoidingView>
+				<KeyboardAvoidingView
+					behavior={Platform.OS === "ios" ? "padding" : "height"}
+					keyboardVerticalOffset={20}
+				>
+					<View style={styles.inputContainer}>
+						<Ionicons
+							name="lock-closed-outline"
+							size={25}
+							style={styles.icon}
+						/>
+						<TextInput
+							value={password}
+							placeholder="Enter password"
+							placeholderTextColor="#888"
+							secureTextEntry={true}
+							onChangeText={(password) => setPassword(password)}
+							style={styles.input}
+						/>
+					</View>
+					<Button title="Sign in" onPress={onSignInPress} />
+				</KeyboardAvoidingView>
+				<OAuthGoogle message="Sign in with Google" />
+				<OAuthGitHub message="Sign in with GitHub" />
+				<View style={{ alignItems: "center" }}>
+					<Text style={{ fontSize: 20, marginTop: 20 }}>
+						Don't have an account?
+					</Text>
+					<Button
+						title="Sign Up"
+						onPress={() => router.push("/sign-up")}
+					/>
+				</View>
+			</SafeAreaView>
+		</TouchableWithoutFeedback>
 	);
 }
 
