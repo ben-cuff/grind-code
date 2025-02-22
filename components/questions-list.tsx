@@ -90,26 +90,6 @@ export default function QuestionsList({
 	);
 }
 
-const handleRenderList = ({ item }: { item: Question }) => (
-	<View style={styles.container}>
-		<Text style={styles.text}>{item.name}</Text>
-		<Pressable
-			onPress={() =>
-				navigation.navigate("QuestionDetail", {
-					questionNumber: item.questionNumber,
-				})
-			}
-			style={styles.iconContainer}
-		>
-			<Ionicons
-				name={"arrow-forward-circle-outline"}
-				color={"white"}
-				size={28}
-			/>
-		</Pressable>
-	</View>
-);
-
 const pulseAnimation = new Animated.Value(1);
 
 Animated.loop(

@@ -1,7 +1,11 @@
+import NextProblem from "@/components/next-problem";
+import RandomShuffle from "@/components/random-shuffle";
 import { Question } from "@/types/question";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import {
+	Alert,
+	Modal,
 	ScrollView,
 	StyleSheet,
 	Text,
@@ -16,6 +20,7 @@ export default function PracticeProblemScreen() {
 	const [currentPattern, setCurrentPattern] =
 		useState<AlgorithmPattern | null>();
 	const [options, setOptions] = useState<AlgorithmPattern[] | null>();
+	const [correctModal, toggleCorrectModal] = useState(false);
 
 	useEffect(() => {
 		async function fetchQuestions() {
@@ -52,8 +57,40 @@ export default function PracticeProblemScreen() {
 		);
 	}, [question]);
 
+	const onSubmit = () => {
+		if (currentPattern?.id === question?.pattern) {
+			toggleCorrectModal(true);
+			return;
+		}
+		Alert.alert("Incorrect", "Please try again");
+	};
+
 	return (
 		<ScrollView style={styles.container}>
+			<Modal
+				animationType="slide"
+				transparent={true}
+				visible={correctModal}
+			>
+				<View style={styles.modalContainer}>
+					<View style={styles.modalContent}>
+						<Text style={styles.modalTitle}>Correct!</Text>
+						<TouchableOpacity
+							style={styles.modalButton}
+							onPress={() => toggleCorrectModal(false)}
+						>
+							<Text style={styles.modalButtonText}>Close</Text>
+						</TouchableOpacity>
+						<RandomShuffle
+							toggleCorrectModal={toggleCorrectModal}
+						/>
+						<NextProblem
+							toggleCorrectModal={toggleCorrectModal}
+							currentIndex={Number(question?.questionNumber)}
+						/>
+					</View>
+				</View>
+			</Modal>
 			{isLoading ? (
 				<Text>Loading...</Text>
 			) : (
@@ -94,7 +131,7 @@ export default function PracticeProblemScreen() {
 									borderRadius: 5,
 									alignItems: "center",
 								}}
-								onPress={() => {}}
+								onPress={onSubmit}
 							>
 								<Text style={{ color: "#fff" }}>Submit</Text>
 							</TouchableOpacity>
@@ -109,6 +146,37 @@ export default function PracticeProblemScreen() {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
+	},
+	modalContainer: {
+		flex: 1,
+		marginTop: "auto",
+		alignItems: "center",
+		justifyContent: "flex-end",
+		backgroundColor: "rgba(0, 0, 0, 0.5)",
+	},
+	modalContent: {
+		width: "100%",
+		height: "60%",
+		padding: 20,
+		backgroundColor: "#fff",
+		borderRadius: 10,
+		alignItems: "center",
+	},
+	modalTitle: {
+		fontSize: 20,
+		fontWeight: "bold",
+		marginBottom: 15,
+	},
+	modalButton: {
+		marginTop: 10,
+		backgroundColor: "#007AFF",
+		paddingHorizontal: 20,
+		paddingVertical: 10,
+		borderRadius: 5,
+	},
+	modalButtonText: {
+		color: "#fff",
+		fontSize: 16,
 	},
 	codeContainer: {
 		padding: 16,
