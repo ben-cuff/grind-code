@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import {
 	Animated,
@@ -25,6 +26,7 @@ type Question = {
 export default function QuestionsList() {
 	const [questions, setQuestions] = useState<Question[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
+	const router = useRouter();
 
 	useEffect(() => {
 		async function fetchQuestions() {
@@ -46,6 +48,27 @@ export default function QuestionsList() {
 		fetchQuestions();
 	}, []);
 
+	const handleRenderList = ({ item }: { item: Question }) => (
+		<View style={styles.container}>
+			<Text style={styles.text}>{item.name}</Text>
+			<Pressable
+				onPress={() =>
+					router.push({
+						pathname: "/(practice)/[questionNumber]",
+						params: { questionNumber: item.questionNumber },
+					})
+				}
+				style={styles.iconContainer}
+			>
+				<Ionicons
+					name={"arrow-forward-circle-outline"}
+					color={"white"}
+					size={28}
+				/>
+			</Pressable>
+		</View>
+	);
+
 	return isLoading ? (
 		<FlatList
 			data={Array.from({ length: 10 })}
@@ -55,13 +78,13 @@ export default function QuestionsList() {
 					<Animated.View
 						style={[styles.skeleton, { opacity: pulseAnimation }]}
 					/>
-					<Pressable style={styles.iconContainer}>
+					<View style={styles.iconContainer}>
 						<Ionicons
 							name={"arrow-forward-circle-outline"}
 							color={"white"}
 							size={28}
 						/>
-					</Pressable>
+					</View>
 				</View>
 			)}
 		/>
@@ -77,13 +100,20 @@ export default function QuestionsList() {
 const handleRenderList = ({ item }: { item: Question }) => (
 	<View style={styles.container}>
 		<Text style={styles.text}>{item.name}</Text>
-		<View style={styles.iconContainer}>
+		<Pressable
+			onPress={() =>
+				navigation.navigate("QuestionDetail", {
+					questionNumber: item.questionNumber,
+				})
+			}
+			style={styles.iconContainer}
+		>
 			<Ionicons
 				name={"arrow-forward-circle-outline"}
 				color={"white"}
 				size={28}
 			/>
-		</View>
+		</Pressable>
 	</View>
 );
 
