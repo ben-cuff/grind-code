@@ -19,7 +19,7 @@ export default function NextProblem({
 	const [isLoading, setIsLoading] = useState(false);
 	return (
 		<View style={styles.nextProblemView}>
-			<Text style={styles.text}>Random Problem</Text>
+			<Text style={styles.text}>Next Problem</Text>
 			{isLoading ? (
 				<View style={styles.loadingContainer}>
 					<ActivityIndicator size={"large"} color={"orange"} />
