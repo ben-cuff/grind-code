@@ -59,6 +59,7 @@ export default function SignUpScreen() {
 			// See https://clerk.com/docs/custom-flows/error-handling
 			// for more info on error handling
 			Alert.alert((err as any).errors[0].longMessage);
+			console.error(JSON.stringify(err, null, 2));
 		}
 	};
 

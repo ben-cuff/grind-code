@@ -4,6 +4,7 @@ import { useSignIn } from "@clerk/clerk-expo";
 import { useRouter } from "expo-router";
 import React from "react";
 import {
+	Alert,
 	Button,
 	Image,
 	Keyboard,
@@ -49,6 +50,7 @@ export default function SignInPage() {
 		} catch (err) {
 			// See https://clerk.com/docs/custom-flows/error-handling
 			// for more info on error handling
+			Alert.alert((err as any).errors[0].longMessage);
 			console.error(JSON.stringify(err, null, 2));
 		}
 	}, [isLoaded, emailAddress, password]);
