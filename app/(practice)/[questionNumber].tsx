@@ -21,7 +21,6 @@ export default function PracticeProblemScreen() {
 				}
 			);
 			const data = await response.json();
-			console.log(data);
 			setQuestion(data);
 
 			setIsLoading(false);
