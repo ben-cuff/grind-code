@@ -1,3 +1,4 @@
+import { Question } from "@/types/question";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
@@ -9,19 +10,6 @@ import {
 	Text,
 	View,
 } from "react-native";
-
-type Question = {
-	createdAt: string;
-	id: string;
-	name: string;
-	pattern: string;
-	prompt: string;
-	questionNumber: number;
-	solutionRoute: string;
-	updatedAt: string;
-	urlQuestion: string;
-	urlSolution: string;
-};
 
 export default function QuestionsList() {
 	const [questions, setQuestions] = useState<Question[]>([]);
