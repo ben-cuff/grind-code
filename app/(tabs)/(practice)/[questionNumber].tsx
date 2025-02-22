@@ -1,12 +1,21 @@
 import { Question } from "@/types/question";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+	ScrollView,
+	StyleSheet,
+	Text,
+	TouchableOpacity,
+	View,
+} from "react-native";
 
 export default function PracticeProblemScreen() {
 	const { questionNumber } = useLocalSearchParams();
 	const [question, setQuestion] = useState<Question | null>();
 	const [isLoading, setIsLoading] = useState(true);
+	const [currentPattern, setCurrentPattern] =
+		useState<AlgorithmPattern | null>();
+	const [options, setOptions] = useState<AlgorithmPattern[] | null>();
 
 	useEffect(() => {
 		async function fetchQuestions() {
@@ -27,9 +36,21 @@ export default function PracticeProblemScreen() {
 		fetchQuestions();
 	}, []);
 
-	const pattern = algorithmPatterns.filter(
-		(pattern) => pattern.id === question?.pattern
-	);
+	useEffect(() => {
+		const solution = algorithmPatterns.find(
+			({ id }) => id === question?.pattern
+		);
+		// picks 3 random patterns, adds the answer and then randomizes the order
+		setOptions(
+			[
+				...(solution ? [solution] : []),
+				...algorithmPatterns
+					.filter(({ id }) => id !== question?.pattern)
+					.sort(() => Math.random() - 0.5)
+					.slice(0, 3),
+			].sort(() => Math.random() - 0.5)
+		);
+	}, [question]);
 
 	return (
 		<ScrollView style={styles.container}>
@@ -39,7 +60,46 @@ export default function PracticeProblemScreen() {
 				<View>
 					<Text>{question?.name}</Text>
 					<Text>Prompt: {question?.prompt}</Text>
-					<Text>{pattern[0]?.name}</Text>
+					<View>
+						<Text>Which algorithm pattern is used?</Text>
+						<View>
+							{options?.map((option) => (
+								<TouchableOpacity
+									key={option.id}
+									style={[
+										{
+											padding: 10,
+											marginVertical: 5,
+											borderWidth: 1,
+											borderColor: "#000",
+											borderRadius: 5,
+										},
+										currentPattern?.id === option.id && {
+											borderColor: "green",
+											borderWidth: 2,
+										},
+									]}
+									onPress={() => {
+										setCurrentPattern(option);
+									}}
+								>
+									<Text>{option.name}</Text>
+								</TouchableOpacity>
+							))}
+							<TouchableOpacity
+								style={{
+									padding: 10,
+									marginVertical: 5,
+									backgroundColor: "#007AFF",
+									borderRadius: 5,
+									alignItems: "center",
+								}}
+								onPress={() => {}}
+							>
+								<Text style={{ color: "#fff" }}>Submit</Text>
+							</TouchableOpacity>
+						</View>
+					</View>
 				</View>
 			)}
 		</ScrollView>
@@ -58,7 +118,12 @@ const styles = StyleSheet.create({
 	},
 });
 
-export const algorithmPatterns = [
+export type AlgorithmPattern = {
+	id: string;
+	name: string;
+};
+
+export const algorithmPatterns: AlgorithmPattern[] = [
 	{ id: "slidingWindow", name: "Sliding Window" },
 	{ id: "twoPointer", name: "Two Pointer" },
 	{ id: "fastSlowPointers", name: "Fast Slow Pointers" },
