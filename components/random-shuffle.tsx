@@ -42,7 +42,7 @@ export default function RandomShuffle({
 						setIsLoading(false);
 						toggleCorrectModal(false);
 						router.push({
-							pathname: "/(practice)/[questionNumber]",
+							pathname: "/(tabs)/(practice)/[questionNumber]",
 							params: { questionNumber: data.questionNumber },
 						});
 					}}
