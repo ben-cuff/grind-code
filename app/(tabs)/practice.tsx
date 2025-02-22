@@ -7,12 +7,12 @@ export default function PracticeTab() {
 	return (
 		<SafeAreaView style={styles.container}>
 			<Text style={styles.title}>Practice</Text>
-			<Pressable style={styles.pressable}>
+			<View style={styles.shuffleView}>
 				<Text style={styles.text}>Random Problem</Text>
-				<View style={styles.iconContainer}>
+				<Pressable style={styles.iconContainer}>
 					<Ionicons name={"shuffle"} size={28} />
-				</View>
-			</Pressable>
+				</Pressable>
+			</View>
 			<QuestionsList />
 		</SafeAreaView>
 	);
@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
 		padding: 16,
 		backgroundColor: "#fff",
 	},
-	pressable: {
+	shuffleView: {
 		flexDirection: "row",
 		alignItems: "center",
 		padding: 8,

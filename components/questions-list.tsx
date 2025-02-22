@@ -1,6 +1,13 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
-import { Animated, FlatList, StyleSheet, Text, View } from "react-native";
+import {
+	Animated,
+	FlatList,
+	Pressable,
+	StyleSheet,
+	Text,
+	View,
+} from "react-native";
 
 type Question = {
 	createdAt: string;
@@ -48,13 +55,13 @@ export default function QuestionsList() {
 					<Animated.View
 						style={[styles.skeleton, { opacity: pulseAnimation }]}
 					/>
-					<View style={styles.iconContainer}>
+					<Pressable style={styles.iconContainer}>
 						<Ionicons
 							name={"arrow-forward-circle-outline"}
 							color={"white"}
 							size={28}
 						/>
-					</View>
+					</Pressable>
 				</View>
 			)}
 		/>
