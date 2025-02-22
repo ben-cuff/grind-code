@@ -11,8 +11,13 @@ import {
 	View,
 } from "react-native";
 
-export default function QuestionsList() {
-	const [questions, setQuestions] = useState<Question[]>([]);
+export default function QuestionsList({
+	questions,
+	setQuestions,
+}: {
+	questions: Question[];
+	setQuestions: React.Dispatch<React.SetStateAction<Question[]>>;
+}) {
 	const [isLoading, setIsLoading] = useState(true);
 	const router = useRouter();
 

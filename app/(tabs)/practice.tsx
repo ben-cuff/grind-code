@@ -1,4 +1,5 @@
 import QuestionsList from "@/components/questions-list";
+import { Question } from "@/types/question";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
@@ -14,6 +15,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default function PracticeTab() {
 	const router = useRouter();
 	const [isLoading, setIsLoading] = useState(false);
+	const [questions, setQuestions] = useState<Question[]>([]);
+
 	return (
 		<SafeAreaView style={styles.container}>
 			<Text style={styles.title}>Practice</Text>
@@ -29,22 +32,18 @@ export default function PracticeTab() {
 						onPress={async () => {
 							setIsLoading(true);
 
-							const response = await fetch(
-								`${process.env.EXPO_PUBLIC_BASE_URL}/questions/random-question`,
-								{
-									method: "GET",
-									headers: {
-										"Content-Type": "application/json",
-									},
-								}
+							const randomQuestionIndex = Math.floor(
+								Math.random() * questions.length
 							);
-
-							const data = await response.json();
 
 							setIsLoading(false);
 							router.push({
 								pathname: "/(practice)/[questionNumber]",
-								params: { questionNumber: data.questionNumber },
+								params: {
+									questionNumber:
+										questions[randomQuestionIndex]
+											.questionNumber,
+								},
 							});
 						}}
 					>
@@ -52,7 +51,7 @@ export default function PracticeTab() {
 					</Pressable>
 				)}
 			</View>
-			<QuestionsList />
+			<QuestionsList questions={questions} setQuestions={setQuestions} />
 		</SafeAreaView>
 	);
 }
