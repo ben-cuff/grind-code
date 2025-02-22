@@ -1,5 +1,9 @@
-import { Text } from "react-native";
+import { SafeAreaView, Text } from "react-native";
 
 export default function LearnScreen() {
-	return <Text>HELLO</Text>;
+	return (
+		<SafeAreaView>
+			<Text>HELLO</Text>
+		</SafeAreaView>
+	);
 }
