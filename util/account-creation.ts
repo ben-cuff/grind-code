@@ -1,12 +1,5 @@
-import { useAuth } from "@clerk/clerk-expo";
-
-export default async function createAccount() {
-	const { getToken } = useAuth();
+export default async function createAccount(token: String) {
 	try {
-		const token = await getToken();
-
-		console.log("token: " + token);
-
 		const response = await fetch(
 			`${process.env.EXPO_PUBLIC_BASE_URL}/accounts`,
 			{
@@ -18,18 +11,15 @@ export default async function createAccount() {
 			}
 		);
 
-		console.log(response);
-
 		if (response.status == 409) {
-			const data = await response.json();
-			console.log(data?.error);
 			return;
 		}
-		if (response.ok) {
+		if (!response.ok) {
 			const data = await response.json();
-			console.log(JSON.stringify(data, null, 2));
+			console.error("error: " + data.error);
 			return;
 		}
+		return;
 	} catch (error) {
 		console.error("error: " + error);
 	}

@@ -1,4 +1,5 @@
-import { useSSO } from "@clerk/clerk-expo";
+import createAccount from "@/util/account-creation";
+import { useAuth, useSSO } from "@clerk/clerk-expo";
 import * as AuthSession from "expo-auth-session";
 import * as WebBrowser from "expo-web-browser";
 import React, { useCallback, useEffect } from "react";
@@ -32,6 +33,7 @@ export default function OAuthGitHub({ message }: { message: string }) {
 
 	// Use the `useSSO()` hook to access the `startSSOFlow()` method
 	const { startSSOFlow } = useSSO();
+	const { getToken } = useAuth();
 
 	const onPress = useCallback(async () => {
 		try {
@@ -45,7 +47,10 @@ export default function OAuthGitHub({ message }: { message: string }) {
 
 			// If sign in was successful, set the active session
 			if (createdSessionId) {
-				setActive!({ session: createdSessionId });
+				await setActive!({ session: createdSessionId });
+
+				const token = await getToken();
+				await createAccount(token!);
 			} else {
 				// If there is no `createdSessionId`,
 				// there are missing requirements, such as MFA

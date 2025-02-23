@@ -1,6 +1,7 @@
 import OAuthGitHub from "@/components/auth/oauth-github";
 import OAuthGoogle from "@/components/auth/oauth-google";
-import { useSignUp } from "@clerk/clerk-expo";
+import createAccount from "@/util/account-creation";
+import { useAuth, useSignUp } from "@clerk/clerk-expo";
 import { useRouter } from "expo-router";
 import * as React from "react";
 import {
@@ -21,6 +22,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 
 export default function SignUpScreen() {
 	const { isLoaded, signUp, setActive } = useSignUp();
+	const { getToken } = useAuth();
 	const router = useRouter();
 
 	const [emailAddress, setEmailAddress] = React.useState("");
@@ -77,6 +79,9 @@ export default function SignUpScreen() {
 			// and redirect the user
 			if (signUpAttempt.status === "complete") {
 				await setActive({ session: signUpAttempt.createdSessionId });
+
+				const token = await getToken();
+				await createAccount(token!);
 				router.replace("/");
 			} else {
 				// If the status is not complete, check why. User may need to
