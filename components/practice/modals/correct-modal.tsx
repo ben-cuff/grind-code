@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Modal, Pressable, StyleSheet, Text, View } from "react-native";
-import NextProblem from "./next-problem";
-import RandomShuffle from "./random-shuffle";
+import NextProblem from "../next-problem";
+import RandomShuffle from "../random-shuffle";
 
 export default function CorrectModal({
 	correctModal,

@@ -1,13 +1,11 @@
-import AskAIModal from "@/components/practice/ask-ai-modal";
-import CorrectModal from "@/components/practice/correct-modal";
-import PythonSolution from "@/components/practice/python-code-viewer";
+import AskAIModal from "@/components/practice/modals/ask-ai-modal";
+import CorrectModal from "@/components/practice/modals/correct-modal";
+import SolutionModal from "@/components/practice/modals/solution-modal";
 import { Question } from "@/types/question";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import {
 	Alert,
-	Button,
-	Modal,
 	Pressable,
 	ScrollView,
 	StyleSheet,
@@ -84,35 +82,11 @@ export default function PracticeProblemScreen() {
 				question={question!}
 				toggleAiModal={toggleAiModal}
 			/>
-			<Modal
-				animationType="slide"
-				transparent={true}
-				visible={solutionModal}
-			>
-				<View style={styles.modalContainer}>
-					<View style={styles.modalContent}>
-						<ScrollView style={{ flex: 1 }}>
-							<PythonSolution
-								questionNumber={question?.questionNumber!}
-							/>
-							<View
-								style={{
-									justifyContent: "flex-end",
-									width: "40%",
-									alignSelf: "center",
-								}}
-							>
-								<Button
-									title="Back"
-									onPress={() => {
-										toggleSolutionModal(false);
-									}}
-								/>
-							</View>
-						</ScrollView>
-					</View>
-				</View>
-			</Modal>
+			<SolutionModal
+				solutionModal={solutionModal}
+				question={question!}
+				toggleSolutionModal={toggleSolutionModal}
+			/>
 			<ScrollView style={styles.container}>
 				{isLoading ? (
 					<Text>Loading...</Text>

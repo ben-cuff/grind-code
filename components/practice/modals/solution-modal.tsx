@@ -1,28 +1,35 @@
 import { Question } from "@/types/question";
-import React from "react";
 import { Button, Modal, ScrollView, StyleSheet, View } from "react-native";
-import AskAIScreen from "./ask-ai";
+import PythonSolution from "../python-code-viewer";
 
-export default function AskAIModal({
-	aiModal,
+export default function SolutionModal({
+	solutionModal,
 	question,
-	toggleAiModal,
+	toggleSolutionModal,
 }: {
-	aiModal: boolean;
+	solutionModal: boolean;
 	question: Question;
-	toggleAiModal: React.Dispatch<React.SetStateAction<boolean>>;
+	toggleSolutionModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
 	return (
-		<Modal animationType="slide" transparent={true} visible={aiModal}>
+		<Modal animationType="slide" transparent={true} visible={solutionModal}>
 			<View style={styles.modalContainer}>
 				<View style={styles.modalContent}>
 					<ScrollView style={{ flex: 1 }}>
-						<AskAIScreen question={question!} />
-						<View style={{ justifyContent: "flex-end" }}>
+						<PythonSolution
+							questionNumber={question?.questionNumber!}
+						/>
+						<View
+							style={{
+								justifyContent: "flex-end",
+								width: "40%",
+								alignSelf: "center",
+							}}
+						>
 							<Button
 								title="Back"
 								onPress={() => {
-									toggleAiModal(false);
+									toggleSolutionModal(false);
 								}}
 							/>
 						</View>
