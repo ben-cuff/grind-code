@@ -74,7 +74,7 @@ export default function PracticeProblemScreen() {
 	return (
 		<View style={{ flex: 1 }}>
 			<Modal
-				animationType="slide"
+				animationType="fade"
 				transparent={true}
 				visible={correctModal}
 			>
