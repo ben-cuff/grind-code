@@ -1,4 +1,4 @@
-import { SignOutButton } from "@/components/sign-out-button";
+import { SignOutButton } from "@/components/auth/sign-out-button";
 import { SafeAreaView, Text } from "react-native";
 
 export default function SettingsTab() {

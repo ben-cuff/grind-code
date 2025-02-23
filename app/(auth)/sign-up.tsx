@@ -1,5 +1,5 @@
-import OAuthGitHub from "@/components/oauth-github";
-import OAuthGoogle from "@/components/oauth-google";
+import OAuthGitHub from "@/components/auth/oauth-github";
+import OAuthGoogle from "@/components/auth/oauth-google";
 import { useSignUp } from "@clerk/clerk-expo";
 import { useRouter } from "expo-router";
 import * as React from "react";
