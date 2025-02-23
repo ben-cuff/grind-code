@@ -1,4 +1,4 @@
-import AskAIScreen from "@/components/practice/ask-ai";
+import AskAIModal from "@/components/practice/ask-ai-modal";
 import CorrectModal from "@/components/practice/correct-modal";
 import PythonSolution from "@/components/practice/python-code-viewer";
 import { Question } from "@/types/question";
@@ -79,23 +79,11 @@ export default function PracticeProblemScreen() {
 				toggleAiModal={toggleAiModal}
 				toggleSolutionModal={toggleSolutionModal}
 			/>
-			<Modal animationType="slide" transparent={true} visible={aiModal}>
-				<View style={styles.modalContainer}>
-					<View style={styles.modalContent}>
-						<ScrollView style={{ flex: 1 }}>
-							<AskAIScreen question={question!} />
-							<View style={{ justifyContent: "flex-end" }}>
-								<Button
-									title="Back"
-									onPress={() => {
-										toggleAiModal(false);
-									}}
-								/>
-							</View>
-						</ScrollView>
-					</View>
-				</View>
-			</Modal>
+			<AskAIModal
+				aiModal={aiModal}
+				question={question!}
+				toggleAiModal={toggleAiModal}
+			/>
 			<Modal
 				animationType="slide"
 				transparent={true}
