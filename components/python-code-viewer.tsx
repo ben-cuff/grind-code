@@ -1,3 +1,4 @@
+import Markdown from "@ronradtke/react-native-markdown-display";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 
@@ -42,7 +43,9 @@ export default function PythonSolution({
 			{isLoading ? (
 				<ActivityIndicator size={"large"} />
 			) : (
-				<Text style={styles.responseText}>{solution}</Text>
+				<Text style={styles.responseText}>
+					<Markdown>{solution}</Markdown>
+				</Text>
 			)}
 		</View>
 	);
