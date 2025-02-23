@@ -1,5 +1,6 @@
 import { Question } from "@/types/question";
 import { useAuth } from "@clerk/clerk-expo";
+import Markdown from "@ronradtke/react-native-markdown-display";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 
@@ -58,7 +59,9 @@ export default function AskAIScreen({ question }: { question: Question }) {
 			{isLoading ? (
 				<ActivityIndicator size={"large"} />
 			) : (
-				<Text style={styles.responseText}>{aiResponse}</Text>
+				<Text style={styles.responseText}>
+					<Markdown>{aiResponse}</Markdown>
+				</Text>
 			)}
 		</View>
 	);
