@@ -20,6 +20,7 @@ export default function AskAIScreen({ question }: { question: Question }) {
 						method: "POST",
 						headers: {
 							"Content-Type": "application/json",
+							"x-api-key": `${process.env.X_API_KEY}`,
 						},
 						body: JSON.stringify({ message }),
 					}

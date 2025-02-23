@@ -220,7 +220,8 @@ export default function PracticeProblemScreen() {
 										style={[
 											{
 												width: "48%",
-												padding: 10,
+												padding: 8,
+												paddingVertical: 10,
 												marginVertical: 5,
 												borderWidth: 1,
 												borderColor: "#000",
