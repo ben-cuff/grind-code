@@ -41,6 +41,7 @@ export default function RandomShuffle({
 
 						setIsLoading(false);
 						toggleCorrectModal(false);
+						router.push("/(tabs)/(practice)");
 						router.push({
 							pathname: "/(tabs)/(practice)/[questionNumber]",
 							params: { questionNumber: data.questionNumber },
