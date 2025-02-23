@@ -1,5 +1,6 @@
 import AskAIScreen from "@/components/ask-ai";
 import NextProblem from "@/components/next-problem";
+import PythonSolution from "@/components/python-code-viewer";
 import RandomShuffle from "@/components/random-shuffle";
 import { Question } from "@/types/question";
 import { useLocalSearchParams } from "expo-router";
@@ -25,6 +26,7 @@ export default function PracticeProblemScreen() {
 	const [options, setOptions] = useState<AlgorithmPattern[] | null>();
 	const [correctModal, toggleCorrectModal] = useState(false);
 	const [aiModal, toggleAiModal] = useState(false);
+	const [solutionModal, toggleSolutionModal] = useState(false);
 
 	useEffect(() => {
 		async function fetchQuestions() {
@@ -94,15 +96,38 @@ export default function PracticeProblemScreen() {
 								/>
 							</View>
 						</View>
-						<Pressable
-							style={styles.aiPressable}
-							onPress={() => {
-								toggleAiModal(true);
-								toggleCorrectModal(false);
+						<View
+							style={{
+								flex: 1,
+								flexDirection: "row",
+								gap: 10,
 							}}
 						>
-							<Text style={styles.aiText}>Ask AI</Text>
-						</Pressable>
+							<Pressable
+								style={[
+									styles.aiPressableModal,
+									{ height: "15%", width: "25%" },
+								]}
+								onPress={() => {
+									toggleAiModal(true);
+									toggleCorrectModal(false);
+								}}
+							>
+								<Text style={styles.aiText}>Ask AI</Text>
+							</Pressable>
+							<Pressable
+								style={[
+									styles.aiPressableModal,
+									{ height: "15%", width: "25%" },
+								]}
+								onPress={() => {
+									toggleCorrectModal(false);
+									toggleSolutionModal(true);
+								}}
+							>
+								<Text style={styles.aiText}>Solution</Text>
+							</Pressable>
+						</View>
 						<View style={styles.modalButton}>
 							<Button
 								title="Back"
@@ -122,6 +147,29 @@ export default function PracticeProblemScreen() {
 									title="Back"
 									onPress={() => {
 										toggleAiModal(false);
+									}}
+								/>
+							</View>
+						</ScrollView>
+					</View>
+				</View>
+			</Modal>
+			<Modal
+				animationType="slide"
+				transparent={true}
+				visible={solutionModal}
+			>
+				<View style={styles.modalContainer}>
+					<View style={styles.modalContent}>
+						<ScrollView style={{ flex: 1 }}>
+							<PythonSolution
+								questionNumber={question?.questionNumber!}
+							/>
+							<View style={{ justifyContent: "flex-end" }}>
+								<Button
+									title="Back"
+									onPress={() => {
+										toggleSolutionModal(false);
 									}}
 								/>
 							</View>
@@ -222,6 +270,16 @@ export default function PracticeProblemScreen() {
 					</View>
 				)}
 			</ScrollView>
+			<View style={styles.bottomButtonSolution}>
+				<Pressable
+					style={styles.aiPressable}
+					onPress={() => {
+						toggleSolutionModal(true);
+					}}
+				>
+					<Text style={styles.aiText}>Solution</Text>
+				</Pressable>
+			</View>
 			<View style={styles.bottomButton}>
 				<Pressable
 					style={styles.aiPressable}
@@ -289,6 +347,19 @@ const styles = StyleSheet.create({
 		shadowRadius: 3.84,
 		elevation: 5,
 	},
+	aiPressableModal: {
+		marginTop: 20,
+		backgroundColor: "#007AFF",
+		paddingVertical: 12,
+		paddingHorizontal: 12,
+		borderRadius: 8,
+		alignItems: "center",
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 2 },
+		shadowOpacity: 0.25,
+		shadowRadius: 3.84,
+		elevation: 5,
+	},
 	aiText: {
 		color: "#fff",
 		fontSize: 16,
@@ -328,6 +399,12 @@ const styles = StyleSheet.create({
 		bottom: 20,
 		alignSelf: "flex-end",
 		paddingRight: 20,
+	},
+	bottomButtonSolution: {
+		position: "absolute",
+		bottom: 20,
+		alignSelf: "flex-start",
+		paddingLeft: 20,
 	},
 });
 
