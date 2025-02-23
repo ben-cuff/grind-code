@@ -1,4 +1,4 @@
-import QuestionsList from "@/components/questions-list";
+import QuestionsList from "@/components/practice/questions-list";
 import { Question } from "@/types/question";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";

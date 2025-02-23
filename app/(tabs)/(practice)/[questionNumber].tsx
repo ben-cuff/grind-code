@@ -1,7 +1,6 @@
-import AskAIScreen from "@/components/ask-ai";
-import NextProblem from "@/components/next-problem";
-import PythonSolution from "@/components/python-code-viewer";
-import RandomShuffle from "@/components/random-shuffle";
+import AskAIScreen from "@/components/practice/ask-ai";
+import CorrectModal from "@/components/practice/correct-modal";
+import PythonSolution from "@/components/practice/python-code-viewer";
 import { Question } from "@/types/question";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
@@ -73,70 +72,13 @@ export default function PracticeProblemScreen() {
 
 	return (
 		<View style={{ flex: 1 }}>
-			<Modal
-				animationType="fade"
-				transparent={true}
-				visible={correctModal}
-			>
-				<View style={styles.modalContainerMiddle}>
-					<View style={styles.modalContentMiddle}>
-						<Text style={styles.modalTitle}>Correct!</Text>
-						<View style={styles.buttonsRow}>
-							<View style={styles.buttonWrapper}>
-								<RandomShuffle
-									toggleCorrectModal={toggleCorrectModal}
-								/>
-							</View>
-							<View style={styles.buttonWrapper}>
-								<NextProblem
-									toggleCorrectModal={toggleCorrectModal}
-									currentIndex={Number(
-										question?.questionNumber
-									)}
-								/>
-							</View>
-						</View>
-						<View
-							style={{
-								flex: 1,
-								flexDirection: "row",
-								gap: 10,
-							}}
-						>
-							<Pressable
-								style={[
-									styles.aiPressableModal,
-									{ height: "30%", width: "30%" },
-								]}
-								onPress={() => {
-									toggleAiModal(true);
-									toggleCorrectModal(false);
-								}}
-							>
-								<Text style={styles.aiText}>Ask AI</Text>
-							</Pressable>
-							<Pressable
-								style={[
-									styles.aiPressableModal,
-									{ height: "30%", width: "30%" },
-								]}
-								onPress={() => {
-									toggleCorrectModal(false);
-									toggleSolutionModal(true);
-								}}
-							>
-								<Text style={styles.aiText}>Solution</Text>
-							</Pressable>
-						</View>
-						<View style={styles.modalButton}>
-							<Button
-								title="Back"
-								onPress={() => toggleCorrectModal(false)}
-							/>
-						</View>
-					</View>
-				</View>
-			</Modal>
+			<CorrectModal
+				correctModal={correctModal}
+				toggleCorrectModal={toggleCorrectModal}
+				questionNumber={Number(question?.questionNumber)}
+				toggleAiModal={toggleAiModal}
+				toggleSolutionModal={toggleSolutionModal}
+			/>
 			<Modal animationType="slide" transparent={true} visible={aiModal}>
 				<View style={styles.modalContainer}>
 					<View style={styles.modalContent}>
