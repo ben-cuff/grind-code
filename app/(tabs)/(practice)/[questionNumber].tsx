@@ -78,8 +78,8 @@ export default function PracticeProblemScreen() {
 				transparent={true}
 				visible={correctModal}
 			>
-				<View style={styles.modalContainer}>
-					<View style={styles.modalContent}>
+				<View style={styles.modalContainerMiddle}>
+					<View style={styles.modalContentMiddle}>
 						<Text style={styles.modalTitle}>Correct!</Text>
 						<View style={styles.buttonsRow}>
 							<View style={styles.buttonWrapper}>
@@ -106,7 +106,7 @@ export default function PracticeProblemScreen() {
 							<Pressable
 								style={[
 									styles.aiPressableModal,
-									{ height: "15%", width: "25%" },
+									{ height: "30%", width: "30%" },
 								]}
 								onPress={() => {
 									toggleAiModal(true);
@@ -118,7 +118,7 @@ export default function PracticeProblemScreen() {
 							<Pressable
 								style={[
 									styles.aiPressableModal,
-									{ height: "15%", width: "25%" },
+									{ height: "30%", width: "30%" },
 								]}
 								onPress={() => {
 									toggleCorrectModal(false);
@@ -297,6 +297,21 @@ export default function PracticeProblemScreen() {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
+	},
+	modalContainerMiddle: {
+		flex: 1,
+		marginTop: "auto",
+		alignItems: "center",
+		justifyContent: "center",
+		backgroundColor: "rgba(0, 0, 0, 0.5)",
+	},
+	modalContentMiddle: {
+		width: "90%",
+		height: "40%",
+		padding: 20,
+		backgroundColor: "#fff",
+		borderRadius: 10,
+		alignItems: "center",
 	},
 	modalContainer: {
 		flex: 1,
