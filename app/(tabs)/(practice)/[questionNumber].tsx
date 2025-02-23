@@ -5,6 +5,7 @@ import { Question } from "@/types/question";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import {
+	ActivityIndicator,
 	Alert,
 	Pressable,
 	ScrollView,
@@ -89,7 +90,14 @@ export default function PracticeProblemScreen() {
 			/>
 			<ScrollView style={styles.container}>
 				{isLoading ? (
-					<Text>Loading...</Text>
+					<View
+						style={{
+							justifyContent: "center",
+							alignItems: "center",
+						}}
+					>
+						<ActivityIndicator size={"large"} />
+					</View>
 				) : (
 					<View style={{ paddingBottom: 80 }}>
 						<View style={styles.questionContainer}>
@@ -209,75 +217,11 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 	},
-	modalContainerMiddle: {
-		flex: 1,
-		marginTop: "auto",
-		alignItems: "center",
-		justifyContent: "center",
-		backgroundColor: "rgba(0, 0, 0, 0.5)",
-	},
-	modalContentMiddle: {
-		width: "90%",
-		height: "40%",
-		padding: 20,
-		backgroundColor: "#fff",
-		borderRadius: 10,
-		alignItems: "center",
-	},
-	modalContainer: {
-		flex: 1,
-		marginTop: "auto",
-		alignItems: "center",
-		justifyContent: "flex-end",
-		backgroundColor: "rgba(0, 0, 0, 0.5)",
-	},
-	modalContent: {
-		width: "100%",
-		height: "60%",
-		padding: 20,
-		backgroundColor: "#fff",
-		borderRadius: 10,
-		alignItems: "center",
-	},
-	modalTitle: {
-		fontSize: 20,
-		fontWeight: "bold",
-		marginBottom: 15,
-	},
-	modalButton: {
-		marginTop: "auto",
-		paddingHorizontal: 20,
-		paddingVertical: 10,
-		borderRadius: 5,
-	},
-	modalButtonText: {
-		color: "#fff",
-		fontSize: 16,
-	},
-	codeContainer: {
-		padding: 16,
-		backgroundColor: "#f5f5f5",
-		borderRadius: 8,
-		margin: 16,
-	},
 	aiPressable: {
 		marginTop: 20,
 		backgroundColor: "#007AFF",
 		paddingVertical: 16,
 		paddingHorizontal: 20,
-		borderRadius: 8,
-		alignItems: "center",
-		shadowColor: "#000",
-		shadowOffset: { width: 0, height: 2 },
-		shadowOpacity: 0.25,
-		shadowRadius: 3.84,
-		elevation: 5,
-	},
-	aiPressableModal: {
-		marginTop: 20,
-		backgroundColor: "#007AFF",
-		paddingVertical: 12,
-		paddingHorizontal: 12,
 		borderRadius: 8,
 		alignItems: "center",
 		shadowColor: "#000",
@@ -310,15 +254,6 @@ const styles = StyleSheet.create({
 	questionPrompt: {
 		fontSize: 20,
 		color: "#333",
-	},
-	buttonsRow: {
-		flexDirection: "row",
-		gap: 10,
-		width: "100%",
-		paddingHorizontal: 16,
-	},
-	buttonWrapper: {
-		flex: 1,
 	},
 	bottomButton: {
 		position: "absolute",
