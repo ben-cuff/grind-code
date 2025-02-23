@@ -19,10 +19,10 @@ export default function NextProblem({
 	const [isLoading, setIsLoading] = useState(false);
 	return (
 		<View style={styles.nextProblemView}>
-			<Text style={styles.text}>Next Problem</Text>
+			<Text style={styles.text}>Next</Text>
 			{isLoading ? (
 				<View style={styles.loadingContainer}>
-					<ActivityIndicator size={"large"} color={"orange"} />
+					<ActivityIndicator size={"large"} color="#2b7fff" />
 				</View>
 			) : (
 				<Pressable
@@ -44,7 +44,7 @@ export default function NextProblem({
 						setIsLoading(false);
 						toggleCorrectModal(false);
 						router.push({
-							pathname: "/(practice)/[questionNumber]",
+							pathname: "/(tabs)/(practice)/[questionNumber]",
 							params: { questionNumber: data.questionNumber },
 						});
 					}}
@@ -61,29 +61,26 @@ export default function NextProblem({
 }
 
 const styles = StyleSheet.create({
-	iconContainer: {
-		marginLeft: "auto",
-		backgroundColor: "#2b7fff",
-		padding: 5,
-		borderRadius: 100,
-	},
-	loadingContainer: {
-		marginLeft: "auto",
-		borderRadius: 100,
-	},
 	nextProblemView: {
 		flexDirection: "row",
 		alignItems: "center",
-		padding: 8,
-		paddingLeft: 12,
-		paddingVertical: 12,
+		justifyContent: "space-between",
+		padding: 12,
 		backgroundColor: "#f0f0f0",
 		borderRadius: 8,
-		marginVertical: 8,
+		height: 64,
 	},
 	text: {
-		fontSize: 20,
+		fontSize: 16,
 		color: "#333",
-		marginRight: 8,
+		fontWeight: "600",
+	},
+	iconContainer: {
+		backgroundColor: "#2b7fff",
+		padding: 6,
+		borderRadius: 100,
+	},
+	loadingContainer: {
+		padding: 6,
 	},
 });

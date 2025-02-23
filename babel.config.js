@@ -3,7 +3,6 @@ module.exports = function (api) {
 	return {
 		presets: ["babel-preset-expo"],
 		plugins: [
-			// ...existing plugins...
 			[
 				"babel-plugin-inline-import",
 				{

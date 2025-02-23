@@ -1,3 +1,4 @@
+import AskAIScreen from "@/components/ask-ai";
 import NextProblem from "@/components/next-problem";
 import RandomShuffle from "@/components/random-shuffle";
 import { Question } from "@/types/question";
@@ -5,7 +6,9 @@ import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import {
 	Alert,
+	Button,
 	Modal,
+	Pressable,
 	ScrollView,
 	StyleSheet,
 	Text,
@@ -21,6 +24,7 @@ export default function PracticeProblemScreen() {
 		useState<AlgorithmPattern | null>();
 	const [options, setOptions] = useState<AlgorithmPattern[] | null>();
 	const [correctModal, toggleCorrectModal] = useState(false);
+	const [aiModal, toggleAiModal] = useState(false);
 
 	useEffect(() => {
 		async function fetchQuestions() {
@@ -66,7 +70,7 @@ export default function PracticeProblemScreen() {
 	};
 
 	return (
-		<ScrollView style={styles.container}>
+		<View style={{ flex: 1 }}>
 			<Modal
 				animationType="slide"
 				transparent={true}
@@ -75,71 +79,160 @@ export default function PracticeProblemScreen() {
 				<View style={styles.modalContainer}>
 					<View style={styles.modalContent}>
 						<Text style={styles.modalTitle}>Correct!</Text>
-						<TouchableOpacity
-							style={styles.modalButton}
-							onPress={() => toggleCorrectModal(false)}
+						<View style={styles.buttonsRow}>
+							<View style={styles.buttonWrapper}>
+								<RandomShuffle
+									toggleCorrectModal={toggleCorrectModal}
+								/>
+							</View>
+							<View style={styles.buttonWrapper}>
+								<NextProblem
+									toggleCorrectModal={toggleCorrectModal}
+									currentIndex={Number(
+										question?.questionNumber
+									)}
+								/>
+							</View>
+						</View>
+						<Pressable
+							style={styles.aiPressable}
+							onPress={() => {
+								toggleAiModal(true);
+								toggleCorrectModal(false);
+							}}
 						>
-							<Text style={styles.modalButtonText}>Close</Text>
-						</TouchableOpacity>
-						<RandomShuffle
-							toggleCorrectModal={toggleCorrectModal}
-						/>
-						<NextProblem
-							toggleCorrectModal={toggleCorrectModal}
-							currentIndex={Number(question?.questionNumber)}
-						/>
-					</View>
-				</View>
-			</Modal>
-			{isLoading ? (
-				<Text>Loading...</Text>
-			) : (
-				<View>
-					<Text>{question?.name}</Text>
-					<Text>Prompt: {question?.prompt}</Text>
-					<View>
-						<Text>Which algorithm pattern is used?</Text>
-						<View>
-							{options?.map((option) => (
-								<TouchableOpacity
-									key={option.id}
-									style={[
-										{
-											padding: 10,
-											marginVertical: 5,
-											borderWidth: 1,
-											borderColor: "#000",
-											borderRadius: 5,
-										},
-										currentPattern?.id === option.id && {
-											borderColor: "green",
-											borderWidth: 2,
-										},
-									]}
-									onPress={() => {
-										setCurrentPattern(option);
-									}}
-								>
-									<Text>{option.name}</Text>
-								</TouchableOpacity>
-							))}
-							<TouchableOpacity
-								style={{
-									padding: 10,
-									marginVertical: 5,
-									backgroundColor: "#007AFF",
-									borderRadius: 5,
-									alignItems: "center",
-								}}
-								onPress={onSubmit}
-							>
-								<Text style={{ color: "#fff" }}>Submit</Text>
-							</TouchableOpacity>
+							<Text style={styles.aiText}>Ask AI</Text>
+						</Pressable>
+						<View style={styles.modalButton}>
+							<Button
+								title="Back"
+								onPress={() => toggleCorrectModal(false)}
+							/>
 						</View>
 					</View>
 				</View>
-			)}
-		</ScrollView>
+			</Modal>
+			<Modal animationType="slide" transparent={true} visible={aiModal}>
+				<View style={styles.modalContainer}>
+					<View style={styles.modalContent}>
+						<ScrollView style={{ flex: 1 }}>
+							<AskAIScreen question={question!} />
+							<View style={{ justifyContent: "flex-end" }}>
+								<Button
+									title="Back"
+									onPress={() => {
+										toggleAiModal(false);
+									}}
+								/>
+							</View>
+						</ScrollView>
+					</View>
+				</View>
+			</Modal>
+			<ScrollView style={styles.container}>
+				{isLoading ? (
+					<Text>Loading...</Text>
+				) : (
+					<View style={{ paddingBottom: 80 }}>
+						<View style={styles.questionContainer}>
+							<Text style={styles.questionTitle}>
+								{question?.name}
+							</Text>
+							<Text style={styles.questionPrompt}>
+								{question?.prompt}
+							</Text>
+						</View>
+						<View>
+							<Text
+								style={[
+									styles.questionTitle,
+									{ textAlign: "center" },
+								]}
+							>
+								Which algorithm pattern is used?
+							</Text>
+							<View
+								style={{
+									flexDirection: "row",
+									flexWrap: "wrap",
+									justifyContent: "space-between",
+
+									margin: 10,
+								}}
+							>
+								{options?.map((option) => (
+									<TouchableOpacity
+										key={option.id}
+										style={[
+											{
+												width: "48%",
+												padding: 10,
+												marginVertical: 5,
+												borderWidth: 1,
+												borderColor: "#000",
+												borderRadius: 5,
+											},
+											currentPattern?.id ===
+												option.id && {
+												borderColor: "green",
+												borderWidth: 3,
+												marginVertical: 3,
+											},
+										]}
+										onPress={() =>
+											currentPattern?.id === option.id
+												? setCurrentPattern(null)
+												: setCurrentPattern(option)
+										}
+									>
+										<Text style={{ textAlign: "center" }}>
+											{option.name}
+										</Text>
+									</TouchableOpacity>
+								))}
+							</View>
+							<View
+								style={{
+									alignItems: "center",
+									flex: 1,
+								}}
+							>
+								<TouchableOpacity
+									style={{
+										padding: 10,
+										marginVertical: 5,
+										backgroundColor: "#007AFF",
+										borderRadius: 5,
+										alignItems: "center",
+										width: "20%",
+									}}
+									onPress={onSubmit}
+								>
+									<Text
+										style={{
+											color: "#fff",
+											textAlign: "center",
+										}}
+									>
+										Submit
+									</Text>
+								</TouchableOpacity>
+							</View>
+						</View>
+					</View>
+				)}
+			</ScrollView>
+			<View style={styles.bottomButton}>
+				<Pressable
+					style={styles.aiPressable}
+					onPress={() => {
+						toggleAiModal(true);
+					}}
+				>
+					<Text style={styles.aiText}>Ask AI</Text>
+				</Pressable>
+			</View>
+		</View>
 	);
 }
 
@@ -168,8 +261,7 @@ const styles = StyleSheet.create({
 		marginBottom: 15,
 	},
 	modalButton: {
-		marginTop: 10,
-		backgroundColor: "#007AFF",
+		marginTop: "auto",
 		paddingHorizontal: 20,
 		paddingVertical: 10,
 		borderRadius: 5,
@@ -183,6 +275,59 @@ const styles = StyleSheet.create({
 		backgroundColor: "#f5f5f5",
 		borderRadius: 8,
 		margin: 16,
+	},
+	aiPressable: {
+		marginTop: 20,
+		backgroundColor: "#007AFF",
+		paddingVertical: 12,
+		paddingHorizontal: 20,
+		borderRadius: 8,
+		alignItems: "center",
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 2 },
+		shadowOpacity: 0.25,
+		shadowRadius: 3.84,
+		elevation: 5,
+	},
+	aiText: {
+		color: "#fff",
+		fontSize: 16,
+		fontWeight: "500",
+	},
+	questionContainer: {
+		padding: 16,
+		margin: 16,
+		backgroundColor: "#f9f9f9",
+		borderRadius: 8,
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 2 },
+		shadowOpacity: 0.1,
+		shadowRadius: 4,
+		elevation: 2,
+	},
+	questionTitle: {
+		fontSize: 24,
+		fontWeight: "bold",
+		marginBottom: 8,
+	},
+	questionPrompt: {
+		fontSize: 20,
+		color: "#333",
+	},
+	buttonsRow: {
+		flexDirection: "row",
+		gap: 10,
+		width: "100%",
+		paddingHorizontal: 16,
+	},
+	buttonWrapper: {
+		flex: 1,
+	},
+	bottomButton: {
+		position: "absolute",
+		bottom: 20,
+		alignSelf: "flex-end",
+		paddingRight: 20,
 	},
 });
 

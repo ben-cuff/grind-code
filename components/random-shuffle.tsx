@@ -17,7 +17,7 @@ export default function RandomShuffle({
 	const [isLoading, setIsLoading] = useState(false);
 	return (
 		<View style={styles.shuffleView}>
-			<Text style={styles.text}>Random Problem</Text>
+			<Text style={styles.text}>Randomize</Text>
 			{isLoading ? (
 				<View style={styles.loadingContainer}>
 					<ActivityIndicator size={"large"} color={"orange"} />
@@ -47,7 +47,7 @@ export default function RandomShuffle({
 						});
 					}}
 				>
-					<Ionicons name={"shuffle"} size={28} />
+					<Ionicons name={"shuffle"} size={28} color="white" />
 				</Pressable>
 			)}
 		</View>
@@ -55,29 +55,26 @@ export default function RandomShuffle({
 }
 
 const styles = StyleSheet.create({
-	iconContainer: {
-		marginLeft: "auto",
-		backgroundColor: "orange",
-		padding: 5,
-		borderRadius: 100,
-	},
-	loadingContainer: {
-		marginLeft: "auto",
-		borderRadius: 100,
-	},
 	shuffleView: {
 		flexDirection: "row",
 		alignItems: "center",
-		padding: 8,
-		paddingLeft: 12,
-		paddingVertical: 12,
+		justifyContent: "space-between",
+		padding: 12,
 		backgroundColor: "#f0f0f0",
 		borderRadius: 8,
-		marginVertical: 8,
+		height: 64,
 	},
 	text: {
-		fontSize: 20,
+		fontSize: 16,
 		color: "#333",
-		marginRight: 8,
+		fontWeight: "600",
+	},
+	iconContainer: {
+		backgroundColor: "orange",
+		padding: 6,
+		borderRadius: 100,
+	},
+	loadingContainer: {
+		padding: 6,
 	},
 });
