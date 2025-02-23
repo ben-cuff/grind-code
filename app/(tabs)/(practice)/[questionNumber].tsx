@@ -165,7 +165,13 @@ export default function PracticeProblemScreen() {
 							<PythonSolution
 								questionNumber={question?.questionNumber!}
 							/>
-							<View style={{ justifyContent: "flex-end" }}>
+							<View
+								style={{
+									justifyContent: "flex-end",
+									width: "40%",
+									alignSelf: "center",
+								}}
+							>
 								<Button
 									title="Back"
 									onPress={() => {
@@ -412,14 +418,14 @@ const styles = StyleSheet.create({
 	bottomButton: {
 		position: "absolute",
 		bottom: 20,
-		alignSelf: "flex-end",
-		paddingRight: 20,
+		alignSelf: "flex-start",
+		paddingLeft: 20,
 	},
 	bottomButtonSolution: {
 		position: "absolute",
 		bottom: 20,
-		alignSelf: "flex-start",
-		paddingLeft: 20,
+		alignSelf: "flex-end",
+		paddingRight: 20,
 	},
 });
 
