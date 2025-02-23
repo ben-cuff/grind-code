@@ -7,13 +7,16 @@ export default async function createAccount() {
 
 		console.log("token: " + token);
 
-		const response = await fetch(`http://localhost:3000/accounts`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${token}`,
-			},
-		});
+		const response = await fetch(
+			`${process.env.EXPO_PUBLIC_BASE_URL}/accounts`,
+			{
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${token}`,
+				},
+			}
+		);
 
 		console.log(response);
 
