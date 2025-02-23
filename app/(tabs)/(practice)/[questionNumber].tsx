@@ -358,7 +358,7 @@ const styles = StyleSheet.create({
 	aiPressable: {
 		marginTop: 20,
 		backgroundColor: "#007AFF",
-		paddingVertical: 12,
+		paddingVertical: 16,
 		paddingHorizontal: 20,
 		borderRadius: 8,
 		alignItems: "center",
@@ -420,12 +420,14 @@ const styles = StyleSheet.create({
 		bottom: 20,
 		alignSelf: "flex-start",
 		paddingLeft: 20,
+		width: "30%",
 	},
 	bottomButtonSolution: {
 		position: "absolute",
 		bottom: 20,
 		alignSelf: "flex-end",
 		paddingRight: 20,
+		width: "30%",
 	},
 });
 
