@@ -1,10 +1,12 @@
 import { Question } from "@/types/question";
+import { useAuth } from "@clerk/clerk-expo";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 
 export default function AskAIScreen({ question }: { question: Question }) {
 	const [aiResponse, setAiResponse] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
+	const { getToken } = useAuth();
 
 	useEffect(() => {
 		async function fetchResponse() {
@@ -14,13 +16,15 @@ export default function AskAIScreen({ question }: { question: Question }) {
 					"You are trying to answer the users question that they got on a coding interview. Give a brief explanation on how to solve it without actually coding anything. This is the prompt: " +
 					question.prompt;
 
+				const token = await getToken();
+
 				const response = await fetch(
 					`${process.env.EXPO_PUBLIC_BASE_URL}/openai/ask-ai`,
 					{
 						method: "POST",
 						headers: {
 							"Content-Type": "application/json",
-							"x-api-key": `${process.env.X_API_KEY}`,
+							Authorization: `Bearer ${token}`,
 						},
 						body: JSON.stringify({ message }),
 					}
