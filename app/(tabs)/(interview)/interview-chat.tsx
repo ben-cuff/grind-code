@@ -1,5 +1,7 @@
+import { Question } from "@/types/question";
 import { useAuth } from "@clerk/clerk-expo";
-import { useState } from "react";
+import Markdown from "@ronradtke/react-native-markdown-display";
+import { useEffect, useState } from "react";
 import { Button, ScrollView, Text, TextInput, View } from "react-native";
 import uuid from "react-native-uuid";
 
@@ -10,16 +12,60 @@ export interface Message {
 }
 
 export default function InterviewChat() {
-	const [messages, setMessages] = useState<Message[]>([
-		{
-			id: "initial",
-			role: "assistant",
-			content: "Hello! How can I help you today?",
-		},
-	]);
+	const [messages, setMessages] = useState<Message[]>([]);
 	const [isLoading, setIsLoading] = useState(false);
+	const [initialLoad, setInitialLoad] = useState(false);
+	const [solution, setSolution] = useState("");
+	const [question, setQuestion] = useState<Question | null>(null);
 	const [input, setInput] = useState("");
 	const { getToken } = useAuth();
+
+	useEffect(() => {
+		const fetchData = async () => {
+			setInitialLoad(true);
+			const response = await fetch(
+				`${process.env.EXPO_PUBLIC_BASE_URL}/questions/random-question`,
+				{
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json",
+					},
+				}
+			);
+			const data = await response.json();
+
+			console.log(data);
+
+			setQuestion(data);
+
+			setMessages([
+				{
+					id: "initial",
+					role: "assistant",
+					content: data.prompt,
+				},
+			]);
+
+			const responseSolution = await fetch(
+				`${process.env.EXPO_PUBLIC_BASE_URL}/solutions/?questionNumber=${data.questionNumber}`,
+				{
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json",
+					},
+				}
+			);
+
+			const dataSolution = await responseSolution.json();
+
+			console.log(dataSolution);
+
+			setSolution(dataSolution.solution);
+
+			setInitialLoad(false);
+		};
+		fetchData();
+	}, []);
 
 	const handleSubmit = async () => {
 		if (!input.trim() || isLoading) return;
@@ -30,15 +76,13 @@ export default function InterviewChat() {
 			content: input.trim(),
 		};
 
-		console.log(userMessage);
-
-		setMessages((prev) => [...prev, userMessage]);
+		setMessages((prev) => [...prev!, userMessage]);
 		setInput("");
 		setIsLoading(true);
 
 		const tempMessageId = uuid.v4();
 		setMessages((prev) => [
-			...prev,
+			...prev!,
 			{
 				id: tempMessageId,
 				role: "assistant",
@@ -66,6 +110,7 @@ export default function InterviewChat() {
 								content,
 							})
 						),
+						solution,
 					}),
 				}
 			);
@@ -83,7 +128,7 @@ export default function InterviewChat() {
 
 			console.log(data);
 			setMessages((prev) =>
-				prev.map((message) =>
+				prev?.map((message) =>
 					message.id === tempMessageId
 						? { ...message, content: data.message }
 						: message
@@ -118,13 +163,15 @@ export default function InterviewChat() {
 		}
 	};
 
-	return (
+	return initialLoad ? (
+		<Text>Loading</Text>
+	) : (
 		<ScrollView>
 			<View>
 				{messages.map((msg, index) => (
-					<Text key={msg.id}>
-						{index}. {msg.content}
-					</Text>
+					<Markdown
+						key={msg.id}
+					>{`${index}. ${msg.content}`}</Markdown>
 				))}
 			</View>
 			<View>
