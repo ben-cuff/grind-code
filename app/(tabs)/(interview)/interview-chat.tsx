@@ -96,7 +96,6 @@ export default function InterviewChat() {
 			const token = await getToken();
 			const response = await fetch(
 				`${process.env.EXPO_PUBLIC_BASE_URL}/openai/stream`,
-				// "http://localhost:3000/openai/stream",
 				{
 					method: "POST",
 					headers: {
@@ -167,12 +166,69 @@ export default function InterviewChat() {
 		<Text>Loading</Text>
 	) : (
 		<ScrollView>
-			<View>
-				{messages.map((msg, index) => (
-					<Markdown
-						key={msg.id}
-					>{`${index}. ${msg.content}`}</Markdown>
-				))}
+			<View
+				style={{
+					padding: 10,
+					backgroundColor: "#f9f9f9",
+					borderRadius: 8,
+					marginBottom: 20,
+				}}
+			>
+				{messages.map((msg, index) => {
+					const isUser = msg.role === "user";
+					return (
+						<View
+							key={msg.id}
+							style={{
+								flexDirection: isUser ? "row-reverse" : "row",
+								padding: 8,
+								backgroundColor: isUser ? "#dcf8c6" : "#fff",
+								alignSelf: isUser ? "flex-end" : "flex-start",
+								borderRadius: 5,
+								maxWidth: "80%",
+								height: "auto",
+								width: "auto",
+								alignItems: "center",
+							}}
+						>
+							<View
+								style={{
+									width: 40,
+									height: 40,
+									borderRadius: 20,
+									backgroundColor: isUser
+										? "#007AFF"
+										: "#FF9500",
+									justifyContent: "center",
+									alignItems: "center",
+									marginHorizontal: 8,
+								}}
+							>
+								<Text
+									style={{
+										color: "#fff",
+										fontWeight: "bold",
+									}}
+								>
+									{isUser ? "ME" : "AI"}
+								</Text>
+							</View>
+							<Markdown
+								style={{
+									body: {
+										color: "#333",
+										fontSize: 16,
+										textAlign: isUser ? "right" : "left",
+										flexShrink: 1,
+										width: "100%",
+									},
+								}}
+							>
+								{msg.content}
+							</Markdown>
+						</View>
+					);
+				})}
 			</View>
 			<View>
 				<TextInput
