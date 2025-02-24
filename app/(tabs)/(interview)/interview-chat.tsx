@@ -14,9 +14,11 @@ export interface Message {
 export default function InterviewChat() {
 	const [messages, setMessages] = useState<Message[]>([]);
 	const [isLoading, setIsLoading] = useState(false);
+	const [isLoadingFeedback, setIsLoadingFeedback] = useState(false);
 	const [initialLoad, setInitialLoad] = useState(false);
 	const [solution, setSolution] = useState("");
 	const [question, setQuestion] = useState<Question | null>(null);
+	const [feedback, setFeedback] = useState();
 	const [input, setInput] = useState("");
 	const { getToken } = useAuth();
 
@@ -162,6 +164,47 @@ export default function InterviewChat() {
 		}
 	};
 
+	const handleFeedback = async () => {
+		try {
+			setIsLoadingFeedback(true);
+			const token = await getToken();
+			const response = await fetch(
+				`${process.env.EXPO_PUBLIC_BASE_URL}/openai/feedback`,
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${token}`,
+					},
+					body: JSON.stringify({
+						messages: messages.map(({ role, content }) => ({
+							role,
+							content,
+						})),
+						solution,
+					}),
+				}
+			);
+
+			if (!response.ok) {
+				console.log(response);
+				const errorData = await response.json();
+				alert(errorData.error || "Failed to fetch response");
+				throw new Error(
+					errorData.message || "Failed to fetch response"
+				);
+			}
+
+			const data = await response.json();
+
+			console.log(data);
+
+			setIsLoadingFeedback(false);
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
 	return initialLoad ? (
 		<Text>Loading</Text>
 	) : (
@@ -249,6 +292,15 @@ export default function InterviewChat() {
 					disabled={isLoading}
 				/>
 			</View>
+			<Button
+				title={
+					isLoadingFeedback
+						? "Generating Feedback..."
+						: "End Interview"
+				}
+				onPress={handleFeedback}
+				disabled={isLoadingFeedback}
+			/>
 		</ScrollView>
 	);
 }
