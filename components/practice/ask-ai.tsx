@@ -2,9 +2,15 @@ import { Question } from "@/types/question";
 import { useAuth } from "@clerk/clerk-expo";
 import Markdown from "@ronradtke/react-native-markdown-display";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, Alert, StyleSheet, Text, View } from "react-native";
 
-export default function AskAIScreen({ question }: { question: Question }) {
+export default function AskAIScreen({
+	question,
+	toggleAiModal,
+}: {
+	question: Question;
+	toggleAiModal: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
 	const [aiResponse, setAiResponse] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
 	const { getToken } = useAuth();
@@ -30,6 +36,13 @@ export default function AskAIScreen({ question }: { question: Question }) {
 						body: JSON.stringify({ message }),
 					}
 				);
+
+				if (response.status == 402) {
+					const data = await response.json();
+					toggleAiModal(false);
+					Alert.alert(data.error);
+					return;
+				}
 
 				if (!response.ok) {
 					const errorData = await response.json();

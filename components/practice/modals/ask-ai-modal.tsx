@@ -17,7 +17,10 @@ export default function AskAIModal({
 			<View style={styles.modalContainer}>
 				<View style={styles.modalContent}>
 					<ScrollView style={{ flex: 1 }}>
-						<AskAIScreen question={question!} />
+						<AskAIScreen
+							question={question!}
+							toggleAiModal={toggleAiModal}
+						/>
 						<View style={{ justifyContent: "flex-end" }}>
 							<Button
 								title="Back"
