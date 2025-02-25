@@ -43,9 +43,8 @@ export default function TabLayout() {
 					),
 				}}
 			/>
-
 			<Tabs.Screen
-				name="interview"
+				name="(interview)"
 				options={{
 					title: "Interview",
 					tabBarIcon: ({ color, focused }) => (
