@@ -1,4 +1,3 @@
-import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { getThemeColors } from "@/constants/theme";
 import { useTheme } from "@/context/theme-context";
@@ -10,14 +9,14 @@ interface AskAIModalProps {
 	isVisible: boolean;
 	onClose: () => void;
 	question: Question;
-	toggleAiModal: React.Dispatch<React.SetStateAction<boolean>>;
+	setAiModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export function AskAIModal({
 	isVisible,
 	onClose,
 	question,
-	toggleAiModal,
+	setAiModal,
 }: AskAIModalProps) {
 	const { theme } = useTheme();
 	const colors = getThemeColors(theme === "dark");
@@ -36,9 +35,7 @@ export function AskAIModal({
 				]}
 			>
 				<ThemedView useGradient style={styles.modalContent}>
-					<ThemedText>
-						<AskAIScreen question={question} toggleAiModal={toggleAiModal} />
-					</ThemedText>
+					<AskAIScreen question={question} setAiModal={setAiModal} />
 				</ThemedView>
 			</View>
 		</Modal>

@@ -36,12 +36,15 @@ export default function InterviewModal({
 		},
 		code_inline: {
 			color: colors.text,
+			backgroundColor: colors.code,
 		},
 		code_block: {
 			color: colors.text,
+			backgroundColor: colors.code,
 		},
 		fence: {
 			color: colors.text,
+			backgroundColor: colors.code,
 		},
 		link: {
 			color: colors.primary,

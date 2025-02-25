@@ -8,12 +8,14 @@ interface SolutionModalProps {
 	isVisible: boolean;
 	onClose: () => void;
 	questionNumber: number;
+	setSolutionModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export function SolutionModal({
 	isVisible,
 	onClose,
 	questionNumber,
+	setSolutionModal,
 }: SolutionModalProps) {
 	const { theme } = useTheme();
 	const colors = getThemeColors(theme === "dark");
@@ -32,7 +34,10 @@ export function SolutionModal({
 				]}
 			>
 				<ThemedView useGradient style={styles.modalContent}>
-					<PythonSolution questionNumber={questionNumber} />
+					<PythonSolution
+						questionNumber={questionNumber}
+						setSolutionModal={setSolutionModal}
+					/>
 				</ThemedView>
 			</View>
 		</Modal>

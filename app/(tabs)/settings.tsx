@@ -1,15 +1,28 @@
 import { SignOutButton } from "@/components/auth/sign-out-button";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
+import TogglePremium from "@/components/toggle-premium";
 import { getThemeColors } from "@/constants/theme";
 import { useTheme } from "@/context/theme-context";
+import { useAuth } from "@clerk/clerk-expo";
 import { Ionicons } from "@expo/vector-icons";
+import { useEffect, useState } from "react";
 import { Pressable, SafeAreaView, StyleSheet, View } from "react-native";
 
 export default function SettingsTab() {
+	const [token, setToken] = useState("");
 	const { themeMode, setThemeMode } = useTheme();
 	const { theme } = useTheme();
 	const colors = getThemeColors(theme === "dark");
+	const { getToken } = useAuth();
+
+	useEffect(() => {
+		const fetchToken = async () => {
+			const token = await getToken();
+			setToken(token || "");
+		};
+		fetchToken();
+	}, [getToken]);
 
 	return (
 		<ThemedView style={{ flex: 1 }}>
@@ -68,6 +81,7 @@ export default function SettingsTab() {
 				</View>
 
 				<View style={styles.signOutContainer}>
+					<TogglePremium token={token} />
 					<SignOutButton />
 				</View>
 			</SafeAreaView>

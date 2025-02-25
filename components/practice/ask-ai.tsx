@@ -1,19 +1,53 @@
+import { getThemeColors } from "@/constants/theme";
+import { useTheme } from "@/context/theme-context";
 import { Question } from "@/types/question";
 import { useAuth } from "@clerk/clerk-expo";
 import Markdown from "@ronradtke/react-native-markdown-display";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, Alert, StyleSheet, Text, View } from "react-native";
+import {
+	ActivityIndicator,
+	Alert,
+	Button,
+	ScrollView,
+	StyleSheet,
+	View,
+} from "react-native";
 
 export default function AskAIScreen({
 	question,
-	toggleAiModal,
+	setAiModal,
 }: {
 	question: Question;
-	toggleAiModal: React.Dispatch<React.SetStateAction<boolean>>;
+	setAiModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
 	const [aiResponse, setAiResponse] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
 	const { getToken } = useAuth();
+	const { theme } = useTheme();
+	const colors = getThemeColors(theme === "dark");
+
+	const markdownStyle = {
+		body: {
+			color: colors.text,
+			fontSize: 16,
+			lineHeight: 24,
+		},
+		code_inline: {
+			color: colors.text,
+			backgroundColor: colors.code,
+		},
+		code_block: {
+			color: colors.text,
+			backgroundColor: colors.code,
+		},
+		fence: {
+			color: colors.text,
+			backgroundColor: colors.code,
+		},
+		link: {
+			color: colors.primary,
+		},
+	};
 
 	useEffect(() => {
 		async function fetchResponse() {
@@ -39,7 +73,7 @@ export default function AskAIScreen({
 
 				if (response.status == 402) {
 					const data = await response.json();
-					toggleAiModal(false);
+					setAiModal(false);
 					Alert.alert(data.error);
 					return;
 				}
@@ -70,20 +104,27 @@ export default function AskAIScreen({
 	return (
 		<View style={styles.container}>
 			{isLoading ? (
-				<ActivityIndicator size={"large"} />
+				<View
+					style={{
+						flex: 1,
+						alignContent: "center",
+					}}
+				>
+					<ActivityIndicator size={"large"} color={"gray"} />
+				</View>
 			) : (
-				<Markdown style={styles.body}>{aiResponse}</Markdown>
+				<ScrollView>
+					<Markdown style={markdownStyle}>{aiResponse}</Markdown>
+				</ScrollView>
 			)}
+			<Button title="back" onPress={() => setAiModal(false)} />
 		</View>
 	);
 }
 
 const styles = StyleSheet.create({
 	container: {
+		flex: 1,
 		padding: 16,
-	},
-	body: {
-		fontSize: 16,
-		lineHeight: 24,
 	},
 });

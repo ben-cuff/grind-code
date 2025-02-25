@@ -6,6 +6,7 @@ export const lightTheme = {
 	border: "#E5E5EA",
 	card: ["#FFFFFF", "#F8F9FA"],
 	surface: "#FFFFFF",
+	code: "#e0e0e0",
 	surfaceAlt: "#F2F2F7",
 	tabBar: {
 		background: ["#FFFFFF", "#F8F9FA"],
@@ -31,6 +32,7 @@ export const darkTheme = {
 	card: ["#2C2E33", "#1A1B1E"],
 	surface: "#2C2E33",
 	surfaceAlt: "#242426",
+	code: "#14121b",
 	tabBar: {
 		background: ["#1A1B1E", "#2C2E33"],
 		active: "#0A84FF",
