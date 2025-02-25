@@ -1,10 +1,10 @@
-import { Message } from "@/app/(tabs)/(interview)/interview-chat";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
-import { useTheme } from "@/context/theme-context";
 import { getThemeColors } from "@/constants/theme";
+import { useTheme } from "@/context/theme-context";
+import { Message } from "@/types/message";
 import Markdown from "@ronradtke/react-native-markdown-display";
-import { StyleSheet, View, ViewStyle, TextStyle } from "react-native";
+import { StyleSheet, TextStyle, View, ViewStyle } from "react-native";
 
 export default function ChatArea({ messages }: { messages: Message[] }) {
 	const { theme } = useTheme();
@@ -31,7 +31,9 @@ export default function ChatArea({ messages }: { messages: Message[] }) {
 	};
 
 	return (
-		<ThemedView style={[styles.container, { backgroundColor: colors.surfaceAlt }]}>
+		<ThemedView
+			style={[styles.container, { backgroundColor: colors.surfaceAlt }]}
+		>
 			{messages.map((msg) => {
 				const isUser = msg.role === "user";
 				return (
@@ -41,7 +43,9 @@ export default function ChatArea({ messages }: { messages: Message[] }) {
 							styles.messageContainer,
 							{
 								alignSelf: isUser ? "flex-end" : "flex-start",
-								backgroundColor: isUser ? colors.primary : colors.surface,
+								backgroundColor: isUser
+									? colors.primary
+									: colors.surface,
 							},
 						]}
 					>
@@ -49,7 +53,9 @@ export default function ChatArea({ messages }: { messages: Message[] }) {
 							style={[
 								styles.profile,
 								{
-									backgroundColor: isUser ? colors.button.background[0] : colors.button.background[1],
+									backgroundColor: isUser
+										? colors.button.background[0]
+										: colors.button.background[1],
 								},
 							]}
 						>
@@ -58,7 +64,9 @@ export default function ChatArea({ messages }: { messages: Message[] }) {
 							</ThemedText>
 						</View>
 						<View style={styles.messageContent}>
-							<Markdown style={markdownStyle}>{msg.content}</Markdown>
+							<Markdown style={markdownStyle}>
+								{msg.content}
+							</Markdown>
 						</View>
 					</View>
 				);

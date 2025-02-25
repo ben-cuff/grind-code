@@ -1,11 +1,10 @@
 import { SignOutButton } from "@/components/auth/sign-out-button";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
-import { useTheme } from "@/context/theme-context";
 import { getThemeColors } from "@/constants/theme";
+import { useTheme } from "@/context/theme-context";
 import { Ionicons } from "@expo/vector-icons";
 import { Pressable, SafeAreaView, StyleSheet, View } from "react-native";
-import { LinearGradient } from 'expo-linear-gradient';
 
 export default function SettingsTab() {
 	const { themeMode, setThemeMode } = useTheme();
@@ -16,7 +15,7 @@ export default function SettingsTab() {
 		<ThemedView style={{ flex: 1 }}>
 			<SafeAreaView style={styles.container}>
 				<ThemedText style={styles.title}>Settings</ThemedText>
-				
+
 				<View style={styles.section}>
 					<ThemedText style={styles.sectionTitle}>Theme</ThemedText>
 					<View style={styles.themeOptions}>
@@ -24,36 +23,46 @@ export default function SettingsTab() {
 							style={[
 								styles.themeButton,
 								themeMode === "light" && styles.selectedTheme,
-								{ backgroundColor: colors.surfaceAlt }
+								{ backgroundColor: colors.surfaceAlt },
 							]}
 							onPress={() => setThemeMode("light")}
 						>
 							<Ionicons name="sunny" size={24} color="#FFB800" />
-							<ThemedText style={styles.buttonText}>Light</ThemedText>
+							<ThemedText style={styles.buttonText}>
+								Light
+							</ThemedText>
 						</Pressable>
 
 						<Pressable
 							style={[
 								styles.themeButton,
 								themeMode === "dark" && styles.selectedTheme,
-								{ backgroundColor: colors.surfaceAlt }
+								{ backgroundColor: colors.surfaceAlt },
 							]}
 							onPress={() => setThemeMode("dark")}
 						>
 							<Ionicons name="moon" size={24} color="#6C63FF" />
-							<ThemedText style={styles.buttonText}>Dark</ThemedText>
+							<ThemedText style={styles.buttonText}>
+								Dark
+							</ThemedText>
 						</Pressable>
 
 						<Pressable
 							style={[
 								styles.themeButton,
 								themeMode === "system" && styles.selectedTheme,
-								{ backgroundColor: colors.surfaceAlt }
+								{ backgroundColor: colors.surfaceAlt },
 							]}
 							onPress={() => setThemeMode("system")}
 						>
-							<Ionicons name="settings" size={24} color="#4CAF50" />
-							<ThemedText style={styles.buttonText}>System</ThemedText>
+							<Ionicons
+								name="settings"
+								size={24}
+								color="#4CAF50"
+							/>
+							<ThemedText style={styles.buttonText}>
+								System
+							</ThemedText>
 						</Pressable>
 					</View>
 				</View>

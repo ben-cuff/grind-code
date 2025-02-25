@@ -1,11 +1,11 @@
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
-import { useTheme } from "@/context/theme-context";
 import { getThemeColors } from "@/constants/theme";
+import { useTheme } from "@/context/theme-context";
+import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { Pressable, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { LinearGradient } from 'expo-linear-gradient';
 
 export default function InterviewTab() {
 	const router = useRouter();
@@ -18,13 +18,20 @@ export default function InterviewTab() {
 				<ThemedText style={styles.title}>Interview</ThemedText>
 				<Pressable
 					style={styles.buttonWrapper}
-					onPress={() => router.push("/(tabs)/(interview)/interview-chat")}
+					onPress={() =>
+						router.push("/(tabs)/(interview)/interview-chat")
+					}
 				>
 					<LinearGradient
-						colors={[colors.button.background[0], colors.button.background[1]]}
+						colors={[
+							colors.button.background[0],
+							colors.button.background[1],
+						]}
 						style={styles.button}
 					>
-						<ThemedText style={styles.buttonText}>Start Interview</ThemedText>
+						<ThemedText style={styles.buttonText}>
+							Start Interview
+						</ThemedText>
 					</LinearGradient>
 				</Pressable>
 			</SafeAreaView>

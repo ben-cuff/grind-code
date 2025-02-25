@@ -1,9 +1,8 @@
-import { useTheme } from "@/context/theme-context";
 import { getThemeColors } from "@/constants/theme";
+import { useTheme } from "@/context/theme-context";
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import { View } from "react-native";
-import { LinearGradient } from 'expo-linear-gradient';
 
 export default function TabLayout() {
 	const { theme } = useTheme();

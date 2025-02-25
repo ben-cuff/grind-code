@@ -1,10 +1,18 @@
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
-import { useTheme } from "@/context/theme-context";
 import { getThemeColors } from "@/constants/theme";
+import { useTheme } from "@/context/theme-context";
 import Markdown from "@ronradtke/react-native-markdown-display";
-import { Modal, Pressable, ScrollView, StyleSheet, View, ViewStyle, TextStyle } from "react-native";
-import { LinearGradient } from 'expo-linear-gradient';
+import { LinearGradient } from "expo-linear-gradient";
+import {
+	Modal,
+	Pressable,
+	ScrollView,
+	StyleSheet,
+	TextStyle,
+	View,
+	ViewStyle,
+} from "react-native";
 
 export default function InterviewModal({
 	feedbackModal,
@@ -42,14 +50,27 @@ export default function InterviewModal({
 
 	return (
 		<Modal animationType="slide" transparent={true} visible={feedbackModal}>
-			<View style={[styles.modalContainer, { backgroundColor: colors.modal.background }]}>
+			<View
+				style={[
+					styles.modalContainer,
+					{ backgroundColor: colors.modal.background },
+				]}
+			>
 				<ThemedView useGradient style={styles.modalContent}>
 					<ScrollView style={styles.scrollView}>
 						<View style={styles.contentContainer}>
-							<ThemedText style={styles.title}>Interview Feedback</ThemedText>
-							<Markdown style={markdownStyle}>{feedback?.message ?? ""}</Markdown>
-							<ThemedText style={styles.solutionTitle}>Solution:</ThemedText>
-							<Markdown style={markdownStyle}>{solution}</Markdown>
+							<ThemedText style={styles.title}>
+								Interview Feedback
+							</ThemedText>
+							<Markdown style={markdownStyle}>
+								{feedback?.message ?? ""}
+							</Markdown>
+							<ThemedText style={styles.solutionTitle}>
+								Solution:
+							</ThemedText>
+							<Markdown style={markdownStyle}>
+								{solution}
+							</Markdown>
 						</View>
 					</ScrollView>
 					<Pressable
@@ -57,10 +78,15 @@ export default function InterviewModal({
 						onPress={() => toggleFeedbackModal(false)}
 					>
 						<LinearGradient
-							colors={[colors.button.background[0], colors.button.background[1]]}
+							colors={[
+								colors.button.background[0],
+								colors.button.background[1],
+							]}
 							style={styles.button}
 						>
-							<ThemedText style={styles.buttonText}>Close</ThemedText>
+							<ThemedText style={styles.buttonText}>
+								Close
+							</ThemedText>
 						</LinearGradient>
 					</Pressable>
 				</ThemedView>

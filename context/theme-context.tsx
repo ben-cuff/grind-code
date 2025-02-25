@@ -1,60 +1,61 @@
+import * as SecureStore from "expo-secure-store";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useColorScheme } from "react-native";
-import * as SecureStore from "expo-secure-store";
 
 type ThemeMode = "light" | "dark" | "system";
 
 interface ThemeContextType {
-  theme: "light" | "dark";
-  themeMode: ThemeMode;
-  setThemeMode: (mode: ThemeMode) => void;
+	theme: "light" | "dark";
+	themeMode: ThemeMode;
+	setThemeMode: (mode: ThemeMode) => void;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const systemColorScheme = useColorScheme();
-  const [themeMode, setThemeModeState] = useState<ThemeMode>("system");
+	const systemColorScheme = useColorScheme();
+	const [themeMode, setThemeModeState] = useState<ThemeMode>("system");
 
-  useEffect(() => {
-    // Load saved theme mode on app start
-    const loadThemeMode = async () => {
-      try {
-        const savedMode = await SecureStore.getItemAsync("themeMode");
-        if (savedMode) {
-          setThemeModeState(savedMode as ThemeMode);
-        }
-      } catch (error) {
-        console.error("Error loading theme mode:", error);
-      }
-    };
-    
-    loadThemeMode();
-  }, []);
+	useEffect(() => {
+		// Load saved theme mode on app start
+		const loadThemeMode = async () => {
+			try {
+				const savedMode = await SecureStore.getItemAsync("themeMode");
+				if (savedMode) {
+					setThemeModeState(savedMode as ThemeMode);
+				}
+			} catch (error) {
+				console.error("Error loading theme mode:", error);
+			}
+		};
 
-  const setThemeMode = async (mode: ThemeMode) => {
-    try {
-      setThemeModeState(mode);
-      await SecureStore.setItemAsync("themeMode", mode);
-    } catch (error) {
-      console.error("Error saving theme mode:", error);
-    }
-  };
+		loadThemeMode();
+	}, []);
 
-  // Determine actual theme based on mode and system preference
-  const theme = themeMode === "system" ? systemColorScheme || "light" : themeMode;
+	const setThemeMode = async (mode: ThemeMode) => {
+		try {
+			setThemeModeState(mode);
+			await SecureStore.setItemAsync("themeMode", mode);
+		} catch (error) {
+			console.error("Error saving theme mode:", error);
+		}
+	};
 
-  return (
-    <ThemeContext.Provider value={{ theme, themeMode, setThemeMode }}>
-      {children}
-    </ThemeContext.Provider>
-  );
+	// Determine actual theme based on mode and system preference
+	const theme =
+		themeMode === "system" ? systemColorScheme || "light" : themeMode;
+
+	return (
+		<ThemeContext.Provider value={{ theme, themeMode, setThemeMode }}>
+			{children}
+		</ThemeContext.Provider>
+	);
 }
 
 export function useTheme() {
-  const context = useContext(ThemeContext);
-  if (context === undefined) {
-    throw new Error("useTheme must be used within a ThemeProvider");
-  }
-  return context;
-} 
+	const context = useContext(ThemeContext);
+	if (context === undefined) {
+		throw new Error("useTheme must be used within a ThemeProvider");
+	}
+	return context;
+}

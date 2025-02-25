@@ -1,16 +1,22 @@
-import { ThemedText } from "@/components/themed-text";
-import { ThemedView } from "@/components/themed-view";
 import { AskAIModal } from "@/components/practice/modals/ask-ai-modal";
 import { CorrectModal } from "@/components/practice/modals/correct-modal";
 import { SolutionModal } from "@/components/practice/modals/solution-modal";
 import QuestionDisplay from "@/components/practice/question";
-import { Question } from "@/types/question";
-import { useTheme } from "@/context/theme-context";
+import { ThemedText } from "@/components/themed-text";
+import { ThemedView } from "@/components/themed-view";
 import { getThemeColors } from "@/constants/theme";
+import { useTheme } from "@/context/theme-context";
+import { Question } from "@/types/question";
+import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, Pressable, ScrollView, StyleSheet, View } from "react-native";
-import { LinearGradient } from 'expo-linear-gradient';
+import {
+	ActivityIndicator,
+	Pressable,
+	ScrollView,
+	StyleSheet,
+	View,
+} from "react-native";
 
 export default function PracticeProblemScreen() {
 	const { questionNumber } = useLocalSearchParams();
@@ -64,7 +70,9 @@ export default function PracticeProblemScreen() {
 			<AskAIModal
 				isVisible={aiModal}
 				onClose={() => setAiModal(false)}
-				explanation={question?.explanation || "No explanation available"}
+				explanation={
+					question?.explanation || "No explanation available"
+				}
 			/>
 			<SolutionModal
 				isVisible={solutionModal}
@@ -74,7 +82,10 @@ export default function PracticeProblemScreen() {
 			<ScrollView style={styles.container}>
 				{isLoading ? (
 					<View style={styles.loadingContainer}>
-						<ActivityIndicator size={"large"} color={colors.primary} />
+						<ActivityIndicator
+							size={"large"}
+							color={colors.primary}
+						/>
 					</View>
 				) : (
 					<QuestionDisplay
@@ -89,10 +100,15 @@ export default function PracticeProblemScreen() {
 					onPress={() => setAiModal(true)}
 				>
 					<LinearGradient
-						colors={[colors.button.background[0], colors.button.background[1]]}
+						colors={[
+							colors.button.background[0],
+							colors.button.background[1],
+						]}
 						style={styles.button}
 					>
-						<ThemedText style={styles.buttonText}>Ask AI</ThemedText>
+						<ThemedText style={styles.buttonText}>
+							Ask AI
+						</ThemedText>
 					</LinearGradient>
 				</Pressable>
 				<Pressable
@@ -100,10 +116,15 @@ export default function PracticeProblemScreen() {
 					onPress={() => setSolutionModal(true)}
 				>
 					<LinearGradient
-						colors={[colors.button.background[0], colors.button.background[1]]}
+						colors={[
+							colors.button.background[0],
+							colors.button.background[1],
+						]}
 						style={styles.button}
 					>
-						<ThemedText style={styles.buttonText}>Solution</ThemedText>
+						<ThemedText style={styles.buttonText}>
+							Solution
+						</ThemedText>
 					</LinearGradient>
 				</Pressable>
 			</View>

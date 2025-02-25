@@ -2,21 +2,23 @@ import ChatArea from "@/components/interview/chat-area";
 import InterviewModal from "@/components/interview/interview-modal";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
-import { useTheme } from "@/context/theme-context";
 import { getThemeColors } from "@/constants/theme";
+import { useTheme } from "@/context/theme-context";
+import { Message } from "@/types/message";
 import { Question } from "@/types/question";
 import { handleFeedback } from "@/utils/interview";
 import { useAuth } from "@clerk/clerk-expo";
+import { LinearGradient } from "expo-linear-gradient";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, Pressable, ScrollView, StyleSheet, TextInput, View } from "react-native";
-import { LinearGradient } from 'expo-linear-gradient';
+import {
+	ActivityIndicator,
+	Pressable,
+	ScrollView,
+	StyleSheet,
+	TextInput,
+	View,
+} from "react-native";
 import uuid from "react-native-uuid";
-
-export interface Message {
-	id: string;
-	role: "user" | "assistant";
-	content: string;
-}
 
 export default function InterviewChat() {
 	const [messages, setMessages] = useState<Message[]>([]);
@@ -194,11 +196,14 @@ export default function InterviewChat() {
 				<ChatArea messages={messages} />
 				<View style={styles.inputContainer}>
 					<TextInput
-						style={[styles.input, { 
-							backgroundColor: colors.surfaceAlt,
-							color: colors.text,
-							borderColor: colors.border
-						}]}
+						style={[
+							styles.input,
+							{
+								backgroundColor: colors.surfaceAlt,
+								color: colors.text,
+								borderColor: colors.border,
+							},
+						]}
 						value={input}
 						onChangeText={setInput}
 						placeholder="Type your message"
@@ -210,7 +215,10 @@ export default function InterviewChat() {
 						disabled={isLoading}
 					>
 						<LinearGradient
-							colors={[colors.button.background[0], colors.button.background[1]]}
+							colors={[
+								colors.button.background[0],
+								colors.button.background[1],
+							]}
 							style={styles.button}
 						>
 							<ThemedText style={styles.buttonText}>
@@ -226,11 +234,16 @@ export default function InterviewChat() {
 						disabled={isLoadingFeedback}
 					>
 						<LinearGradient
-							colors={[colors.button.background[0], colors.button.background[1]]}
+							colors={[
+								colors.button.background[0],
+								colors.button.background[1],
+							]}
 							style={styles.button}
 						>
 							<ThemedText style={styles.buttonText}>
-								{isLoadingFeedback ? "Generating Feedback..." : "End Interview"}
+								{isLoadingFeedback
+									? "Generating Feedback..."
+									: "End Interview"}
 							</ThemedText>
 						</LinearGradient>
 					</Pressable>

@@ -1,5 +1,5 @@
-import { useTheme } from "@/context/theme-context";
 import { getThemeColors } from "@/constants/theme";
+import { useTheme } from "@/context/theme-context";
 import { Stack } from "expo-router";
 
 export default function InterviewLayout() {
