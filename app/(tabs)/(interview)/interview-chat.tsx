@@ -4,7 +4,14 @@ import { Question } from "@/types/question";
 import { handleFeedback } from "@/utils/interview";
 import { useAuth } from "@clerk/clerk-expo";
 import { useEffect, useState } from "react";
-import { Button, ScrollView, Text, TextInput, View } from "react-native";
+import {
+	ActivityIndicator,
+	Button,
+	ScrollView,
+	Text,
+	TextInput,
+	View,
+} from "react-native";
 import uuid from "react-native-uuid";
 
 export interface Message {
@@ -38,7 +45,7 @@ export default function InterviewChat() {
 				}
 			);
 			const data = await response.json();
-			
+
 			setQuestion(data);
 
 			setMessages([
@@ -171,7 +178,12 @@ export default function InterviewChat() {
 	};
 
 	return initialLoad ? (
-		<Text>Loading</Text>
+		<View
+			style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+		>
+			<ActivityIndicator size="large" color="#0000ff" />
+			<Text style={{ marginTop: 10 }}>Loading...</Text>
+		</View>
 	) : (
 		<View style={{ marginBottom: 10 }}>
 			<InterviewModal
