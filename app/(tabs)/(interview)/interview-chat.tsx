@@ -12,10 +12,13 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useEffect, useState } from "react";
 import {
 	ActivityIndicator,
+	Keyboard,
+	KeyboardAvoidingView,
+	Platform,
 	Pressable,
-	ScrollView,
 	StyleSheet,
 	TextInput,
+	TouchableWithoutFeedback,
 	View,
 } from "react-native";
 import uuid from "react-native-uuid";
@@ -181,75 +184,88 @@ export default function InterviewChat() {
 
 	return initialLoad ? (
 		<ThemedView style={styles.loadingContainer}>
-			<ActivityIndicator size="large" color={colors.primary} />
+			<ActivityIndicator size="large" color="gray" />
 			<ThemedText style={styles.loadingText}>Loading...</ThemedText>
 		</ThemedView>
 	) : (
-		<ThemedView style={{ flex: 1 }}>
-			<InterviewModal
-				feedbackModal={feedbackModal}
-				feedback={feedback!}
-				toggleFeedbackModal={toggleFeedbackModal}
-				solution={solution}
-			/>
-			<ScrollView style={styles.container}>
-				<ChatArea messages={messages} />
-				<View style={styles.inputContainer}>
-					<TextInput
-						style={[
-							styles.input,
-							{
-								backgroundColor: colors.surfaceAlt,
-								color: colors.text,
-								borderColor: colors.border,
-							},
-						]}
-						value={input}
-						onChangeText={setInput}
-						placeholder="Type your message"
-						placeholderTextColor={colors.text}
-					/>
-					<Pressable
-						style={styles.buttonWrapper}
-						onPress={handleSubmit}
-						disabled={isLoading}
+		<TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+			<ThemedView style={{ flex: 1 }}>
+				<InterviewModal
+					feedbackModal={feedbackModal}
+					feedback={feedback!}
+					toggleFeedbackModal={toggleFeedbackModal}
+					solution={solution}
+				/>
+
+				<View style={styles.container}>
+					<KeyboardAvoidingView
+						behavior={Platform.OS === "ios" ? "padding" : "height"}
+						keyboardVerticalOffset={100}
+						style={{ flex: 1 }}
 					>
-						<LinearGradient
-							colors={[
-								colors.button.background[0],
-								colors.button.background[1],
-							]}
-							style={styles.button}
-						>
-							<ThemedText style={styles.buttonText}>
-								{isLoading ? "Sending..." : "Send"}
-							</ThemedText>
-						</LinearGradient>
-					</Pressable>
+						<ChatArea messages={messages} />
+						<View style={styles.inputContainer}>
+							<TextInput
+								style={[
+									styles.input,
+									{
+										backgroundColor: colors.surfaceAlt,
+										color: colors.text,
+										borderColor: colors.border,
+										maxHeight: 100,
+										padding: 8,
+										height: "auto",
+									},
+								]}
+								multiline
+								value={input}
+								onChangeText={setInput}
+								placeholder="Type your message"
+								placeholderTextColor={colors.text}
+							/>
+							<Pressable
+								style={styles.buttonWrapper}
+								onPress={handleSubmit}
+								disabled={isLoading}
+							>
+								<LinearGradient
+									colors={[
+										colors.button.background[0],
+										colors.button.background[1],
+									]}
+									style={styles.button}
+								>
+									<ThemedText style={styles.buttonText}>
+										{isLoading ? "Sending..." : "Send"}
+									</ThemedText>
+								</LinearGradient>
+							</Pressable>
+						</View>
+						{messages.length >= 3 && messages[2].content != "" && (
+							<Pressable
+								style={[styles.buttonWrapper, styles.endButton]}
+								onPress={handleFeedbackClick}
+								disabled={isLoadingFeedback}
+							>
+								<LinearGradient
+									colors={[
+										colors.button.background[0],
+										colors.button.background[1],
+									]}
+									style={styles.button}
+								>
+									<ThemedText style={styles.buttonText}>
+										{isLoadingFeedback
+											? "Generating Feedback..."
+											: "End Interview"}
+									</ThemedText>
+								</LinearGradient>
+							</Pressable>
+						)}
+					</KeyboardAvoidingView>
 				</View>
-				{messages.length > 2 && (
-					<Pressable
-						style={[styles.buttonWrapper, styles.endButton]}
-						onPress={handleFeedbackClick}
-						disabled={isLoadingFeedback}
-					>
-						<LinearGradient
-							colors={[
-								colors.button.background[0],
-								colors.button.background[1],
-							]}
-							style={styles.button}
-						>
-							<ThemedText style={styles.buttonText}>
-								{isLoadingFeedback
-									? "Generating Feedback..."
-									: "End Interview"}
-							</ThemedText>
-						</LinearGradient>
-					</Pressable>
-				)}
-			</ScrollView>
-		</ThemedView>
+			</ThemedView>
+		</TouchableWithoutFeedback>
 	);
 }
 
@@ -268,7 +284,8 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 	},
 	inputContainer: {
-		marginVertical: 16,
+		marginBottom: 16,
+		marginTop: "auto",
 		gap: 12,
 	},
 	input: {
