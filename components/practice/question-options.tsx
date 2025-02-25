@@ -1,6 +1,6 @@
 import { ThemedText } from "@/components/themed-text";
-import { useTheme } from "@/context/theme-context";
 import { getThemeColors } from "@/constants/theme";
+import { useTheme } from "@/context/theme-context";
 import { AlgorithmPattern } from "@/types/algorithm-pattern";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 
@@ -37,7 +37,9 @@ export default function QuestionOptions({
 							: setCurrentPattern(option)
 					}
 				>
-					<ThemedText style={styles.optionText}>{option.name}</ThemedText>
+					<ThemedText style={styles.optionText}>
+						{option.name}
+					</ThemedText>
 				</TouchableOpacity>
 			))}
 		</View>
@@ -48,18 +50,21 @@ const styles = StyleSheet.create({
 	container: {
 		flexDirection: "row",
 		flexWrap: "wrap",
-		justifyContent: "center",
-		gap: 12,
+		justifyContent: "space-between",
 		padding: 16,
+		gap: 12,
 	},
 	touchable: {
-		padding: 12,
+		paddingVertical: 12,
+		paddingHorizontal: 8,
 		borderRadius: 8,
-		minWidth: 120,
+		width: "48%",
+		marginBottom: 12,
 	},
 	optionText: {
 		textAlign: "center",
 		fontSize: 14,
 		fontWeight: "500",
+		flexWrap: "nowrap",
 	},
 });

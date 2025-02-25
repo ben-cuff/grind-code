@@ -1,12 +1,12 @@
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
+import { getThemeColors } from "@/constants/theme";
+import { useTheme } from "@/context/theme-context";
 import { AlgorithmPattern, algorithmPatterns } from "@/types/algorithm-pattern";
 import { Question } from "@/types/question";
-import { useTheme } from "@/context/theme-context";
-import { getThemeColors } from "@/constants/theme";
+import { LinearGradient } from "expo-linear-gradient";
 import { useEffect, useState } from "react";
 import { Alert, StyleSheet, TouchableOpacity, View } from "react-native";
-import { LinearGradient } from 'expo-linear-gradient';
 import QuestionOptions from "./question-options";
 
 export default function QuestionDisplay({
@@ -48,12 +48,23 @@ export default function QuestionDisplay({
 
 	return (
 		<View style={{ paddingBottom: 80 }}>
-			<ThemedView style={[styles.questionContainer, { backgroundColor: colors.surfaceAlt }]}>
-				<ThemedText style={styles.questionTitle}>{question?.name}</ThemedText>
-				<ThemedText style={styles.questionPrompt}>{question?.prompt}</ThemedText>
+			<ThemedView
+				style={[
+					styles.questionContainer,
+					{ backgroundColor: colors.surfaceAlt },
+				]}
+			>
+				<ThemedText style={styles.questionTitle}>
+					{question?.name}
+				</ThemedText>
+				<ThemedText style={styles.questionPrompt}>
+					{question?.prompt}
+				</ThemedText>
 			</ThemedView>
 			<View>
-				<ThemedText style={[styles.questionTitle, { textAlign: "center" }]}>
+				<ThemedText
+					style={[styles.questionTitle, { textAlign: "center" }]}
+				>
 					Which algorithm pattern is used?
 				</ThemedText>
 				<QuestionOptions
