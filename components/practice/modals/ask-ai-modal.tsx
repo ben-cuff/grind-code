@@ -1,19 +1,23 @@
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
-import { useTheme } from "@/context/theme-context";
 import { getThemeColors } from "@/constants/theme";
+import { useTheme } from "@/context/theme-context";
+import { Question } from "@/types/question";
 import { Modal, StyleSheet, View } from "react-native";
+import AskAIScreen from "../ask-ai";
 
 interface AskAIModalProps {
 	isVisible: boolean;
 	onClose: () => void;
-	explanation: string;
+	question: Question;
+	toggleAiModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export function AskAIModal({
 	isVisible,
 	onClose,
-	explanation,
+	question,
+	toggleAiModal,
 }: AskAIModalProps) {
 	const { theme } = useTheme();
 	const colors = getThemeColors(theme === "dark");
@@ -25,9 +29,16 @@ export function AskAIModal({
 			visible={isVisible}
 			onRequestClose={onClose}
 		>
-			<View style={[styles.modalContainer, { backgroundColor: colors.modal.background }]}>
+			<View
+				style={[
+					styles.modalContainer,
+					{ backgroundColor: colors.modal.background },
+				]}
+			>
 				<ThemedView useGradient style={styles.modalContent}>
-					<ThemedText>{explanation}</ThemedText>
+					<ThemedText>
+						<AskAIScreen question={question} toggleAiModal={toggleAiModal} />
+					</ThemedText>
 				</ThemedView>
 			</View>
 		</Modal>

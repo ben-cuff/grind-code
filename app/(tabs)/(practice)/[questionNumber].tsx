@@ -70,14 +70,13 @@ export default function PracticeProblemScreen() {
 			<AskAIModal
 				isVisible={aiModal}
 				onClose={() => setAiModal(false)}
-				explanation={
-					question?.explanation || "No explanation available"
-				}
+				toggleAiModal={setAiModal}
+				question={question!}
 			/>
 			<SolutionModal
 				isVisible={solutionModal}
 				onClose={() => setSolutionModal(false)}
-				solution={question?.solution || "No solution available"}
+				questionNumber={question?.questionNumber!}
 			/>
 			<ScrollView style={styles.container}>
 				{isLoading ? (

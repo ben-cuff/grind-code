@@ -1,19 +1,19 @@
-import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
-import { useTheme } from "@/context/theme-context";
 import { getThemeColors } from "@/constants/theme";
+import { useTheme } from "@/context/theme-context";
 import { Modal, StyleSheet, View } from "react-native";
+import PythonSolution from "../python-code-viewer";
 
 interface SolutionModalProps {
 	isVisible: boolean;
 	onClose: () => void;
-	solution: string;
+	questionNumber: number;
 }
 
 export function SolutionModal({
 	isVisible,
 	onClose,
-	solution,
+	questionNumber,
 }: SolutionModalProps) {
 	const { theme } = useTheme();
 	const colors = getThemeColors(theme === "dark");
@@ -25,9 +25,14 @@ export function SolutionModal({
 			visible={isVisible}
 			onRequestClose={onClose}
 		>
-			<View style={[styles.modalContainer, { backgroundColor: colors.modal.background }]}>
+			<View
+				style={[
+					styles.modalContainer,
+					{ backgroundColor: colors.modal.background },
+				]}
+			>
 				<ThemedView useGradient style={styles.modalContent}>
-					<ThemedText>{solution}</ThemedText>
+					<PythonSolution questionNumber={questionNumber} />
 				</ThemedView>
 			</View>
 		</Modal>
