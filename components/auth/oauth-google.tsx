@@ -1,5 +1,5 @@
 import googleLogo from "@/assets/images/7123025_logo_google_g_icon.png";
-import createAccount from "@/util/account-creation";
+import createAccount from "@/utils/account-creation";
 import { useAuth, useSSO } from "@clerk/clerk-expo";
 import * as AuthSession from "expo-auth-session";
 import * as WebBrowser from "expo-web-browser";

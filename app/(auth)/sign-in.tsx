@@ -1,6 +1,6 @@
 import OAuthGitHub from "@/components/auth/oauth-github";
 import OAuthGoogle from "@/components/auth/oauth-google";
-import createAccount from "@/util/account-creation";
+import createAccount from "@/utils/account-creation";
 import { useAuth, useSignIn } from "@clerk/clerk-expo";
 import { useRouter } from "expo-router";
 import React from "react";
