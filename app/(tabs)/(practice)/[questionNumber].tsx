@@ -1,26 +1,27 @@
-import AskAIModal from "@/components/practice/modals/ask-ai-modal";
-import CorrectModal from "@/components/practice/modals/correct-modal";
-import SolutionModal from "@/components/practice/modals/solution-modal";
+import { ThemedText } from "@/components/themed-text";
+import { ThemedView } from "@/components/themed-view";
+import { AskAIModal } from "@/components/practice/modals/ask-ai-modal";
+import { CorrectModal } from "@/components/practice/modals/correct-modal";
+import { SolutionModal } from "@/components/practice/modals/solution-modal";
 import QuestionDisplay from "@/components/practice/question";
 import { Question } from "@/types/question";
-import { useLocalSearchParams } from "expo-router";
+import { useTheme } from "@/context/theme-context";
+import { getThemeColors } from "@/constants/theme";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import {
-	ActivityIndicator,
-	Pressable,
-	ScrollView,
-	StyleSheet,
-	Text,
-	View,
-} from "react-native";
+import { ActivityIndicator, Pressable, ScrollView, StyleSheet, View } from "react-native";
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function PracticeProblemScreen() {
 	const { questionNumber } = useLocalSearchParams();
 	const [question, setQuestion] = useState<Question | null>();
 	const [isLoading, setIsLoading] = useState(true);
-	const [correctModal, toggleCorrectModal] = useState(false);
-	const [aiModal, toggleAiModal] = useState(false);
-	const [solutionModal, toggleSolutionModal] = useState(false);
+	const [correctModal, setCorrectModal] = useState(false);
+	const [aiModal, setAiModal] = useState(false);
+	const [solutionModal, setSolutionModal] = useState(false);
+	const { theme } = useTheme();
+	const colors = getThemeColors(theme === "dark");
+	const router = useRouter();
 
 	useEffect(() => {
 		async function fetchQuestions() {
@@ -41,63 +42,72 @@ export default function PracticeProblemScreen() {
 		fetchQuestions();
 	}, []);
 
+	const handleNext = () => {
+		setCorrectModal(false);
+		router.push({
+			pathname: "/(tabs)/(practice)/[questionNumber]",
+			params: { questionNumber: Number(questionNumber) + 1 },
+		});
+	};
+
 	return (
-		<View style={{ flex: 1 }}>
+		<ThemedView style={{ flex: 1 }}>
 			<CorrectModal
-				correctModal={correctModal}
-				toggleCorrectModal={toggleCorrectModal}
-				questionNumber={Number(question?.questionNumber)}
-				toggleAiModal={toggleAiModal}
-				toggleSolutionModal={toggleSolutionModal}
+				isVisible={correctModal}
+				onClose={() => setCorrectModal(false)}
+				onNext={handleNext}
+				onAskAI={() => {
+					setCorrectModal(false);
+					setAiModal(true);
+				}}
 			/>
 			<AskAIModal
-				aiModal={aiModal}
-				question={question!}
-				toggleAiModal={toggleAiModal}
+				isVisible={aiModal}
+				onClose={() => setAiModal(false)}
+				explanation={question?.explanation || "No explanation available"}
 			/>
 			<SolutionModal
-				solutionModal={solutionModal}
-				question={question!}
-				toggleSolutionModal={toggleSolutionModal}
+				isVisible={solutionModal}
+				onClose={() => setSolutionModal(false)}
+				solution={question?.solution || "No solution available"}
 			/>
 			<ScrollView style={styles.container}>
 				{isLoading ? (
-					<View
-						style={{
-							justifyContent: "center",
-							alignItems: "center",
-						}}
-					>
-						<ActivityIndicator size={"large"} />
+					<View style={styles.loadingContainer}>
+						<ActivityIndicator size={"large"} color={colors.primary} />
 					</View>
 				) : (
 					<QuestionDisplay
 						question={question!}
-						toggleCorrectModal={toggleCorrectModal}
+						toggleCorrectModal={setCorrectModal}
 					/>
 				)}
 			</ScrollView>
-			<View style={styles.bottomButtonSolution}>
+			<View style={styles.buttonContainer}>
 				<Pressable
-					style={styles.aiPressable}
-					onPress={() => {
-						toggleSolutionModal(true);
-					}}
+					style={styles.buttonWrapper}
+					onPress={() => setAiModal(true)}
 				>
-					<Text style={styles.aiText}>Solution</Text>
+					<LinearGradient
+						colors={[colors.button.background[0], colors.button.background[1]]}
+						style={styles.button}
+					>
+						<ThemedText style={styles.buttonText}>Ask AI</ThemedText>
+					</LinearGradient>
+				</Pressable>
+				<Pressable
+					style={styles.buttonWrapper}
+					onPress={() => setSolutionModal(true)}
+				>
+					<LinearGradient
+						colors={[colors.button.background[0], colors.button.background[1]]}
+						style={styles.button}
+					>
+						<ThemedText style={styles.buttonText}>Solution</ThemedText>
+					</LinearGradient>
 				</Pressable>
 			</View>
-			<View style={styles.bottomButton}>
-				<Pressable
-					style={styles.aiPressable}
-					onPress={() => {
-						toggleAiModal(true);
-					}}
-				>
-					<Text style={styles.aiText}>Ask AI</Text>
-				</Pressable>
-			</View>
-		</View>
+		</ThemedView>
 	);
 }
 
@@ -105,36 +115,33 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 	},
-	aiPressable: {
-		marginTop: 20,
-		backgroundColor: "#007AFF",
-		paddingVertical: 16,
-		paddingHorizontal: 20,
-		borderRadius: 8,
+	loadingContainer: {
+		flex: 1,
+		justifyContent: "center",
 		alignItems: "center",
-		shadowColor: "#000",
-		shadowOffset: { width: 0, height: 2 },
-		shadowOpacity: 0.25,
-		shadowRadius: 3.84,
-		elevation: 5,
+		padding: 20,
 	},
-	aiText: {
-		color: "#fff",
+	buttonContainer: {
+		position: "absolute",
+		bottom: 20,
+		left: 0,
+		right: 0,
+		flexDirection: "row",
+		justifyContent: "space-between",
+		paddingHorizontal: 20,
+	},
+	buttonWrapper: {
+		width: "45%",
+	},
+	button: {
+		paddingVertical: 12,
+		paddingHorizontal: 16,
+		borderRadius: 12,
+		alignItems: "center",
+	},
+	buttonText: {
+		color: "#FFFFFF",
 		fontSize: 16,
-		fontWeight: "500",
-	},
-	bottomButton: {
-		position: "absolute",
-		bottom: 20,
-		alignSelf: "flex-start",
-		paddingLeft: 20,
-		width: "30%",
-	},
-	bottomButtonSolution: {
-		position: "absolute",
-		bottom: 20,
-		alignSelf: "flex-end",
-		paddingRight: 20,
-		width: "30%",
+		fontWeight: "600",
 	},
 });

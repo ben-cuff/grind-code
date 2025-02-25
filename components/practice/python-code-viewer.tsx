@@ -1,6 +1,6 @@
 import Markdown from "@ronradtke/react-native-markdown-display";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
 
 export default function PythonSolution({
 	questionNumber,
@@ -43,9 +43,7 @@ export default function PythonSolution({
 			{isLoading ? (
 				<ActivityIndicator size={"large"} />
 			) : (
-				<Text style={styles.responseText}>
-					<Markdown>{solution}</Markdown>
-				</Text>
+				<Markdown style={styles}>{solution}</Markdown>
 			)}
 		</View>
 	);
@@ -55,7 +53,7 @@ const styles = StyleSheet.create({
 	container: {
 		padding: 16,
 	},
-	responseText: {
+	body: {
 		fontSize: 16,
 		lineHeight: 24,
 	},

@@ -1,40 +1,34 @@
-import { Question } from "@/types/question";
-import { Button, Modal, ScrollView, StyleSheet, View } from "react-native";
-import PythonSolution from "../python-code-viewer";
+import { ThemedText } from "@/components/themed-text";
+import { ThemedView } from "@/components/themed-view";
+import { useTheme } from "@/context/theme-context";
+import { getThemeColors } from "@/constants/theme";
+import { Modal, StyleSheet, View } from "react-native";
 
-export default function SolutionModal({
-	solutionModal,
-	question,
-	toggleSolutionModal,
-}: {
-	solutionModal: boolean;
-	question: Question;
-	toggleSolutionModal: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
+interface SolutionModalProps {
+	isVisible: boolean;
+	onClose: () => void;
+	solution: string;
+}
+
+export function SolutionModal({
+	isVisible,
+	onClose,
+	solution,
+}: SolutionModalProps) {
+	const { theme } = useTheme();
+	const colors = getThemeColors(theme === "dark");
+
 	return (
-		<Modal animationType="slide" transparent={true} visible={solutionModal}>
-			<View style={styles.modalContainer}>
-				<View style={styles.modalContent}>
-					<ScrollView style={{ flex: 1 }}>
-						<PythonSolution
-							questionNumber={question?.questionNumber!}
-						/>
-						<View
-							style={{
-								justifyContent: "flex-end",
-								width: "40%",
-								alignSelf: "center",
-							}}
-						>
-							<Button
-								title="Back"
-								onPress={() => {
-									toggleSolutionModal(false);
-								}}
-							/>
-						</View>
-					</ScrollView>
-				</View>
+		<Modal
+			animationType="slide"
+			transparent={true}
+			visible={isVisible}
+			onRequestClose={onClose}
+		>
+			<View style={[styles.modalContainer, { backgroundColor: colors.modal.background }]}>
+				<ThemedView useGradient style={styles.modalContent}>
+					<ThemedText>{solution}</ThemedText>
+				</ThemedView>
 			</View>
 		</Modal>
 	);
@@ -46,14 +40,12 @@ const styles = StyleSheet.create({
 		marginTop: "auto",
 		alignItems: "center",
 		justifyContent: "flex-end",
-		backgroundColor: "rgba(0, 0, 0, 0.5)",
 	},
 	modalContent: {
 		width: "100%",
 		height: "60%",
 		padding: 20,
-		backgroundColor: "#fff",
-		borderRadius: 10,
-		alignItems: "center",
+		borderTopLeftRadius: 20,
+		borderTopRightRadius: 20,
 	},
 });

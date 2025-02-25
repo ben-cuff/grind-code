@@ -72,9 +72,7 @@ export default function AskAIScreen({
 			{isLoading ? (
 				<ActivityIndicator size={"large"} />
 			) : (
-				<Text style={styles.responseText}>
-					<Markdown>{aiResponse}</Markdown>
-				</Text>
+				<Markdown style={styles.body}>{aiResponse}</Markdown>
 			)}
 		</View>
 	);
@@ -84,7 +82,7 @@ const styles = StyleSheet.create({
 	container: {
 		padding: 16,
 	},
-	responseText: {
+	body: {
 		fontSize: 16,
 		lineHeight: 24,
 	},

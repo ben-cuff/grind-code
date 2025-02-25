@@ -1,7 +1,12 @@
+import { ThemedText } from "@/components/themed-text";
+import { ThemedView } from "@/components/themed-view";
 import { AlgorithmPattern, algorithmPatterns } from "@/types/algorithm-pattern";
 import { Question } from "@/types/question";
+import { useTheme } from "@/context/theme-context";
+import { getThemeColors } from "@/constants/theme";
 import { useEffect, useState } from "react";
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, StyleSheet, TouchableOpacity, View } from "react-native";
+import { LinearGradient } from 'expo-linear-gradient';
 import QuestionOptions from "./question-options";
 
 export default function QuestionDisplay({
@@ -14,6 +19,9 @@ export default function QuestionDisplay({
 	const [options, setOptions] = useState<AlgorithmPattern[] | null>();
 	const [currentPattern, setCurrentPattern] =
 		useState<AlgorithmPattern | null>();
+	const { theme } = useTheme();
+	const colors = getThemeColors(theme === "dark");
+
 	useEffect(() => {
 		const solution = algorithmPatterns.find(
 			({ id }) => id === question?.pattern
@@ -37,39 +45,32 @@ export default function QuestionDisplay({
 		}
 		Alert.alert("Incorrect", "Please try again");
 	};
+
 	return (
 		<View style={{ paddingBottom: 80 }}>
-			<View style={styles.questionContainer}>
-				<Text style={styles.questionTitle}>{question?.name}</Text>
-				<Text style={styles.questionPrompt}>{question?.prompt}</Text>
-			</View>
+			<ThemedView style={[styles.questionContainer, { backgroundColor: colors.surfaceAlt }]}>
+				<ThemedText style={styles.questionTitle}>{question?.name}</ThemedText>
+				<ThemedText style={styles.questionPrompt}>{question?.prompt}</ThemedText>
+			</ThemedView>
 			<View>
-				<Text style={[styles.questionTitle, { textAlign: "center" }]}>
+				<ThemedText style={[styles.questionTitle, { textAlign: "center" }]}>
 					Which algorithm pattern is used?
-				</Text>
+				</ThemedText>
 				<QuestionOptions
 					options={options!}
 					currentPattern={currentPattern!}
 					setCurrentPattern={setCurrentPattern!}
 				/>
-				<View
-					style={{
-						alignItems: "center",
-						flex: 1,
-					}}
-				>
-					<TouchableOpacity
-						style={styles.touchable}
-						onPress={onSubmit}
-					>
-						<Text
-							style={{
-								color: "#fff",
-								textAlign: "center",
-							}}
+				<View style={{ alignItems: "center", flex: 1 }}>
+					<TouchableOpacity onPress={onSubmit}>
+						<LinearGradient
+							colors={colors.button.background}
+							style={styles.submitButton}
 						>
-							Submit
-						</Text>
+							<ThemedText style={styles.submitButtonText}>
+								Submit
+							</ThemedText>
+						</LinearGradient>
 					</TouchableOpacity>
 				</View>
 			</View>
@@ -80,30 +81,27 @@ export default function QuestionDisplay({
 const styles = StyleSheet.create({
 	questionContainer: {
 		padding: 16,
-		margin: 16,
-		backgroundColor: "#f9f9f9",
-		borderRadius: 8,
-		shadowColor: "#000",
-		shadowOffset: { width: 0, height: 2 },
-		shadowOpacity: 0.1,
-		shadowRadius: 4,
-		elevation: 2,
+		borderRadius: 12,
+		marginBottom: 24,
 	},
 	questionTitle: {
 		fontSize: 24,
-		fontWeight: "bold",
-		marginBottom: 8,
+		fontWeight: "600",
+		marginBottom: 12,
 	},
 	questionPrompt: {
-		fontSize: 20,
-		color: "#333",
+		fontSize: 16,
+		lineHeight: 24,
 	},
-	touchable: {
-		padding: 10,
-		marginVertical: 5,
-		backgroundColor: "#007AFF",
-		borderRadius: 5,
-		alignItems: "center",
-		width: "20%",
+	submitButton: {
+		paddingVertical: 12,
+		paddingHorizontal: 24,
+		borderRadius: 8,
+		marginTop: 16,
+	},
+	submitButtonText: {
+		color: "#FFFFFF",
+		fontSize: 16,
+		fontWeight: "600",
 	},
 });

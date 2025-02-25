@@ -1,36 +1,34 @@
-import { Question } from "@/types/question";
-import React from "react";
-import { Button, Modal, ScrollView, StyleSheet, View } from "react-native";
-import AskAIScreen from "../ask-ai";
+import { ThemedText } from "@/components/themed-text";
+import { ThemedView } from "@/components/themed-view";
+import { useTheme } from "@/context/theme-context";
+import { getThemeColors } from "@/constants/theme";
+import { Modal, StyleSheet, View } from "react-native";
 
-export default function AskAIModal({
-	aiModal,
-	question,
-	toggleAiModal,
-}: {
-	aiModal: boolean;
-	question: Question;
-	toggleAiModal: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
+interface AskAIModalProps {
+	isVisible: boolean;
+	onClose: () => void;
+	explanation: string;
+}
+
+export function AskAIModal({
+	isVisible,
+	onClose,
+	explanation,
+}: AskAIModalProps) {
+	const { theme } = useTheme();
+	const colors = getThemeColors(theme === "dark");
+
 	return (
-		<Modal animationType="slide" transparent={true} visible={aiModal}>
-			<View style={styles.modalContainer}>
-				<View style={styles.modalContent}>
-					<ScrollView style={{ flex: 1 }}>
-						<AskAIScreen
-							question={question!}
-							toggleAiModal={toggleAiModal}
-						/>
-						<View style={{ justifyContent: "flex-end" }}>
-							<Button
-								title="Back"
-								onPress={() => {
-									toggleAiModal(false);
-								}}
-							/>
-						</View>
-					</ScrollView>
-				</View>
+		<Modal
+			animationType="slide"
+			transparent={true}
+			visible={isVisible}
+			onRequestClose={onClose}
+		>
+			<View style={[styles.modalContainer, { backgroundColor: colors.modal.background }]}>
+				<ThemedView useGradient style={styles.modalContent}>
+					<ThemedText>{explanation}</ThemedText>
+				</ThemedView>
 			</View>
 		</Modal>
 	);
@@ -42,14 +40,12 @@ const styles = StyleSheet.create({
 		marginTop: "auto",
 		alignItems: "center",
 		justifyContent: "flex-end",
-		backgroundColor: "rgba(0, 0, 0, 0.5)",
 	},
 	modalContent: {
 		width: "100%",
 		height: "60%",
 		padding: 20,
-		backgroundColor: "#fff",
-		borderRadius: 10,
-		alignItems: "center",
+		borderTopLeftRadius: 20,
+		borderTopRightRadius: 20,
 	},
 });

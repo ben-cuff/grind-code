@@ -1,12 +1,23 @@
+import { useTheme } from "@/context/theme-context";
+import { getThemeColors } from "@/constants/theme";
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import { View } from "react-native";
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function TabLayout() {
+	const { theme } = useTheme();
+	const colors = getThemeColors(theme === "dark");
+
 	return (
 		<Tabs
 			screenOptions={{
-				tabBarActiveTintColor: "blue",
+				tabBarActiveTintColor: colors.primary,
+				tabBarInactiveTintColor: colors.tabBar.inactive,
+				tabBarStyle: {
+					backgroundColor: colors.surfaceAlt,
+					borderTopColor: colors.border,
+				},
 				headerShown: false,
 			}}
 		>
@@ -47,7 +58,7 @@ export default function TabLayout() {
 								borderColor: color,
 								alignItems: "center",
 								justifyContent: "center",
-								backgroundColor: "white",
+								backgroundColor: colors.surfaceAlt,
 								marginBottom: 20,
 							}}
 						>

@@ -1,5 +1,8 @@
+import { ThemedText } from "@/components/themed-text";
+import { useTheme } from "@/context/theme-context";
+import { getThemeColors } from "@/constants/theme";
 import { AlgorithmPattern } from "@/types/algorithm-pattern";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 export default function QuestionOptions({
 	options,
@@ -12,6 +15,9 @@ export default function QuestionOptions({
 		React.SetStateAction<AlgorithmPattern | null | undefined>
 	>;
 }) {
+	const { theme } = useTheme();
+	const colors = getThemeColors(theme === "dark");
+
 	return (
 		<View style={styles.container}>
 			{options?.map((option) => (
@@ -19,10 +25,10 @@ export default function QuestionOptions({
 					key={option.id}
 					style={[
 						styles.touchable,
+						{ backgroundColor: colors.surfaceAlt },
 						currentPattern?.id === option.id && {
-							borderColor: "green",
-							borderWidth: 3,
-							marginVertical: 3,
+							borderColor: colors.primary,
+							borderWidth: 2,
 						},
 					]}
 					onPress={() =>
@@ -31,7 +37,7 @@ export default function QuestionOptions({
 							: setCurrentPattern(option)
 					}
 				>
-					<Text style={{ textAlign: "center" }}>{option.name}</Text>
+					<ThemedText style={styles.optionText}>{option.name}</ThemedText>
 				</TouchableOpacity>
 			))}
 		</View>
@@ -42,16 +48,18 @@ const styles = StyleSheet.create({
 	container: {
 		flexDirection: "row",
 		flexWrap: "wrap",
-		justifyContent: "space-between",
-		margin: 10,
+		justifyContent: "center",
+		gap: 12,
+		padding: 16,
 	},
 	touchable: {
-		width: "48%",
-		padding: 8,
-		paddingVertical: 10,
-		marginVertical: 5,
-		borderWidth: 1,
-		borderColor: "#000",
-		borderRadius: 5,
+		padding: 12,
+		borderRadius: 8,
+		minWidth: 120,
+	},
+	optionText: {
+		textAlign: "center",
+		fontSize: 14,
+		fontWeight: "500",
 	},
 });

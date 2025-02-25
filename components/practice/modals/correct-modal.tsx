@@ -1,135 +1,114 @@
-import React from "react";
-import { Button, Modal, Pressable, StyleSheet, Text, View } from "react-native";
-import NextProblem from "../next-problem";
-import RandomShuffle from "../random-shuffle";
+import { ThemedText } from "@/components/themed-text";
+import { ThemedView } from "@/components/themed-view";
+import { useTheme } from "@/context/theme-context";
+import { getThemeColors } from "@/constants/theme";
+import { Modal, StyleSheet, TouchableOpacity, View } from "react-native";
+import { LinearGradient } from 'expo-linear-gradient';
 
-export default function CorrectModal({
-	correctModal,
-	toggleCorrectModal,
-	questionNumber,
-	toggleAiModal,
-	toggleSolutionModal,
-}: {
-	correctModal: boolean;
-	toggleCorrectModal: React.Dispatch<React.SetStateAction<boolean>>;
-	questionNumber: number;
-	toggleAiModal: React.Dispatch<React.SetStateAction<boolean>>;
-	toggleSolutionModal: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
+interface CorrectModalProps {
+	isVisible: boolean;
+	onClose: () => void;
+	onNext: () => void;
+	onAskAI: () => void;
+}
+
+export function CorrectModal({
+	isVisible,
+	onClose,
+	onNext,
+	onAskAI,
+}: CorrectModalProps) {
+	const { theme } = useTheme();
+	const colors = getThemeColors(theme === "dark");
+
 	return (
-		<Modal animationType="fade" transparent={true} visible={correctModal}>
-			<View style={styles.modalContainerMiddle}>
-				<View style={styles.modalContentMiddle}>
-					<Text style={styles.modalTitle}>Correct!</Text>
+		<Modal
+			animationType="fade"
+			transparent={true}
+			visible={isVisible}
+			onRequestClose={onClose}
+		>
+			<View style={[styles.modalContainer, { backgroundColor: colors.modal.background }]}>
+				<ThemedView useGradient style={styles.modalContent}>
+					<ThemedText style={styles.modalTitle}>Correct!</ThemedText>
+					
 					<View style={styles.buttonsRow}>
 						<View style={styles.buttonWrapper}>
-							<RandomShuffle
-								toggleCorrectModal={toggleCorrectModal}
-							/>
+							<TouchableOpacity onPress={onClose}>
+								<LinearGradient
+									colors={colors.button.background}
+									style={styles.button}
+								>
+									<ThemedText style={styles.buttonText}>Try Again</ThemedText>
+								</LinearGradient>
+							</TouchableOpacity>
 						</View>
+						
 						<View style={styles.buttonWrapper}>
-							<NextProblem
-								toggleCorrectModal={toggleCorrectModal}
-								currentIndex={Number(questionNumber)}
-							/>
+							<TouchableOpacity onPress={onNext}>
+								<LinearGradient
+									colors={colors.button.background}
+									style={styles.button}
+								>
+									<ThemedText style={styles.buttonText}>Next</ThemedText>
+								</LinearGradient>
+							</TouchableOpacity>
 						</View>
 					</View>
-					<View
-						style={{
-							flex: 1,
-							flexDirection: "row",
-							gap: 10,
-						}}
-					>
-						<Pressable
-							style={[
-								styles.aiPressableModal,
-								{ height: "30%", width: "30%" },
-							]}
-							onPress={() => {
-								toggleAiModal(true);
-								toggleCorrectModal(false);
-							}}
+
+					<TouchableOpacity onPress={onAskAI}>
+						<LinearGradient
+							colors={colors.button.background}
+							style={[styles.button, styles.aiButton]}
 						>
-							<Text style={styles.aiText}>Ask AI</Text>
-						</Pressable>
-						<Pressable
-							style={[
-								styles.aiPressableModal,
-								{ height: "30%", width: "30%" },
-							]}
-							onPress={() => {
-								toggleCorrectModal(false);
-								toggleSolutionModal(true);
-							}}
-						>
-							<Text style={styles.aiText}>Solution</Text>
-						</Pressable>
-					</View>
-					<View style={styles.modalButton}>
-						<Button
-							title="Back"
-							onPress={() => toggleCorrectModal(false)}
-						/>
-					</View>
-				</View>
+							<ThemedText style={styles.buttonText}>Ask AI to Explain</ThemedText>
+						</LinearGradient>
+					</TouchableOpacity>
+				</ThemedView>
 			</View>
 		</Modal>
 	);
 }
 
 const styles = StyleSheet.create({
-	modalContainerMiddle: {
+	modalContainer: {
 		flex: 1,
-		marginTop: "auto",
 		alignItems: "center",
 		justifyContent: "center",
-		backgroundColor: "rgba(0, 0, 0, 0.5)",
 	},
-	modalContentMiddle: {
+	modalContent: {
 		width: "90%",
-		height: "40%",
-		padding: 20,
-		backgroundColor: "#fff",
-		borderRadius: 10,
+		padding: 24,
+		borderRadius: 20,
 		alignItems: "center",
 	},
 	modalTitle: {
-		fontSize: 20,
+		fontSize: 24,
 		fontWeight: "bold",
-		marginBottom: 15,
-	},
-	modalButton: {
-		marginTop: "auto",
-		paddingHorizontal: 20,
-		paddingVertical: 10,
-		borderRadius: 5,
+		marginBottom: 24,
 	},
 	buttonsRow: {
 		flexDirection: "row",
-		gap: 10,
+		gap: 16,
 		width: "100%",
-		paddingHorizontal: 16,
+		marginBottom: 16,
 	},
 	buttonWrapper: {
 		flex: 1,
 	},
-	aiPressableModal: {
-		marginTop: 20,
-		backgroundColor: "#007AFF",
+	button: {
 		paddingVertical: 12,
-		paddingHorizontal: 12,
-		borderRadius: 8,
+		paddingHorizontal: 16,
+		borderRadius: 12,
 		alignItems: "center",
-		shadowColor: "#000",
-		shadowOffset: { width: 0, height: 2 },
-		shadowOpacity: 0.25,
-		shadowRadius: 3.84,
-		elevation: 5,
 	},
-	aiText: {
-		color: "#fff",
+	aiButton: {
+		marginTop: 8,
+		width: "100%",
+	},
+	buttonText: {
+		color: "#FFFFFF",
 		fontSize: 16,
-		fontWeight: "500",
+		fontWeight: "600",
 	},
 });

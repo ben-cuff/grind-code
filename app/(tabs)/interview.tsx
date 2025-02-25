@@ -1,10 +1,15 @@
-import { Text } from "react-native";
+import { ThemedText } from "@/components/themed-text";
+import { ThemedView } from "@/components/themed-view";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function InterviewTab() {
 	return (
-		<SafeAreaView>
-			<Text>This is the interview tab</Text>
-		</SafeAreaView>
+		<ThemedView style={{ flex: 1 }}>
+			<SafeAreaView>
+				<ThemedText style={{ fontSize: 24, padding: 16 }}>
+					This is the Interview Tab
+				</ThemedText>
+			</SafeAreaView>
+		</ThemedView>
 	);
 }
