@@ -1,6 +1,8 @@
+import ChatArea from "@/components/interview/chat-area";
+import InterviewModal from "@/components/interview/interview-modal";
 import { Question } from "@/types/question";
+import { handleFeedback } from "@/utils/interview";
 import { useAuth } from "@clerk/clerk-expo";
-import Markdown from "@ronradtke/react-native-markdown-display";
 import { useEffect, useState } from "react";
 import { Button, ScrollView, Text, TextInput, View } from "react-native";
 import uuid from "react-native-uuid";
@@ -18,7 +20,8 @@ export default function InterviewChat() {
 	const [initialLoad, setInitialLoad] = useState(false);
 	const [solution, setSolution] = useState("");
 	const [question, setQuestion] = useState<Question | null>(null);
-	const [feedback, setFeedback] = useState();
+	const [feedback, setFeedback] = useState<{ message: string }>();
+	const [feedbackModal, toggleFeedbackModal] = useState(false);
 	const [input, setInput] = useState("");
 	const { getToken } = useAuth();
 
@@ -35,9 +38,7 @@ export default function InterviewChat() {
 				}
 			);
 			const data = await response.json();
-
-			console.log(data);
-
+			
 			setQuestion(data);
 
 			setMessages([
@@ -59,8 +60,6 @@ export default function InterviewChat() {
 			);
 
 			const dataSolution = await responseSolution.json();
-
-			console.log(dataSolution);
 
 			setSolution(dataSolution.solution);
 
@@ -91,8 +90,6 @@ export default function InterviewChat() {
 				content: "",
 			},
 		]);
-
-		// console.log(JSON.stringify(messages, null, 2));
 
 		try {
 			const token = await getToken();
@@ -127,7 +124,6 @@ export default function InterviewChat() {
 
 			const data = await response.json();
 
-			console.log(data);
 			setMessages((prev) =>
 				prev?.map((message) =>
 					message.id === tempMessageId
@@ -164,143 +160,59 @@ export default function InterviewChat() {
 		}
 	};
 
-	const handleFeedback = async () => {
-		try {
-			setIsLoadingFeedback(true);
-			const token = await getToken();
-			const response = await fetch(
-				`${process.env.EXPO_PUBLIC_BASE_URL}/openai/feedback`,
-				{
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${token}`,
-					},
-					body: JSON.stringify({
-						messages: messages.map(({ role, content }) => ({
-							role,
-							content,
-						})),
-						solution,
-					}),
-				}
-			);
-
-			if (!response.ok) {
-				console.log(response);
-				const errorData = await response.json();
-				alert(errorData.error || "Failed to fetch response");
-				throw new Error(
-					errorData.message || "Failed to fetch response"
-				);
-			}
-
-			const data = await response.json();
-
-			console.log(data);
-
-			setIsLoadingFeedback(false);
-		} catch (error) {
-			console.error(error);
-		}
+	const handleFeedbackClick = async () => {
+		await handleFeedback({
+			getToken,
+			messages,
+			setIsLoadingFeedback,
+			setFeedback,
+			toggleFeedbackModal,
+		});
 	};
 
 	return initialLoad ? (
 		<Text>Loading</Text>
 	) : (
-		<ScrollView>
-			<View
-				style={{
-					padding: 10,
-					backgroundColor: "#f9f9f9",
-					borderRadius: 8,
-					marginBottom: 20,
-				}}
-			>
-				{messages.map((msg, index) => {
-					const isUser = msg.role === "user";
-					return (
-						<View
-							key={msg.id}
-							style={{
-								flexDirection: isUser ? "row-reverse" : "row",
-								padding: 8,
-								backgroundColor: isUser ? "#dcf8c6" : "#fff",
-								alignSelf: isUser ? "flex-end" : "flex-start",
-								borderRadius: 5,
-								maxWidth: "80%",
-								height: "auto",
-								width: "auto",
-								alignItems: "center",
-							}}
-						>
-							<View
-								style={{
-									width: 40,
-									height: 40,
-									borderRadius: 20,
-									backgroundColor: isUser
-										? "#007AFF"
-										: "#FF9500",
-									justifyContent: "center",
-									alignItems: "center",
-									marginHorizontal: 8,
-								}}
-							>
-								<Text
-									style={{
-										color: "#fff",
-										fontWeight: "bold",
-									}}
-								>
-									{isUser ? "ME" : "AI"}
-								</Text>
-							</View>
-							<Markdown
-								style={{
-									body: {
-										color: "#333",
-										fontSize: 16,
-										textAlign: isUser ? "right" : "left",
-										flexShrink: 1,
-										width: "100%",
-									},
-								}}
-							>
-								{msg.content}
-							</Markdown>
-						</View>
-					);
-				})}
-			</View>
-			<View>
-				<TextInput
-					style={{
-						height: 40,
-						borderColor: "gray",
-						borderWidth: 1,
-						marginVertical: 10,
-						paddingHorizontal: 5,
-					}}
-					value={input}
-					onChangeText={setInput}
-					placeholder="Type your message"
-				/>
-				<Button
-					title={isLoading ? "Sending..." : "Send"}
-					onPress={handleSubmit}
-					disabled={isLoading}
-				/>
-			</View>
-			<Button
-				title={
-					isLoadingFeedback
-						? "Generating Feedback..."
-						: "End Interview"
-				}
-				onPress={handleFeedback}
-				disabled={isLoadingFeedback}
+		<View style={{ marginBottom: 10 }}>
+			<InterviewModal
+				feedbackModal={feedbackModal}
+				feedback={feedback!}
+				toggleFeedbackModal={toggleFeedbackModal}
+				solution={solution}
 			/>
-		</ScrollView>
+			<ScrollView>
+				<ChatArea messages={messages} />
+				<View>
+					<TextInput
+						style={{
+							height: 40,
+							borderColor: "gray",
+							borderWidth: 1,
+							marginVertical: 10,
+							paddingHorizontal: 5,
+						}}
+						value={input}
+						onChangeText={setInput}
+						placeholder="Type your message"
+					/>
+					<Button
+						title={isLoading ? "Sending..." : "Send"}
+						onPress={handleSubmit}
+						disabled={isLoading}
+					/>
+				</View>
+				{messages.length > 2 && (
+					<Button
+						title={
+							isLoadingFeedback
+								? "Generating Feedback..."
+								: "End Interview"
+						}
+						onPress={handleFeedbackClick}
+						disabled={isLoadingFeedback}
+					/>
+				)}
+			</ScrollView>
+		</View>
 	);
 }
