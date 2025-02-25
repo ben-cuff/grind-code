@@ -1,17 +1,15 @@
 import ChatArea from "@/components/interview/chat-area";
 import InterviewModal from "@/components/interview/interview-modal";
+import { ThemedText } from "@/components/themed-text";
+import { ThemedView } from "@/components/themed-view";
+import { useTheme } from "@/context/theme-context";
+import { getThemeColors } from "@/constants/theme";
 import { Question } from "@/types/question";
 import { handleFeedback } from "@/utils/interview";
 import { useAuth } from "@clerk/clerk-expo";
 import { useEffect, useState } from "react";
-import {
-	ActivityIndicator,
-	Button,
-	ScrollView,
-	Text,
-	TextInput,
-	View,
-} from "react-native";
+import { ActivityIndicator, Pressable, ScrollView, StyleSheet, TextInput, View } from "react-native";
+import { LinearGradient } from 'expo-linear-gradient';
 import uuid from "react-native-uuid";
 
 export interface Message {
@@ -31,6 +29,8 @@ export default function InterviewChat() {
 	const [feedbackModal, toggleFeedbackModal] = useState(false);
 	const [input, setInput] = useState("");
 	const { getToken } = useAuth();
+	const { theme } = useTheme();
+	const colors = getThemeColors(theme === "dark");
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -178,53 +178,108 @@ export default function InterviewChat() {
 	};
 
 	return initialLoad ? (
-		<View
-			style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-		>
-			<ActivityIndicator size="large" color="#0000ff" />
-			<Text style={{ marginTop: 10 }}>Loading...</Text>
-		</View>
+		<ThemedView style={styles.loadingContainer}>
+			<ActivityIndicator size="large" color={colors.primary} />
+			<ThemedText style={styles.loadingText}>Loading...</ThemedText>
+		</ThemedView>
 	) : (
-		<View style={{ marginBottom: 10 }}>
+		<ThemedView style={{ flex: 1 }}>
 			<InterviewModal
 				feedbackModal={feedbackModal}
 				feedback={feedback!}
 				toggleFeedbackModal={toggleFeedbackModal}
 				solution={solution}
 			/>
-			<ScrollView>
+			<ScrollView style={styles.container}>
 				<ChatArea messages={messages} />
-				<View>
+				<View style={styles.inputContainer}>
 					<TextInput
-						style={{
-							height: 40,
-							borderColor: "gray",
-							borderWidth: 1,
-							marginVertical: 10,
-							paddingHorizontal: 5,
-						}}
+						style={[styles.input, { 
+							backgroundColor: colors.surfaceAlt,
+							color: colors.text,
+							borderColor: colors.border
+						}]}
 						value={input}
 						onChangeText={setInput}
 						placeholder="Type your message"
+						placeholderTextColor={colors.text}
 					/>
-					<Button
-						title={isLoading ? "Sending..." : "Send"}
+					<Pressable
+						style={styles.buttonWrapper}
 						onPress={handleSubmit}
 						disabled={isLoading}
-					/>
+					>
+						<LinearGradient
+							colors={[colors.button.background[0], colors.button.background[1]]}
+							style={styles.button}
+						>
+							<ThemedText style={styles.buttonText}>
+								{isLoading ? "Sending..." : "Send"}
+							</ThemedText>
+						</LinearGradient>
+					</Pressable>
 				</View>
 				{messages.length > 2 && (
-					<Button
-						title={
-							isLoadingFeedback
-								? "Generating Feedback..."
-								: "End Interview"
-						}
+					<Pressable
+						style={[styles.buttonWrapper, styles.endButton]}
 						onPress={handleFeedbackClick}
 						disabled={isLoadingFeedback}
-					/>
+					>
+						<LinearGradient
+							colors={[colors.button.background[0], colors.button.background[1]]}
+							style={styles.button}
+						>
+							<ThemedText style={styles.buttonText}>
+								{isLoadingFeedback ? "Generating Feedback..." : "End Interview"}
+							</ThemedText>
+						</LinearGradient>
+					</Pressable>
 				)}
 			</ScrollView>
-		</View>
+		</ThemedView>
 	);
 }
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		padding: 16,
+	},
+	loadingContainer: {
+		flex: 1,
+		justifyContent: "center",
+		alignItems: "center",
+	},
+	loadingText: {
+		marginTop: 10,
+		fontSize: 16,
+	},
+	inputContainer: {
+		marginVertical: 16,
+		gap: 12,
+	},
+	input: {
+		height: 48,
+		borderWidth: 1,
+		borderRadius: 8,
+		paddingHorizontal: 12,
+		fontSize: 16,
+	},
+	buttonWrapper: {
+		width: "100%",
+	},
+	button: {
+		paddingVertical: 12,
+		paddingHorizontal: 16,
+		borderRadius: 12,
+		alignItems: "center",
+	},
+	buttonText: {
+		color: "#FFFFFF",
+		fontSize: 16,
+		fontWeight: "600",
+	},
+	endButton: {
+		marginBottom: 24,
+	},
+});

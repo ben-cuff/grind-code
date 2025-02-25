@@ -1,73 +1,100 @@
 import { Message } from "@/app/(tabs)/(interview)/interview-chat";
+import { ThemedText } from "@/components/themed-text";
+import { ThemedView } from "@/components/themed-view";
+import { useTheme } from "@/context/theme-context";
+import { getThemeColors } from "@/constants/theme";
 import Markdown from "@ronradtke/react-native-markdown-display";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View, ViewStyle, TextStyle } from "react-native";
 
 export default function ChatArea({ messages }: { messages: Message[] }) {
+	const { theme } = useTheme();
+	const colors = getThemeColors(theme === "dark");
+
+	const markdownStyle = {
+		body: {
+			color: colors.text,
+			fontSize: 16,
+			lineHeight: 24,
+		},
+		code_inline: {
+			color: colors.text,
+		},
+		code_block: {
+			color: colors.text,
+		},
+		fence: {
+			color: colors.text,
+		},
+		link: {
+			color: colors.primary,
+		},
+	};
+
 	return (
-		<View
-			style={{
-				padding: 10,
-				backgroundColor: "#f9f9f9",
-				borderRadius: 8,
-				marginBottom: 20,
-			}}
-		>
-			{messages.map((msg, index) => {
+		<ThemedView style={[styles.container, { backgroundColor: colors.surfaceAlt }]}>
+			{messages.map((msg) => {
 				const isUser = msg.role === "user";
 				return (
 					<View
 						key={msg.id}
 						style={[
+							styles.messageContainer,
 							{
-								flexDirection: isUser ? "row-reverse" : "row",
-								backgroundColor: isUser ? "#dcf8c6" : "#fff",
 								alignSelf: isUser ? "flex-end" : "flex-start",
+								backgroundColor: isUser ? colors.primary : colors.surface,
 							},
-							styles.container,
 						]}
 					>
 						<View
 							style={[
-								{
-									backgroundColor: isUser
-										? "#007AFF"
-										: "#FF9500",
-								},
 								styles.profile,
+								{
+									backgroundColor: isUser ? colors.button.background[0] : colors.button.background[1],
+								},
 							]}
 						>
-							<Text
-								style={{
-									color: "#fff",
-									fontWeight: "bold",
-								}}
-							>
+							<ThemedText style={styles.profileText}>
 								{isUser ? "ME" : "AI"}
-							</Text>
+							</ThemedText>
 						</View>
-						<Markdown>{msg.content}</Markdown>
+						<View style={styles.messageContent}>
+							<Markdown style={markdownStyle}>{msg.content}</Markdown>
+						</View>
 					</View>
 				);
 			})}
-		</View>
+		</ThemedView>
 	);
 }
 
 const styles = StyleSheet.create({
 	container: {
-		padding: 8,
-		borderRadius: 5,
+		padding: 16,
+		borderRadius: 12,
+		marginBottom: 16,
+	} as ViewStyle,
+	messageContainer: {
+		flexDirection: "row",
+		alignItems: "flex-start",
+		padding: 12,
+		borderRadius: 12,
 		maxWidth: "80%",
-		height: "auto",
-		width: "auto",
-		alignItems: "center",
-	},
+		marginBottom: 12,
+	} as ViewStyle,
 	profile: {
-		width: 40,
-		height: 40,
-		borderRadius: 20,
+		width: 36,
+		height: 36,
+		borderRadius: 18,
 		justifyContent: "center",
 		alignItems: "center",
-		marginHorizontal: 8,
-	},
+		marginRight: 8,
+	} as ViewStyle,
+	profileText: {
+		color: "#FFFFFF",
+		fontSize: 12,
+		fontWeight: "600",
+	} as TextStyle,
+	messageContent: {
+		flex: 1,
+	} as ViewStyle,
 });
