@@ -1,22 +1,29 @@
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
-import { useTheme } from "@/context/theme-context";
 import { getThemeColors } from "@/constants/theme";
+import { useTheme } from "@/context/theme-context";
+import { Question } from "@/types/question";
+import { LinearGradient } from "expo-linear-gradient";
 import { Modal, StyleSheet, TouchableOpacity, View } from "react-native";
-import { LinearGradient } from 'expo-linear-gradient';
+import NextProblem from "../next-problem";
+import RandomShuffle from "../random-shuffle";
 
 interface CorrectModalProps {
 	isVisible: boolean;
 	onClose: () => void;
-	onNext: () => void;
 	onAskAI: () => void;
+	onSolution: () => void;
+	question: Question | undefined;
+	setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export function CorrectModal({
 	isVisible,
 	onClose,
-	onNext,
 	onAskAI,
+	onSolution,
+	question,
+	setIsVisible,
 }: CorrectModalProps) {
 	const { theme } = useTheme();
 	const colors = getThemeColors(theme === "dark");
@@ -28,42 +35,54 @@ export function CorrectModal({
 			visible={isVisible}
 			onRequestClose={onClose}
 		>
-			<View style={[styles.modalContainer, { backgroundColor: colors.modal.background }]}>
+			<View
+				style={[
+					styles.modalContainer,
+					{ backgroundColor: colors.modal.background },
+				]}
+			>
 				<ThemedView useGradient style={styles.modalContent}>
 					<ThemedText style={styles.modalTitle}>Correct!</ThemedText>
-					
+
 					<View style={styles.buttonsRow}>
 						<View style={styles.buttonWrapper}>
-							<TouchableOpacity onPress={onClose}>
-								<LinearGradient
-									colors={colors.button.background}
-									style={styles.button}
-								>
-									<ThemedText style={styles.buttonText}>Try Again</ThemedText>
-								</LinearGradient>
-							</TouchableOpacity>
+							<RandomShuffle toggleCorrectModal={setIsVisible} />
 						</View>
-						
 						<View style={styles.buttonWrapper}>
-							<TouchableOpacity onPress={onNext}>
-								<LinearGradient
-									colors={colors.button.background}
-									style={styles.button}
-								>
-									<ThemedText style={styles.buttonText}>Next</ThemedText>
-								</LinearGradient>
-							</TouchableOpacity>
+							<NextProblem
+								currentIndex={question?.questionNumber!}
+								toggleCorrectModal={setIsVisible}
+							/>
 						</View>
 					</View>
-
-					<TouchableOpacity onPress={onAskAI}>
-						<LinearGradient
-							colors={colors.button.background}
-							style={[styles.button, styles.aiButton]}
+					<View style={styles.buttonsRow}>
+						<TouchableOpacity
+							style={styles.buttonWrapper}
+							onPress={onAskAI}
 						>
-							<ThemedText style={styles.buttonText}>Ask AI to Explain</ThemedText>
-						</LinearGradient>
-					</TouchableOpacity>
+							<LinearGradient
+								colors={["#4c669f", "#3b5998", "#192f6a"]}
+								style={[styles.button, styles.aiButton]}
+							>
+								<ThemedText style={styles.buttonText}>
+									Ask AI to Explain
+								</ThemedText>
+							</LinearGradient>
+						</TouchableOpacity>
+						<TouchableOpacity
+							style={styles.buttonWrapper}
+							onPress={onSolution}
+						>
+							<LinearGradient
+								colors={["#4c669f", "#3b5998", "#192f6a"]}
+								style={[styles.button, styles.aiButton]}
+							>
+								<ThemedText style={styles.buttonText}>
+									Code
+								</ThemedText>
+							</LinearGradient>
+						</TouchableOpacity>
+					</View>
 				</ThemedView>
 			</View>
 		</Modal>
@@ -101,10 +120,10 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 16,
 		borderRadius: 12,
 		alignItems: "center",
+		width: "100%",
 	},
 	aiButton: {
 		marginTop: 8,
-		width: "100%",
 	},
 	buttonText: {
 		color: "#FFFFFF",

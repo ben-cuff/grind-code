@@ -8,7 +8,7 @@ import { getThemeColors } from "@/constants/theme";
 import { useTheme } from "@/context/theme-context";
 import { Question } from "@/types/question";
 import { LinearGradient } from "expo-linear-gradient";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import {
 	ActivityIndicator,
@@ -27,7 +27,6 @@ export default function PracticeProblemScreen() {
 	const [solutionModal, setSolutionModal] = useState(false);
 	const { theme } = useTheme();
 	const colors = getThemeColors(theme === "dark");
-	const router = useRouter();
 
 	useEffect(() => {
 		async function fetchQuestions() {
@@ -48,24 +47,21 @@ export default function PracticeProblemScreen() {
 		fetchQuestions();
 	}, []);
 
-	const handleNext = () => {
-		setCorrectModal(false);
-		router.push({
-			pathname: "/(tabs)/(practice)/[questionNumber]",
-			params: { questionNumber: Number(questionNumber) + 1 },
-		});
-	};
-
 	return (
 		<ThemedView style={{ flex: 1 }}>
 			<CorrectModal
 				isVisible={correctModal}
 				onClose={() => setCorrectModal(false)}
-				onNext={handleNext}
 				onAskAI={() => {
 					setCorrectModal(false);
 					setAiModal(true);
 				}}
+				onSolution={() => {
+					setCorrectModal(false);
+					setSolutionModal(true);
+				}}
+				setIsVisible={setCorrectModal}
+				question={question!}
 			/>
 			<AskAIModal
 				isVisible={aiModal}

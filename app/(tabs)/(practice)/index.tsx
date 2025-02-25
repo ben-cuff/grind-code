@@ -39,7 +39,7 @@ export default function PracticeTab() {
 						<Pressable
 							style={[
 								styles.iconContainer,
-								{ backgroundColor: colors.primary },
+								{ backgroundColor: "orange" },
 							]}
 							onPress={async () => {
 								setIsLoading(true);
@@ -101,8 +101,8 @@ const styles = StyleSheet.create({
 	},
 	iconContainer: {
 		marginLeft: "auto",
-		padding: 5,
-		borderRadius: 100,
+		padding: 6,
+		borderRadius: 1000,
 	},
 	loadingContainer: {
 		marginLeft: "auto",

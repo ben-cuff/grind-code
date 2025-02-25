@@ -2,7 +2,7 @@ import { getThemeColors } from "@/constants/theme";
 import { useTheme } from "@/context/theme-context";
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
-import { View } from "react-native";
+import { Platform, View } from "react-native";
 
 export default function TabLayout() {
 	const { theme } = useTheme();
@@ -16,6 +16,7 @@ export default function TabLayout() {
 				tabBarStyle: {
 					backgroundColor: colors.surfaceAlt,
 					borderTopColor: colors.border,
+					paddingVertical: Platform.OS === "web" ? 10 : 0,
 				},
 				headerShown: false,
 			}}
@@ -38,7 +39,7 @@ export default function TabLayout() {
 				options={{
 					title: "Learn",
 					tabBarIcon: ({ color }) => (
-						<Ionicons size={28} name={"repeat"} color={color} />
+						<Ionicons size={28} name="repeat" color={color} />
 					),
 				}}
 			/>
@@ -57,7 +58,8 @@ export default function TabLayout() {
 								alignItems: "center",
 								justifyContent: "center",
 								backgroundColor: colors.surfaceAlt,
-								marginBottom: 20,
+								marginBottom: Platform.OS === "web" ? 0 : 20,
+								marginRight: Platform.OS === "web" ? 20 : 0,
 							}}
 						>
 							<Ionicons
