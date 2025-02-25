@@ -78,7 +78,6 @@ export default function SettingsTab() {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		padding: 16,
 	},
 	title: {
 		fontSize: 32,
@@ -87,6 +86,7 @@ const styles = StyleSheet.create({
 	},
 	section: {
 		marginBottom: 24,
+		padding: 16,
 	},
 	sectionTitle: {
 		fontSize: 20,
@@ -116,5 +116,6 @@ const styles = StyleSheet.create({
 	},
 	signOutContainer: {
 		marginTop: "auto",
+		marginBottom: 16,
 	},
 });

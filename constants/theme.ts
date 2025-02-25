@@ -30,7 +30,7 @@ export const darkTheme = {
 	border: "#38383A",
 	card: ["#2C2E33", "#1A1B1E"],
 	surface: "#2C2E33",
-	surfaceAlt: "#1C1C1E",
+	surfaceAlt: "#242426",
 	tabBar: {
 		background: ["#1A1B1E", "#2C2E33"],
 		active: "#0A84FF",

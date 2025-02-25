@@ -60,6 +60,8 @@ const styles = StyleSheet.create({
 		borderRadius: 8,
 		width: "48%",
 		marginBottom: 12,
+		borderWidth: 2,
+		borderColor: "transparent",
 	},
 	optionText: {
 		textAlign: "center",
