@@ -28,7 +28,7 @@ export default function NextProblem({
 				{ backgroundColor: colors.background[1] },
 			]}
 		>
-			<Text style={(styles.text, { color: colors.text })}>Next</Text>
+			<Text style={[styles.text, { color: colors.text }]}>Next</Text>
 			{isLoading ? (
 				<View style={styles.loadingContainer}>
 					<ActivityIndicator size={"large"} color="#2b7fff" />

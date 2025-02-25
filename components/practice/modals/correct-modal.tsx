@@ -78,7 +78,7 @@ export function CorrectModal({
 								style={[styles.button, styles.aiButton]}
 							>
 								<ThemedText style={styles.buttonText}>
-									Code
+									Solution
 								</ThemedText>
 							</LinearGradient>
 						</TouchableOpacity>
