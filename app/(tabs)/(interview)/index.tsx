@@ -3,9 +3,10 @@ import { ThemedView } from "@/components/themed-view";
 import { getThemeColors } from "@/constants/theme";
 import { useTheme } from "@/context/theme-context";
 import { useAuth } from "@clerk/clerk-expo";
+import { useFocusEffect } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Pressable, ScrollView, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -22,10 +23,15 @@ export default function InterviewTab() {
 	const colors = getThemeColors(theme === "dark");
 	const [interviews, setInterviews] = useState<Interview[]>([]);
 	const { getToken } = useAuth();
-
 	useEffect(() => {
 		fetchInterviews();
 	}, []);
+
+	useFocusEffect(
+		useCallback(() => {
+			fetchInterviews();
+		}, [])
+	);
 
 	const fetchInterviews = async () => {
 		try {

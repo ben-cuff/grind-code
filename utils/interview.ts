@@ -1,4 +1,4 @@
-import { Message } from "@/app/(tabs)/(interview)/interview-chat";
+import { Message } from "@/types/message";
 
 type FeedbackHandlerParams = {
 	getToken: () => Promise<string | null>;

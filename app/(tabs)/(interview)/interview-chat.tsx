@@ -7,6 +7,8 @@ import { useTheme } from "@/context/theme-context";
 import { Message } from "@/types/message";
 import { Question } from "@/types/question";
 import { handleFeedback } from "@/utils/interview";
+import { handleSubmit } from "@/utils/interview-submit";
+import { sendInterview } from "@/utils/send-interview";
 import { useAuth } from "@clerk/clerk-expo";
 import { LinearGradient } from "expo-linear-gradient";
 import { useEffect, useState } from "react";
@@ -44,24 +46,15 @@ export default function InterviewChat() {
 	}, [feedback]);
 
 	useEffect(() => {
-		const sendInterview = async () => {
-			const token = await getToken();
-			await fetch(
-				`${process.env.EXPO_PUBLIC_BASE_URL}/interview/${interviewId}`,
-				{
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${token}`,
-					},
-					body: JSON.stringify({
-						messages: messages,
-						questionNumber: question?.questionNumber,
-					}),
-				}
+		const sendInterviewData = async () => {
+			await sendInterview(
+				getToken,
+				interviewId.toString(),
+				messages,
+				question!
 			);
 		};
-		sendInterview();
+		sendInterviewData();
 	}, [messages]);
 
 	useEffect(() => {
@@ -107,96 +100,17 @@ export default function InterviewChat() {
 		fetchData();
 	}, []);
 
-	const handleSubmit = async () => {
-		if (!input.trim() || isLoading) return;
-
-		const userMessage: Message = {
-			id: uuid.v4(),
-			role: "user",
-			content: input.trim(),
-		};
-
-		setMessages((prev) => [...prev!, userMessage]);
-		setInput("");
-		setIsLoading(true);
-
-		const tempMessageId = uuid.v4();
-		setMessages((prev) => [
-			...prev!,
-			{
-				id: tempMessageId,
-				role: "assistant",
-				content: "",
-			},
-		]);
-
-		try {
-			const token = await getToken();
-			const response = await fetch(
-				`${process.env.EXPO_PUBLIC_BASE_URL}/openai/stream`,
-				{
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${token}`,
-					},
-					body: JSON.stringify({
-						messages: [...messages, userMessage].map(
-							({ role, content }) => ({
-								role,
-								content,
-							})
-						),
-						solution,
-					}),
-				}
-			);
-
-			if (!response.ok) {
-				console.log(response);
-				const errorData = await response.json();
-				alert(errorData.error || "Failed to fetch response");
-				throw new Error(
-					errorData.message || "Failed to fetch response"
-				);
-			}
-
-			const data = await response.json();
-
-			setMessages((prev) =>
-				prev?.map((message) =>
-					message.id === tempMessageId
-						? { ...message, content: data.message }
-						: message
-				)
-			);
-
-			// const reader = response.body.getReader();
-			// const decoder = new TextDecoder();
-			// let content = "";
-
-			// while (true) {
-			// 	const { done, value } = await reader.read();
-			// 	if (done) break;
-
-			// 	const chunk = decoder.decode(value);
-			// 	content += chunk;
-			// 	console.log(chunk);
-
-			// 	// Update the temporary message with the accumulated content
-			// 	setMessages((prev) =>
-			// 		prev.map((message) =>
-			// 			message.id === tempMessageId
-			// 				? { ...message, content }
-			// 				: message
-			// 		)
-			// 	);
-			// }
-		} catch (error) {
-			console.error("Error:", error);
-		} finally {
-			setIsLoading(false);
-		}
+	const onSubmit = async () => {
+		await handleSubmit({
+			input,
+			isLoading,
+			setInput,
+			setIsLoading,
+			messages,
+			setMessages,
+			getToken,
+			solution,
+		});
 	};
 
 	const handleFeedbackClick = async () => {
@@ -211,9 +125,7 @@ export default function InterviewChat() {
 	};
 
 	useEffect(() => {
-		console.log(feedback);
 		if (feedback) {
-			console.log("sending feedback");
 			const sendFeedback = async () => {
 				const token = await getToken();
 				await fetch(
@@ -278,7 +190,7 @@ export default function InterviewChat() {
 							/>
 							<Pressable
 								style={styles.buttonWrapper}
-								onPress={handleSubmit}
+								onPress={onSubmit}
 								disabled={isLoading || disabled}
 							>
 								<LinearGradient
