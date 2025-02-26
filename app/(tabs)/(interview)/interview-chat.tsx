@@ -32,10 +32,16 @@ export default function InterviewChat() {
 	const [question, setQuestion] = useState<Question | null>(null);
 	const [feedback, setFeedback] = useState<{ message: string }>();
 	const [feedbackModal, toggleFeedbackModal] = useState(false);
+	const [disabled, setDisabled] = useState(false);
 	const [input, setInput] = useState("");
 	const { getToken } = useAuth();
 	const { theme } = useTheme();
 	const colors = getThemeColors(theme === "dark");
+
+	useEffect(() => {
+		if (feedback) setDisabled(true);
+		console.log(disabled);
+	}, [feedback]);
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -228,7 +234,7 @@ export default function InterviewChat() {
 							<Pressable
 								style={styles.buttonWrapper}
 								onPress={handleSubmit}
-								disabled={isLoading}
+								disabled={isLoading || disabled}
 							>
 								<LinearGradient
 									colors={[
@@ -243,11 +249,36 @@ export default function InterviewChat() {
 								</LinearGradient>
 							</Pressable>
 						</View>
-						{messages.length >= 3 && messages[2].content != "" && (
+						{messages.length >= 3 &&
+							messages[2].content != "" &&
+							!feedback && (
+								<Pressable
+									style={[
+										styles.buttonWrapper,
+										styles.endButton,
+									]}
+									onPress={handleFeedbackClick}
+									disabled={isLoadingFeedback || disabled}
+								>
+									<LinearGradient
+										colors={[
+											colors.button.background[0],
+											colors.button.background[1],
+										]}
+										style={styles.button}
+									>
+										<ThemedText style={styles.buttonText}>
+											{isLoadingFeedback
+												? "Generating Feedback..."
+												: "End Interview"}
+										</ThemedText>
+									</LinearGradient>
+								</Pressable>
+							)}
+						{feedback && (
 							<Pressable
 								style={[styles.buttonWrapper, styles.endButton]}
-								onPress={handleFeedbackClick}
-								disabled={isLoadingFeedback}
+								onPress={() => toggleFeedbackModal(true)}
 							>
 								<LinearGradient
 									colors={[
@@ -257,9 +288,7 @@ export default function InterviewChat() {
 									style={styles.button}
 								>
 									<ThemedText style={styles.buttonText}>
-										{isLoadingFeedback
-											? "Generating Feedback..."
-											: "End Interview"}
+										Show Feedback
 									</ThemedText>
 								</LinearGradient>
 							</Pressable>

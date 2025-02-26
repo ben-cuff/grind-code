@@ -4,7 +4,6 @@ import { getThemeColors } from "@/constants/theme";
 import { useTheme } from "@/context/theme-context";
 import Markdown from "@ronradtke/react-native-markdown-display";
 import { LinearGradient } from "expo-linear-gradient";
-import { router } from "expo-router";
 import {
 	ActivityIndicator,
 	Modal,
@@ -107,7 +106,6 @@ export default function InterviewModal({
 								style={styles.buttonWrapper}
 								onPress={() => {
 									toggleFeedbackModal(false);
-									router.replace("/");
 								}}
 							>
 								<LinearGradient

@@ -4,6 +4,7 @@ import { getThemeColors } from "@/constants/theme";
 import { useTheme } from "@/context/theme-context";
 import { Message } from "@/types/message";
 import Markdown from "@ronradtke/react-native-markdown-display";
+import { useEffect, useRef } from "react";
 import {
 	ScrollView,
 	StyleSheet,
@@ -16,6 +17,8 @@ export default function ChatArea({ messages }: { messages: Message[] }) {
 	const { theme } = useTheme();
 	const colors = getThemeColors(theme === "dark");
 
+	const scrollViewRef = useRef<ScrollView>(null);
+
 	const markdownStyle = {
 		body: {
 			color: colors.text,
@@ -24,23 +27,30 @@ export default function ChatArea({ messages }: { messages: Message[] }) {
 		},
 		code_inline: {
 			color: colors.text,
+			backgroundColor: colors.code,
 		},
 		code_block: {
 			color: colors.text,
+			backgroundColor: colors.code,
 		},
 		fence: {
 			color: colors.text,
+			backgroundColor: colors.code,
 		},
 		link: {
 			color: colors.primary,
 		},
 	};
 
+	useEffect(() => {
+		scrollViewRef.current?.scrollToEnd({ animated: true });
+	}, [messages]);
+
 	return (
 		<ThemedView
 			style={[styles.container, { backgroundColor: colors.surfaceAlt }]}
 		>
-			<ScrollView>
+			<ScrollView ref={scrollViewRef}>
 				{messages.map((msg) => {
 					const isUser = msg.role === "user";
 					return (
