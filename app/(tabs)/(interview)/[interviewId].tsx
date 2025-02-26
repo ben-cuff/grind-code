@@ -48,7 +48,7 @@ export default function InterviewChatDynamic() {
 		const sendInterview = async () => {
 			const token = await getToken();
 			await fetch(
-				`${process.env.EXPO_PUBLIC_BASE_URL}/interviews/${interviewId}`,
+				`${process.env.EXPO_PUBLIC_BASE_URL}/interview/${interviewId}`,
 				{
 					method: "POST",
 					headers: {
@@ -71,7 +71,7 @@ export default function InterviewChatDynamic() {
 
 			const token = await getToken();
 			const response = await fetch(
-				`${process.env.EXPO_PUBLIC_BASE_URL}/interviews/${interviewId}`,
+				`${process.env.EXPO_PUBLIC_BASE_URL}/interview/${interviewId}`,
 				{
 					headers: {
 						Authorization: `Bearer ${token}`,
@@ -87,6 +87,7 @@ export default function InterviewChatDynamic() {
 			}
 
 			const data = await response.json();
+			console.log(JSON.stringify(data, null, 2));
 			setMessages(data.interview.messages || []);
 			setQuestion(data.questionDetails);
 			setSolution(data.solution.solution || "");

@@ -47,7 +47,7 @@ export default function InterviewChat() {
 		const sendInterview = async () => {
 			const token = await getToken();
 			await fetch(
-				`${process.env.EXPO_PUBLIC_BASE_URL}/interviews/${interviewId}`,
+				`${process.env.EXPO_PUBLIC_BASE_URL}/interview/${interviewId}`,
 				{
 					method: "POST",
 					headers: {
