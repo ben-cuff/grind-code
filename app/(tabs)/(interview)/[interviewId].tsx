@@ -55,6 +55,10 @@ export default function InterviewChatDynamic() {
 			);
 		};
 		sendInterviewData();
+
+		if (messages.length > 20 && !feedback && !isLoadingFeedback) {
+			handleFeedbackClick();
+		}
 	}, [messages]);
 
 	useEffect(() => {
