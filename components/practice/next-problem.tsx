@@ -31,7 +31,7 @@ export default function NextProblem({
 			<Text style={[styles.text, { color: colors.text }]}>Next</Text>
 			{isLoading ? (
 				<View style={styles.loadingContainer}>
-					<ActivityIndicator size={"large"} color="#2b7fff" />
+					<ActivityIndicator size={"large"} color="gray" />
 				</View>
 			) : (
 				<Pressable
@@ -52,11 +52,8 @@ export default function NextProblem({
 
 						setIsLoading(false);
 						toggleCorrectModal(false);
-						router.push("/(tabs)/(practice)");
-						router.push({
-							pathname: "/(tabs)/(practice)/[questionNumber]",
-							params: { questionNumber: data.questionNumber },
-						});
+						router.push("/practice");
+						router.push(`/practice/${data.questionNumber}`);
 					}}
 				>
 					<Ionicons
