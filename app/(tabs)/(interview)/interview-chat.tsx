@@ -33,13 +33,13 @@ export default function InterviewChat() {
 	const [solution, setSolution] = useState("");
 	const [question, setQuestion] = useState<Question | null>(null);
 	const [feedback, setFeedback] = useState<{ message: string }>();
-	const [interviewId, setInterviewId] = useState(uuid.v4());
 	const [feedbackModal, toggleFeedbackModal] = useState(false);
 	const [disabled, setDisabled] = useState(false);
 	const [input, setInput] = useState("");
 	const { getToken } = useAuth();
 	const { theme } = useTheme();
 	const colors = getThemeColors(theme === "dark");
+	const interviewId = uuid.v4();
 
 	useEffect(() => {
 		if (feedback) setDisabled(true);
