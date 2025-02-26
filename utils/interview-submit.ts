@@ -87,5 +87,7 @@ export const handleSubmit = async ({
 	} catch (error) {
 		console.error("Error:", error);
 		throw error;
+	} finally {
+		setIsLoading(false);
 	}
 };
