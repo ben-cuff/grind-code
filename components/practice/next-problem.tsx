@@ -1,3 +1,5 @@
+import { getThemeColors } from "@/constants/theme";
+import { useTheme } from "@/context/theme-context";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useState } from "react";
@@ -17,12 +19,19 @@ export default function NextProblem({
 	toggleCorrectModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
 	const [isLoading, setIsLoading] = useState(false);
+	const { theme } = useTheme();
+	const colors = getThemeColors(theme === "dark");
 	return (
-		<View style={styles.nextProblemView}>
-			<Text style={styles.text}>Next</Text>
+		<View
+			style={[
+				styles.nextProblemView,
+				{ backgroundColor: colors.background[1] },
+			]}
+		>
+			<Text style={[styles.text, { color: colors.text }]}>Next</Text>
 			{isLoading ? (
 				<View style={styles.loadingContainer}>
-					<ActivityIndicator size={"large"} color="#2b7fff" />
+					<ActivityIndicator size={"large"} color="gray" />
 				</View>
 			) : (
 				<Pressable
@@ -43,11 +52,8 @@ export default function NextProblem({
 
 						setIsLoading(false);
 						toggleCorrectModal(false);
-						router.push("/(tabs)/(practice)");
-						router.push({
-							pathname: "/(tabs)/(practice)/[questionNumber]",
-							params: { questionNumber: data.questionNumber },
-						});
+						router.push("/practice");
+						router.push(`/practice/${data.questionNumber}`);
 					}}
 				>
 					<Ionicons
@@ -67,19 +73,17 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "space-between",
 		padding: 12,
-		backgroundColor: "#f0f0f0",
 		borderRadius: 8,
 		height: 64,
 	},
 	text: {
 		fontSize: 16,
-		color: "#333",
 		fontWeight: "600",
 	},
 	iconContainer: {
 		backgroundColor: "#2b7fff",
 		padding: 6,
-		borderRadius: 100,
+		borderRadius: 1000,
 	},
 	loadingContainer: {
 		padding: 6,

@@ -1,5 +1,5 @@
-import googleLogo from "@/assets/images/7123025_logo_google_g_icon.png";
-import { useSSO } from "@clerk/clerk-expo";
+import createAccount from "@/utils/account-creation";
+import { useAuth, useSSO } from "@clerk/clerk-expo";
 import * as AuthSession from "expo-auth-session";
 import * as WebBrowser from "expo-web-browser";
 import React, { useCallback, useEffect } from "react";
@@ -28,25 +28,29 @@ export const useWarmUpBrowser = () => {
 // Handle any pending authentication sessions
 WebBrowser.maybeCompleteAuthSession();
 
-export default function OAuthGoogle({ message }: { message: string }) {
+export default function OAuthGitHub({ message }: { message: string }) {
 	useWarmUpBrowser();
 
 	// Use the `useSSO()` hook to access the `startSSOFlow()` method
 	const { startSSOFlow } = useSSO();
+	const { getToken } = useAuth();
 
 	const onPress = useCallback(async () => {
 		try {
 			// Start the authentication process by calling `startSSOFlow()`
 			const { createdSessionId, setActive, signIn, signUp } =
 				await startSSOFlow({
-					strategy: "oauth_google",
+					strategy: "oauth_github",
 					// Defaults to current path
 					redirectUrl: AuthSession.makeRedirectUri(),
 				});
 
 			// If sign in was successful, set the active session
 			if (createdSessionId) {
-				setActive!({ session: createdSessionId });
+				await setActive!({ session: createdSessionId });
+
+				const token = await getToken();
+				await createAccount(token!);
 			} else {
 				// If there is no `createdSessionId`,
 				// there are missing requirements, such as MFA
@@ -69,9 +73,10 @@ export default function OAuthGoogle({ message }: { message: string }) {
 					<Text style={styles.button}>{message}</Text>
 				)}
 				<Image
-					source={googleLogo}
+					source={{
+						uri: "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png",
+					}}
 					style={styles.image}
-					resizeMode="contain"
 				/>
 			</View>
 		</Pressable>
@@ -91,7 +96,7 @@ const styles = StyleSheet.create({
 	image: {
 		width: 40,
 		height: 40,
-		resizeMode: "contain",
+		borderRadius: 360,
 	},
 	button: {
 		paddingVertical: 10,

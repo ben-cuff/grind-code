@@ -1,12 +1,23 @@
+import { getThemeColors } from "@/constants/theme";
+import { useTheme } from "@/context/theme-context";
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
-import { View } from "react-native";
+import { Platform, View } from "react-native";
 
 export default function TabLayout() {
+	const { theme } = useTheme();
+	const colors = getThemeColors(theme === "dark");
+
 	return (
 		<Tabs
 			screenOptions={{
-				tabBarActiveTintColor: "blue",
+				tabBarActiveTintColor: colors.primary,
+				tabBarInactiveTintColor: colors.tabBar.inactive,
+				tabBarStyle: {
+					backgroundColor: colors.surfaceAlt,
+					borderTopColor: colors.border,
+					paddingVertical: Platform.OS === "web" ? 10 : 0,
+				},
 				headerShown: false,
 			}}
 		>
@@ -28,13 +39,12 @@ export default function TabLayout() {
 				options={{
 					title: "Learn",
 					tabBarIcon: ({ color }) => (
-						<Ionicons size={28} name={"repeat"} color={color} />
+						<Ionicons size={28} name="repeat" color={color} />
 					),
 				}}
 			/>
-
 			<Tabs.Screen
-				name="interview"
+				name="(interview)"
 				options={{
 					title: "Interview",
 					tabBarIcon: ({ color, focused }) => (
@@ -47,8 +57,9 @@ export default function TabLayout() {
 								borderColor: color,
 								alignItems: "center",
 								justifyContent: "center",
-								backgroundColor: "white",
-								marginBottom: 20,
+								backgroundColor: colors.surfaceAlt,
+								marginBottom: Platform.OS === "web" ? 0 : 20,
+								marginRight: Platform.OS === "web" ? 20 : 0,
 							}}
 						>
 							<Ionicons

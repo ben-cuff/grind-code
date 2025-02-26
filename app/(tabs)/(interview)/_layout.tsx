@@ -2,7 +2,7 @@ import { getThemeColors } from "@/constants/theme";
 import { useTheme } from "@/context/theme-context";
 import { Stack } from "expo-router";
 
-export default function PracticeLayout() {
+export default function InterviewLayout() {
 	const { theme } = useTheme();
 	const colors = getThemeColors(theme === "dark");
 

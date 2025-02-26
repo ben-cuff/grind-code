@@ -1,3 +1,5 @@
+import { getThemeColors } from "@/constants/theme";
+import { useTheme } from "@/context/theme-context";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useState } from "react";
@@ -15,12 +17,20 @@ export default function RandomShuffle({
 	toggleCorrectModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
 	const [isLoading, setIsLoading] = useState(false);
+	const { theme } = useTheme();
+	const colors = getThemeColors(theme === "dark");
+
 	return (
-		<View style={styles.shuffleView}>
-			<Text style={styles.text}>Randomize</Text>
+		<View
+			style={[
+				styles.shuffleView,
+				{ backgroundColor: colors.background[1] },
+			]}
+		>
+			<Text style={[styles.text, { color: colors.text }]}>Randomize</Text>
 			{isLoading ? (
 				<View style={styles.loadingContainer}>
-					<ActivityIndicator size={"large"} color={"orange"} />
+					<ActivityIndicator size={"large"} color={"gray"} />
 				</View>
 			) : (
 				<Pressable
@@ -61,19 +71,17 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "space-between",
 		padding: 12,
-		backgroundColor: "#f0f0f0",
 		borderRadius: 8,
 		height: 64,
 	},
 	text: {
 		fontSize: 16,
-		color: "#333",
 		fontWeight: "600",
 	},
 	iconContainer: {
 		backgroundColor: "orange",
 		padding: 6,
-		borderRadius: 100,
+		borderRadius: 1000,
 	},
 	loadingContainer: {
 		padding: 6,

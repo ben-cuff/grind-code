@@ -9,4 +9,6 @@ export type Question = {
 	updatedAt: string;
 	urlQuestion: string;
 	urlSolution: string;
+	explanation?: string;
+	solution?: string;
 };
