@@ -13,16 +13,35 @@ import { SafeAreaView } from "react-native-safe-area-context";
 interface Interview {
 	id: string;
 	completed: boolean;
-	createdAt: string;
+	updatedAt: string;
 	questionNumber: number;
 }
 
+interface User {
+	createdAt: string;
+	email: string;
+	id: string;
+	lastLogin: string;
+	premium: boolean;
+	updatedAt: string;
+}
+
+interface Usage {
+	askAIUsage: number;
+	interviewUsage: number;
+	askAILast: Date | null;
+	interviewLast: Date | null;
+}
 export default function InterviewTab() {
 	const router = useRouter();
 	const { theme } = useTheme();
 	const colors = getThemeColors(theme === "dark");
 	const [interviews, setInterviews] = useState<Interview[]>([]);
+	const [usage, setUsage] = useState<Usage | null>(null);
+	const [user, setUser] = useState<User | null>(null);
 	const { getToken } = useAuth();
+	const { userId } = useAuth();
+
 	useEffect(() => {
 		fetchInterviews();
 	}, []);
@@ -36,18 +55,35 @@ export default function InterviewTab() {
 	const fetchInterviews = async () => {
 		try {
 			const token = await getToken();
-			const response = await fetch(
-				`${process.env.EXPO_PUBLIC_BASE_URL}/interview`,
-				{
-					headers: {
+
+			const [interviewsData, usageData, userData] = await Promise.all([
+				fetch(`${process.env.EXPO_PUBLIC_BASE_URL}/interview`, {
+					method: "GET",
+					headers: { Authorization: `Bearer ${token}` },
+				}).then((res) => res.json()),
+
+				fetch(`${process.env.EXPO_PUBLIC_BASE_URL}/usage`, {
+					method: "GET",
+					headers: { Authorization: `Bearer ${token}` },
+				}).then((res) => res.json()),
+
+				fetch(
+					`${process.env.EXPO_PUBLIC_BASE_URL}/accounts/${userId}`,
+					{
 						method: "GET",
-						Authorization: `Bearer ${token}`,
-					},
-				}
+					}
+				).then((res) => res.json()),
+			]);
+
+			interviewsData.sort(
+				(a: Interview, b: Interview) =>
+					new Date(b.updatedAt).getTime() -
+					new Date(a.updatedAt).getTime()
 			);
-			const data = await response.json();
-			console.log(data);
-			setInterviews(data);
+
+			setUser(userData);
+			setUsage(usageData);
+			setInterviews(interviewsData);
 		} catch (error) {
 			console.error("Failed to fetch interviews:", error);
 		}
@@ -59,10 +95,25 @@ export default function InterviewTab() {
 				<ScrollView>
 					<ThemedText style={styles.title}>Interview</ThemedText>
 					<Pressable
-						style={styles.buttonWrapper}
-						onPress={() =>
-							router.push("/(tabs)/(interview)/interview-chat")
-						}
+						style={[
+							styles.buttonWrapper,
+							((user?.premium && usage?.interviewUsage! >= 10) ||
+								(!user?.premium &&
+									usage?.interviewUsage! >= 1)) && {
+								opacity: 0.5,
+							},
+						]}
+						onPress={() => {
+							if (
+								(user?.premium &&
+									usage?.interviewUsage! < 10) ||
+								(!user?.premium && usage?.interviewUsage! < 1)
+							) {
+								router.push(
+									"/(tabs)/(interview)/interview-chat"
+								);
+							}
+						}}
 					>
 						<LinearGradient
 							colors={[
@@ -72,7 +123,11 @@ export default function InterviewTab() {
 							style={styles.button}
 						>
 							<ThemedText style={styles.buttonText}>
-								Start New Interview
+								{(user?.premium &&
+									usage?.interviewUsage! >= 10) ||
+								(!user?.premium && usage?.interviewUsage! >= 1)
+									? "Usage Limit Reached"
+									: "Start New Interview"}
 							</ThemedText>
 						</LinearGradient>
 					</Pressable>
@@ -98,7 +153,7 @@ export default function InterviewTab() {
 									<ThemedText style={styles.buttonText}>
 										Question {interview.questionNumber} -{" "}
 										{new Date(
-											interview.createdAt
+											interview.updatedAt
 										).toLocaleDateString()}
 									</ThemedText>
 								</LinearGradient>
@@ -126,7 +181,7 @@ export default function InterviewTab() {
 									<ThemedText style={styles.buttonText}>
 										Question {interview.questionNumber} -{" "}
 										{new Date(
-											interview.createdAt
+											interview.updatedAt
 										).toLocaleDateString()}
 									</ThemedText>
 								</LinearGradient>
