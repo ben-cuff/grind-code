@@ -173,6 +173,7 @@ export default function InterviewChat() {
 	};
 
 	const handleFeedbackClick = async () => {
+		toggleFeedbackModal(true);
 		await handleFeedback({
 			getToken,
 			messages,
@@ -195,6 +196,7 @@ export default function InterviewChat() {
 					feedback={feedback!}
 					toggleFeedbackModal={toggleFeedbackModal}
 					solution={solution}
+					isLoading={isLoadingFeedback}
 				/>
 
 				<View style={styles.container}>
@@ -284,7 +286,7 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 	},
 	inputContainer: {
-		marginBottom: 16,
+		marginBottom: 8,
 		marginTop: "auto",
 		gap: 12,
 	},

@@ -4,7 +4,9 @@ import { getThemeColors } from "@/constants/theme";
 import { useTheme } from "@/context/theme-context";
 import Markdown from "@ronradtke/react-native-markdown-display";
 import { LinearGradient } from "expo-linear-gradient";
+import { router } from "expo-router";
 import {
+	ActivityIndicator,
 	Modal,
 	Pressable,
 	ScrollView,
@@ -18,11 +20,13 @@ export default function InterviewModal({
 	feedbackModal,
 	feedback,
 	toggleFeedbackModal,
+	isLoading,
 	solution,
 }: {
 	feedbackModal: boolean;
 	feedback: { message: string } | undefined;
 	toggleFeedbackModal: React.Dispatch<React.SetStateAction<boolean>>;
+	isLoading: boolean;
 	solution: string;
 }) {
 	const { theme } = useTheme();
@@ -59,39 +63,67 @@ export default function InterviewModal({
 					{ backgroundColor: colors.modal.background },
 				]}
 			>
-				<ThemedView useGradient style={styles.modalContent}>
-					<ScrollView style={styles.scrollView}>
-						<View style={styles.contentContainer}>
-							<ThemedText style={styles.title}>
-								Interview Feedback
-							</ThemedText>
-							<Markdown style={markdownStyle}>
-								{feedback?.message ?? ""}
-							</Markdown>
-							<ThemedText style={styles.solutionTitle}>
-								Solution:
-							</ThemedText>
-							<Markdown style={markdownStyle}>
-								{solution}
-							</Markdown>
-						</View>
-					</ScrollView>
-					<Pressable
-						style={styles.buttonWrapper}
-						onPress={() => toggleFeedbackModal(false)}
-					>
-						<LinearGradient
-							colors={[
-								colors.button.background[0],
-								colors.button.background[1],
-							]}
-							style={styles.button}
+				<ThemedView
+					useGradient
+					style={[
+						styles.modalContent,
+						{ height: isLoading ? "50%" : "80%" },
+					]}
+				>
+					{isLoading ? (
+						<View
+							style={{
+								flex: 1,
+								alignContent: "center",
+								marginTop: 20,
+							}}
 						>
-							<ThemedText style={styles.buttonText}>
-								Close
+							<ActivityIndicator size={"large"} />
+							<ThemedText
+								style={{ textAlign: "center", marginTop: 12 }}
+							>
+								Loading Feedback...
 							</ThemedText>
-						</LinearGradient>
-					</Pressable>
+						</View>
+					) : (
+						<View style={{ flex: 1 }}>
+							<ScrollView style={styles.scrollView}>
+								<View style={styles.contentContainer}>
+									<ThemedText style={styles.title}>
+										Interview Feedback
+									</ThemedText>
+									<Markdown style={markdownStyle}>
+										{feedback?.message ?? ""}
+									</Markdown>
+									<ThemedText style={styles.solutionTitle}>
+										Solution:
+									</ThemedText>
+									<Markdown style={markdownStyle}>
+										{solution}
+									</Markdown>
+								</View>
+							</ScrollView>
+							<Pressable
+								style={styles.buttonWrapper}
+								onPress={() => {
+									toggleFeedbackModal(false);
+									router.replace("/");
+								}}
+							>
+								<LinearGradient
+									colors={[
+										colors.button.background[0],
+										colors.button.background[1],
+									]}
+									style={styles.button}
+								>
+									<ThemedText style={styles.buttonText}>
+										Close
+									</ThemedText>
+								</LinearGradient>
+							</Pressable>
+						</View>
+					)}
 				</ThemedView>
 			</View>
 		</Modal>
@@ -107,7 +139,6 @@ const styles = StyleSheet.create({
 	} as ViewStyle,
 	modalContent: {
 		width: "100%",
-		height: "80%",
 		padding: 20,
 		borderTopLeftRadius: 20,
 		borderTopRightRadius: 20,
