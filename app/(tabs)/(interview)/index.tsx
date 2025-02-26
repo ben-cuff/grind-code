@@ -30,12 +30,15 @@ export default function InterviewTab() {
 	const fetchInterviews = async () => {
 		try {
 			const token = await getToken();
-			const response = await fetch("http://localhost:3000/interview", {
-				headers: {
-					method: "GET",
-					Authorization: `Bearer ${token}`,
-				},
-			});
+			const response = await fetch(
+				`${process.env.EXPO_PUBLIC_BASE_URL}/interview`,
+				{
+					headers: {
+						method: "GET",
+						Authorization: `Bearer ${token}`,
+					},
+				}
+			);
 			const data = await response.json();
 			console.log(data);
 			setInterviews(data);

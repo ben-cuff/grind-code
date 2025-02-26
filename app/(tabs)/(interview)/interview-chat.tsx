@@ -47,8 +47,7 @@ export default function InterviewChat() {
 		const sendInterview = async () => {
 			const token = await getToken();
 			await fetch(
-				// `${process.env.EXPO_PUBLIC_BASE_URL}/interviews/${interviewId}`,
-				`http://localhost:3000/interview/${interviewId}`,
+				`${process.env.EXPO_PUBLIC_BASE_URL}/interviews/${interviewId}`,
 				{
 					method: "POST",
 					headers: {
@@ -218,8 +217,7 @@ export default function InterviewChat() {
 			const sendFeedback = async () => {
 				const token = await getToken();
 				await fetch(
-					//`${process.env.EXPO_PUBLIC_BASE_URL}/interview/${interviewId}/feedback`,
-					`http://localhost:3000/interview/${interviewId}/feedback`,
+					`${process.env.EXPO_PUBLIC_BASE_URL}/interview/${interviewId}/feedback`,
 					{
 						method: "PATCH",
 						headers: {
