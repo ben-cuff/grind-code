@@ -1,25 +1,27 @@
-import { SignedIn, SignedOut, useUser } from "@clerk/clerk-expo";
+import { ThemedText } from "@/components/themed-text";
+import { ThemedView } from "@/components/themed-view";
+import { SignedIn, SignedOut } from "@clerk/clerk-expo";
 import { Link, Redirect } from "expo-router";
 import { Image, StyleSheet, Text, View } from "react-native";
 
 export default function Index() {
-	const user = useUser();
-
 	return (
 		<View style={styles.container}>
 			<SignedIn>
 				<Redirect href="/(tabs)" />
 			</SignedIn>
 			<SignedOut>
-				<View style={styles.content}>
+				<ThemedView style={styles.content}>
 					<Image
 						source={require("@/assets/images/react-logo.png")}
 						style={styles.logo}
 					/>
-					<Text style={styles.title}>Welcome to GrindCode</Text>
-					<Text style={styles.subtitle}>
+					<ThemedText style={styles.title}>
+						Welcome to GrindCode
+					</ThemedText>
+					<ThemedText style={styles.subtitle}>
 						Your companion for coding practice and improvement
-					</Text>
+					</ThemedText>
 
 					<View style={styles.buttonContainer}>
 						<Link style={styles.button} href="/(auth)/sign-in">
@@ -29,7 +31,7 @@ export default function Index() {
 							<Text style={styles.buttonText}>Sign up</Text>
 						</Link>
 					</View>
-				</View>
+				</ThemedView>
 			</SignedOut>
 		</View>
 	);
@@ -38,7 +40,6 @@ export default function Index() {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: "#fff",
 	},
 	content: {
 		flex: 1,
@@ -56,12 +57,10 @@ const styles = StyleSheet.create({
 		fontSize: 32,
 		fontWeight: "bold",
 		marginBottom: 10,
-		color: "black",
 		textAlign: "center",
 	},
 	subtitle: {
 		fontSize: 18,
-		color: "#666",
 		textAlign: "center",
 		marginBottom: 40,
 	},
