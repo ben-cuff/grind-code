@@ -42,10 +42,6 @@ export default function InterviewChatDynamic() {
 	const colors = getThemeColors(theme === "dark");
 
 	useEffect(() => {
-		if (feedback) setDisabled(true);
-	}, [feedback]);
-
-	useEffect(() => {
 		const sendInterviewData = async () => {
 			await sendInterview(
 				getToken,
@@ -125,6 +121,8 @@ export default function InterviewChatDynamic() {
 
 	useEffect(() => {
 		if (feedback) {
+			setDisabled(true);
+
 			const sendFeedback = async () => {
 				const token = await getToken();
 				await fetch(

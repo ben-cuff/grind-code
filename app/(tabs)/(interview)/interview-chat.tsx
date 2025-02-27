@@ -42,10 +42,6 @@ export default function InterviewChat() {
 	const interviewId = uuid.v4();
 
 	useEffect(() => {
-		if (feedback) setDisabled(true);
-	}, [feedback]);
-
-	useEffect(() => {
 		const sendInterviewData = async () => {
 			await sendInterview(
 				getToken,
@@ -134,6 +130,8 @@ export default function InterviewChat() {
 
 	useEffect(() => {
 		if (feedback) {
+			setDisabled(true);
+
 			const sendFeedback = async () => {
 				const token = await getToken();
 				await fetch(
