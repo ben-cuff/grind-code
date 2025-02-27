@@ -1,3 +1,4 @@
+import InterviewButton from "@/components/interview/interview-button";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { getThemeColors } from "@/constants/theme";
@@ -10,7 +11,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Pressable, ScrollView, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-interface Interview {
+export interface Interview {
 	id: string;
 	completed: boolean;
 	updatedAt: string;
@@ -109,9 +110,7 @@ export default function InterviewTab() {
 									usage?.interviewUsage! < 10) ||
 								(!user?.premium && usage?.interviewUsage! < 1)
 							) {
-								router.push(
-									"/(tabs)/(interview)/interview-chat"
-								);
+								router.push("/interview-chat");
 							}
 						}}
 					>
@@ -138,54 +137,31 @@ export default function InterviewTab() {
 					{interviews
 						.filter((interview) => !interview.completed)
 						.map((interview) => (
-							<Pressable
+							<InterviewButton
 								key={interview.id}
-								style={[styles.buttonWrapper, { marginTop: 8 }]}
+								interview={interview}
+								colors={colors}
 								onPress={() => router.push(`/${interview.id}`)}
-							>
-								<LinearGradient
-									colors={[
-										colors.button.background[0],
-										colors.button.background[1],
-									]}
-									style={styles.button}
-								>
-									<ThemedText style={styles.buttonText}>
-										Question {interview.questionNumber} -{" "}
-										{new Date(
-											interview.updatedAt
-										).toLocaleDateString()}
-									</ThemedText>
-								</LinearGradient>
-							</Pressable>
+								getToken={getToken}
+								setInterviews={setInterviews}
+							/>
 						))}
 
 					<ThemedText style={styles.sectionTitle}>
 						Completed
 					</ThemedText>
+
 					{interviews
 						.filter((interview) => interview.completed)
 						.map((interview) => (
-							<Pressable
+							<InterviewButton
 								key={interview.id}
-								style={[styles.buttonWrapper, { marginTop: 8 }]}
+								interview={interview}
+								colors={colors}
 								onPress={() => router.push(`/${interview.id}`)}
-							>
-								<LinearGradient
-									colors={[
-										colors.button.background[0],
-										colors.button.background[1],
-									]}
-									style={styles.button}
-								>
-									<ThemedText style={styles.buttonText}>
-										Question {interview.questionNumber} -{" "}
-										{new Date(
-											interview.updatedAt
-										).toLocaleDateString()}
-									</ThemedText>
-								</LinearGradient>
-							</Pressable>
+								getToken={getToken}
+								setInterviews={setInterviews}
+							/>
 						))}
 				</ScrollView>
 			</SafeAreaView>
