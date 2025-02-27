@@ -1,17 +1,6 @@
 import { Message } from "@/types/message";
 import uuid from "react-native-uuid";
 
-type HandleSubmitProps = {
-	input: string;
-	isLoading: boolean;
-	setInput: (input: string) => void;
-	setIsLoading: (isLoading: boolean) => void;
-	messages: Message[];
-	setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
-	getToken: () => Promise<string | null>;
-	solution: string;
-};
-
 export const handleSubmit = async ({
 	input,
 	isLoading,
@@ -21,7 +10,16 @@ export const handleSubmit = async ({
 	setMessages,
 	getToken,
 	solution,
-}: HandleSubmitProps) => {
+}: {
+	input: string;
+	isLoading: boolean;
+	setInput: (input: string) => void;
+	setIsLoading: (isLoading: boolean) => void;
+	messages: Message[];
+	setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
+	getToken: () => Promise<string | null>;
+	solution: string;
+}) => {
 	if (!input.trim() || isLoading) return;
 
 	const userMessage: Message = {

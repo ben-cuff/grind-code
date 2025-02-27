@@ -6,7 +6,7 @@ import { getThemeColors } from "@/constants/theme";
 import { useTheme } from "@/context/theme-context";
 import { Message } from "@/types/message";
 import { Question } from "@/types/question";
-import { handleFeedback } from "@/utils/interview";
+import { handleFeedback } from "@/utils/interview-feedback";
 import { handleSubmit } from "@/utils/interview-submit";
 import { sendInterview } from "@/utils/send-interview";
 import { useAuth } from "@clerk/clerk-expo";
