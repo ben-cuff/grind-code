@@ -147,10 +147,12 @@ export default function SignInPage() {
 						<ThemedText style={{ fontSize: 20, marginTop: 20 }}>
 							Don't have an account?
 						</ThemedText>
-						<Button
-							title="Sign Up"
-							onPress={() => router.push("/sign-up")}
-						/>
+						<View style={{ marginTop: 10 }}>
+							<Button
+								title="Sign Up"
+								onPress={() => router.push("/sign-up")}
+							/>
+						</View>
 					</View>
 				</SafeAreaView>
 			</ThemedView>

@@ -117,40 +117,53 @@ export default function SignUpScreen() {
 						<ThemedText style={styles.title}>
 							Verify your email
 						</ThemedText>
-						<KeyboardAvoidingView
-							behavior={
-								Platform.OS === "ios" ? "padding" : "height"
-							}
-							keyboardVerticalOffset={120}
+						<View
+							style={{
+								width: "100%",
+								paddingHorizontal: 20,
+								flexShrink: 0,
+							}}
 						>
-							<View
-								style={[
-									styles.inputContainer,
-									{
-										backgroundColor: colors.surface,
-										borderColor: colors.text,
-										borderWidth: 2,
-									},
-								]}
+							<KeyboardAvoidingView
+								behavior={
+									Platform.OS === "ios" ? "padding" : "height"
+								}
+								keyboardVerticalOffset={120}
 							>
-								<TextInput
-									value={code}
-									placeholder="Enter your verification code"
-									placeholderTextColor={colors.text}
-									onChangeText={setCode}
-									maxLength={6}
-									keyboardType="number-pad"
-									returnKeyType="done"
-									onSubmitEditing={() => Keyboard.dismiss()}
-									style={{
-										...styles.input,
-										textAlign: "center",
-										color: colors.text,
-									}}
+								<View
+									style={[
+										styles.inputContainer,
+										{
+											backgroundColor: colors.surface,
+											borderColor: colors.text,
+											borderWidth: 2,
+										},
+									]}
+								>
+									<TextInput
+										value={code}
+										placeholder="Enter your verification code"
+										placeholderTextColor={colors.text}
+										onChangeText={setCode}
+										maxLength={6}
+										keyboardType="number-pad"
+										returnKeyType="done"
+										onSubmitEditing={() =>
+											Keyboard.dismiss()
+										}
+										style={{
+											...styles.input,
+											textAlign: "center",
+											color: colors.text,
+										}}
+									/>
+								</View>
+								<Button
+									title="Verify"
+									onPress={onVerifyPress}
 								/>
-							</View>
-							<Button title="Verify" onPress={onVerifyPress} />
-						</KeyboardAvoidingView>
+							</KeyboardAvoidingView>
+						</View>
 					</SafeAreaView>
 				</ThemedView>
 			</TouchableWithoutFeedback>
@@ -166,114 +179,140 @@ export default function SignUpScreen() {
 						style={styles.logo}
 					/>
 					<ThemedText style={styles.title}>Sign Up</ThemedText>
-					<KeyboardAvoidingView
-						behavior={Platform.OS === "ios" ? "padding" : "height"}
-						keyboardVerticalOffset={20}
+					<View
+						style={{
+							width: "100%",
+							paddingHorizontal: 20,
+							flexShrink: 0,
+							marginBottom: 10,
+						}}
 					>
-						<View
-							style={[
-								styles.inputContainer,
-								{
-									backgroundColor: colors.surface,
-									borderColor: colors.text,
-									borderWidth: 2,
-								},
-							]}
+						<KeyboardAvoidingView
+							behavior={
+								Platform.OS === "ios" ? "padding" : "height"
+							}
+							keyboardVerticalOffset={20}
 						>
-							<Ionicons
-								name="mail-outline"
-								size={25}
-								style={styles.icon}
-								color={colors.text}
-							/>
-							<TextInput
-								autoCapitalize="none"
-								value={emailAddress}
-								keyboardType="email-address"
-								placeholder="Enter email"
-								placeholderTextColor={colors.text}
-								onChangeText={(emailAddress) =>
-									setEmailAddress(emailAddress)
-								}
-								style={[styles.input, { color: colors.text }]}
-							/>
-						</View>
-					</KeyboardAvoidingView>
-					<KeyboardAvoidingView
-						behavior={Platform.OS === "ios" ? "padding" : "height"}
-						keyboardVerticalOffset={20}
-					>
-						<View
-							style={[
-								styles.inputContainer,
-								{
-									backgroundColor: colors.surface,
-									borderColor: colors.text,
-									borderWidth: 2,
-								},
-							]}
+							<View
+								style={[
+									styles.inputContainer,
+									{
+										backgroundColor: colors.surface,
+										borderColor: colors.text,
+										borderWidth: 2,
+									},
+								]}
+							>
+								<Ionicons
+									name="mail-outline"
+									size={25}
+									style={styles.icon}
+									color={colors.text}
+								/>
+								<TextInput
+									autoCapitalize="none"
+									value={emailAddress}
+									keyboardType="email-address"
+									placeholder="Enter email"
+									placeholderTextColor={colors.text}
+									onChangeText={(emailAddress) =>
+										setEmailAddress(emailAddress)
+									}
+									style={[
+										styles.input,
+										{ color: colors.text },
+									]}
+								/>
+							</View>
+						</KeyboardAvoidingView>
+						<KeyboardAvoidingView
+							behavior={
+								Platform.OS === "ios" ? "padding" : "height"
+							}
+							keyboardVerticalOffset={20}
 						>
-							<Ionicons
-								name="lock-closed-outline"
-								size={25}
-								style={styles.icon}
-								color={colors.text}
-							/>
-							<TextInput
-								value={password}
-								placeholder="Enter password"
-								placeholderTextColor={colors.text}
-								secureTextEntry={true}
-								onChangeText={(password) =>
-									setPassword(password)
-								}
-								style={[styles.input, { color: colors.text }]}
-							/>
-						</View>
-					</KeyboardAvoidingView>
-					<KeyboardAvoidingView
-						behavior={Platform.OS === "ios" ? "padding" : "height"}
-						keyboardVerticalOffset={20}
-					>
-						<View
-							style={[
-								styles.inputContainer,
-								{
-									backgroundColor: colors.surface,
-									borderColor: colors.text,
-									borderWidth: 2,
-								},
-							]}
+							<View
+								style={[
+									styles.inputContainer,
+									{
+										backgroundColor: colors.surface,
+										borderColor: colors.text,
+										borderWidth: 2,
+									},
+								]}
+							>
+								<Ionicons
+									name="lock-closed-outline"
+									size={25}
+									style={styles.icon}
+									color={colors.text}
+								/>
+								<TextInput
+									value={password}
+									placeholder="Enter password"
+									placeholderTextColor={colors.text}
+									secureTextEntry={true}
+									onChangeText={(password) =>
+										setPassword(password)
+									}
+									style={[
+										styles.input,
+										{ color: colors.text },
+									]}
+								/>
+							</View>
+						</KeyboardAvoidingView>
+						<KeyboardAvoidingView
+							behavior={
+								Platform.OS === "ios" ? "padding" : "height"
+							}
+							keyboardVerticalOffset={20}
 						>
-							<Ionicons
-								name="lock-closed-outline"
-								size={25}
-								style={styles.icon}
-								color={colors.text}
-							/>
-							<TextInput
-								value={confirmPassword}
-								placeholder="Enter password again"
-								placeholderTextColor={colors.text}
-								secureTextEntry={true}
-								onChangeText={(confirmPassword) =>
-									setConfirmPassword(confirmPassword)
-								}
-								style={[styles.input, { color: colors.text }]}
-							/>
-						</View>
-						<Button title="Continue" onPress={onSignUpPress} />
-					</KeyboardAvoidingView>
+							<View
+								style={[
+									styles.inputContainer,
+									{
+										backgroundColor: colors.surface,
+										borderColor: colors.text,
+										borderWidth: 2,
+									},
+								]}
+							>
+								<Ionicons
+									name="lock-closed-outline"
+									size={25}
+									style={styles.icon}
+									color={colors.text}
+								/>
+								<TextInput
+									value={confirmPassword}
+									placeholder="Enter password again"
+									placeholderTextColor={colors.text}
+									secureTextEntry={true}
+									onChangeText={(confirmPassword) =>
+										setConfirmPassword(confirmPassword)
+									}
+									style={[
+										styles.input,
+										{ color: colors.text },
+									]}
+								/>
+							</View>
+							<Button title="Continue" onPress={onSignUpPress} />
+						</KeyboardAvoidingView>
+					</View>
 					<OAuthGoogle message="Sign up with Google" />
 					<OAuthGitHub message="Sign up with GitHub" />
 					<View style={{ alignItems: "center" }}>
 						<ThemedText style={{ fontSize: 20, marginTop: 20 }}>
 							Already have an account?
 						</ThemedText>
-						<Button
-							title="Sign In"
-							onPress={() => router.push("/sign-in")}
-						/>
+						<View style={{ marginTop: 10 }}>
+							<Button
+								title="Sign In"
+								onPress={() => router.push("/sign-in")}
+							/>
+						</View>
 					</View>
 				</SafeAreaView>
 			</ThemedView>
@@ -284,9 +323,9 @@ export default function SignUpScreen() {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
+		paddingHorizontal: 20,
 		justifyContent: "center",
 		alignItems: "center",
-		paddingHorizontal: 20,
 	},
 	logo: {
 		height: 200,
