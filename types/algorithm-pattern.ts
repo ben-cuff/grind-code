@@ -22,4 +22,5 @@ export const algorithmPatterns: AlgorithmPattern[] = [
 	{ id: "trees", name: "Trees" },
 	{ id: "hashing", name: "Hashing" },
 	{ id: "linkedList", name: "Linked List" },
+	{ id: "divideAndConquer", name: "Divide and Conquer" },
 ];
