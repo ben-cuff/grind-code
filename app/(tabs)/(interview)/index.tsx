@@ -1,3 +1,4 @@
+import Accordion from "@/components/interview/accordion";
 import InterviewButton from "@/components/interview/interview-button";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
@@ -8,7 +9,13 @@ import { useFocusEffect } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
-import { Pressable, ScrollView, StyleSheet } from "react-native";
+import {
+	ActivityIndicator,
+	Pressable,
+	ScrollView,
+	StyleSheet,
+	View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export interface Interview {
@@ -40,6 +47,7 @@ export default function InterviewTab() {
 	const [interviews, setInterviews] = useState<Interview[]>([]);
 	const [usage, setUsage] = useState<Usage | null>(null);
 	const [user, setUser] = useState<User | null>(null);
+	const [loading, setLoading] = useState(true);
 	const { getToken } = useAuth();
 	const { userId } = useAuth();
 
@@ -87,84 +95,117 @@ export default function InterviewTab() {
 			setInterviews(interviewsData);
 		} catch (error) {
 			console.error("Failed to fetch interviews:", error);
+		} finally {
+			setLoading(false);
 		}
 	};
 
 	return (
 		<ThemedView style={{ flex: 1 }}>
-			<SafeAreaView style={styles.container}>
-				<ScrollView>
-					<ThemedText style={styles.title}>Interview</ThemedText>
-					<Pressable
-						style={[
-							styles.buttonWrapper,
-							((user?.premium && usage?.interviewUsage! >= 10) ||
-								(!user?.premium &&
-									usage?.interviewUsage! >= 1)) && {
-								opacity: 0.5,
-							},
-						]}
-						onPress={() => {
-							if (
-								(user?.premium &&
-									usage?.interviewUsage! < 10) ||
-								(!user?.premium && usage?.interviewUsage! < 1)
-							) {
-								router.push("/interview-chat");
-							}
+			{loading ? (
+				<SafeAreaView style={styles.container}>
+					<View
+						style={{
+							flex: 1,
+							alignContent: "center",
+							justifyContent: "center",
 						}}
 					>
-						<LinearGradient
-							colors={[
-								colors.button.background[0],
-								colors.button.background[1],
-							]}
-							style={styles.button}
+						<ActivityIndicator size={"large"} />
+						<ThemedText
+							style={{
+								marginTop: 10,
+								fontSize: 16,
+								textAlign: "center",
+							}}
 						>
-							<ThemedText style={styles.buttonText}>
-								{(user?.premium &&
+							Loading...
+						</ThemedText>
+					</View>
+				</SafeAreaView>
+			) : (
+				<SafeAreaView style={styles.container}>
+					<ScrollView>
+						<ThemedText style={styles.title}>Interview</ThemedText>
+						<Pressable
+							style={[
+								styles.buttonWrapper,
+								((user?.premium &&
 									usage?.interviewUsage! >= 10) ||
-								(!user?.premium && usage?.interviewUsage! >= 1)
-									? "Usage Limit Reached"
-									: "Start New Interview"}
-							</ThemedText>
-						</LinearGradient>
-					</Pressable>
-
-					<ThemedText style={styles.sectionTitle}>
-						In Progress
-					</ThemedText>
-					{interviews
-						.filter((interview) => !interview.completed)
-						.map((interview) => (
-							<InterviewButton
-								key={interview.id}
-								interview={interview}
-								colors={colors}
-								onPress={() => router.push(`/${interview.id}`)}
-								getToken={getToken}
-								setInterviews={setInterviews}
-							/>
-						))}
-
-					<ThemedText style={styles.sectionTitle}>
-						Completed
-					</ThemedText>
-
-					{interviews
-						.filter((interview) => interview.completed)
-						.map((interview) => (
-							<InterviewButton
-								key={interview.id}
-								interview={interview}
-								colors={colors}
-								onPress={() => router.push(`/${interview.id}`)}
-								getToken={getToken}
-								setInterviews={setInterviews}
-							/>
-						))}
-				</ScrollView>
-			</SafeAreaView>
+									(!user?.premium &&
+										usage?.interviewUsage! >= 1)) && {
+									opacity: 0.5,
+								},
+							]}
+							onPress={() => {
+								if (
+									(user?.premium &&
+										usage?.interviewUsage! < 10) ||
+									(!user?.premium &&
+										usage?.interviewUsage! < 1)
+								) {
+									router.push("/interview-chat");
+								}
+							}}
+						>
+							<LinearGradient
+								colors={[
+									colors.button.background[0],
+									colors.button.background[1],
+								]}
+								style={styles.button}
+							>
+								<ThemedText style={styles.buttonText}>
+									{(user?.premium &&
+										usage?.interviewUsage! >= 10) ||
+									(!user?.premium &&
+										usage?.interviewUsage! >= 1)
+										? "Usage Limit Reached"
+										: "Start New Interview"}
+								</ThemedText>
+							</LinearGradient>
+						</Pressable>
+						<Accordion
+							title="In Progress"
+							titleStyle={styles.sectionTitle}
+						>
+							{interviews
+								.filter((interview) => !interview.completed)
+								.map((interview) => (
+									<InterviewButton
+										key={interview.id}
+										interview={interview}
+										colors={colors}
+										onPress={() =>
+											router.push(`/${interview.id}`)
+										}
+										getToken={getToken}
+										setInterviews={setInterviews}
+									/>
+								))}
+						</Accordion>
+						<Accordion
+							title="Completed"
+							titleStyle={styles.sectionTitle}
+						>
+							{interviews
+								.filter((interview) => interview.completed)
+								.map((interview) => (
+									<InterviewButton
+										key={interview.id}
+										interview={interview}
+										colors={colors}
+										onPress={() =>
+											router.push(`/${interview.id}`)
+										}
+										getToken={getToken}
+										setInterviews={setInterviews}
+									/>
+								))}
+						</Accordion>
+					</ScrollView>
+				</SafeAreaView>
+			)}
 		</ThemedView>
 	);
 }
