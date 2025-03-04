@@ -120,12 +120,7 @@ export default function LearnScreen() {
 											padding: 6,
 											borderRadius: 1000,
 										}}
-										onPress={() => {
-											setLoading(true);
-											onPress(pattern).finally(() =>
-												setLoading(false)
-											);
-										}}
+										onPress={() => onPress(pattern)}
 									>
 										<Ionicons
 											name={"shuffle"}
