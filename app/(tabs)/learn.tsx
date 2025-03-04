@@ -3,13 +3,24 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { getThemeColors } from "@/constants/theme";
 import { useTheme } from "@/context/theme-context";
-import { algorithmPatterns } from "@/types/algorithm-pattern";
+import { AlgorithmPattern, algorithmPatterns } from "@/types/algorithm-pattern";
+import { Ionicons } from "@expo/vector-icons";
 import Markdown from "@ronradtke/react-native-markdown-display";
-import { SafeAreaView, ScrollView } from "react-native";
+import { router } from "expo-router";
+import { useState } from "react";
+import {
+	ActivityIndicator,
+	Alert,
+	Pressable,
+	SafeAreaView,
+	ScrollView,
+	View,
+} from "react-native";
 
 export default function LearnScreen() {
 	const { theme } = useTheme();
 	const colors = getThemeColors(theme === "dark");
+	const [loading, setLoading] = useState(false);
 
 	const markdownStyle = {
 		body: {
@@ -34,6 +45,34 @@ export default function LearnScreen() {
 		},
 	};
 
+	const onPress = async (pattern: AlgorithmPattern) => {
+		setLoading(true);
+		const response = await fetch(
+			`${process.env.EXPO_PUBLIC_BASE_URL}/questions/random-question/?pattern=${pattern.id}`,
+			{
+				method: "GET",
+				headers: {
+					"Content-Type": "application/json",
+				},
+			}
+		);
+
+		const data = await response.json();
+
+		if (data.error) {
+			Alert.alert(data.error);
+			return;
+		}
+
+		setLoading(false);
+
+		router.push("/(tabs)/(practice)");
+		router.push({
+			pathname: "/(tabs)/(practice)/[questionNumber]",
+			params: { questionNumber: data.questionNumber },
+		});
+	};
+
 	return (
 		<ThemedView style={{ flex: 1 }}>
 			<SafeAreaView>
@@ -50,6 +89,52 @@ export default function LearnScreen() {
 							<Markdown style={markdownStyle}>
 								{pattern.description}
 							</Markdown>
+							<View
+								style={{
+									marginTop: 10,
+									flexDirection: "row",
+									alignItems: "center",
+									justifyContent: "space-between",
+									padding: 12,
+									borderRadius: 8,
+									height: 64,
+								}}
+							>
+								<ThemedText
+									style={{
+										fontSize: 16,
+										fontWeight: "600",
+									}}
+								>
+									Practice this pattern
+								</ThemedText>
+								{loading ? (
+									<ActivityIndicator
+										size={"large"}
+										color={"gray"}
+									/>
+								) : (
+									<Pressable
+										style={{
+											backgroundColor: "orange",
+											padding: 6,
+											borderRadius: 1000,
+										}}
+										onPress={() => {
+											setLoading(true);
+											onPress(pattern).finally(() =>
+												setLoading(false)
+											);
+										}}
+									>
+										<Ionicons
+											name={"shuffle"}
+											size={28}
+											color="white"
+										/>
+									</Pressable>
+								)}
+							</View>
 						</Accordion>
 					))}
 				</ScrollView>
