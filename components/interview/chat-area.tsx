@@ -17,7 +17,7 @@ export default function ChatArea({ messages }: { messages: Message[] }) {
 	const { theme } = useTheme();
 	const colors = getThemeColors(theme === "dark");
 
-	const scrollViewRef = useRef<ScrollView>(null);
+	const scrollViewRef = useRef<ScrollView | null>(null);
 
 	const markdownStyle = {
 		body: {
@@ -43,7 +43,9 @@ export default function ChatArea({ messages }: { messages: Message[] }) {
 	};
 
 	useEffect(() => {
-		scrollViewRef.current?.scrollToEnd({ animated: true });
+		if (scrollViewRef.current) {
+			scrollViewRef.current.scrollToEnd({ animated: true });
+		}
 	}, [messages]);
 
 	return (
@@ -55,6 +57,7 @@ export default function ChatArea({ messages }: { messages: Message[] }) {
 					const isUser = msg.role === "user";
 					return (
 						<View
+							onStartShouldSetResponder={() => true}
 							key={msg.id}
 							style={[
 								styles.messageContainer,

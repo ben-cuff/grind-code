@@ -11,6 +11,7 @@ import { handleSubmit } from "@/utils/interview-submit";
 import { sendInterview } from "@/utils/send-interview";
 import { useAuth } from "@clerk/clerk-expo";
 import { LinearGradient } from "expo-linear-gradient";
+import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import {
 	ActivityIndicator,
@@ -23,9 +24,8 @@ import {
 	TouchableWithoutFeedback,
 	View,
 } from "react-native";
-import uuid from "react-native-uuid";
 
-export default function InterviewChat() {
+export default function InterviewChatDynamic() {
 	const [messages, setMessages] = useState<Message[]>([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [isLoadingFeedback, setIsLoadingFeedback] = useState(false);
@@ -33,13 +33,13 @@ export default function InterviewChat() {
 	const [solution, setSolution] = useState("");
 	const [question, setQuestion] = useState<Question | null>(null);
 	const [feedback, setFeedback] = useState<{ message: string }>();
+	const { interviewId } = useLocalSearchParams();
 	const [feedbackModal, toggleFeedbackModal] = useState(false);
 	const [disabled, setDisabled] = useState(false);
 	const [input, setInput] = useState("");
 	const { getToken } = useAuth();
 	const { theme } = useTheme();
 	const colors = getThemeColors(theme === "dark");
-	const interviewId = uuid.v4();
 
 	useEffect(() => {
 		const sendInterviewData = async () => {
@@ -64,40 +64,31 @@ export default function InterviewChat() {
 	useEffect(() => {
 		const fetchData = async () => {
 			setInitialLoad(true);
+
+			const token = await getToken();
 			const response = await fetch(
-				`${process.env.EXPO_PUBLIC_BASE_URL}/questions/random-question`,
+				`${process.env.EXPO_PUBLIC_BASE_URL}/interview/${interviewId}`,
 				{
-					method: "GET",
 					headers: {
+						Authorization: `Bearer ${token}`,
 						"Content-Type": "application/json",
 					},
 				}
 			);
+
+			if (!response.ok) {
+				const error = await response.json();
+				alert(error.error || "Failed to fetch interview");
+				return;
+			}
+
 			const data = await response.json();
-
-			setQuestion(data);
-
-			setMessages([
-				{
-					id: "initial",
-					role: "assistant",
-					content: data.prompt,
-				},
-			]);
-
-			const responseSolution = await fetch(
-				`${process.env.EXPO_PUBLIC_BASE_URL}/solutions/?questionNumber=${data.questionNumber}`,
-				{
-					method: "GET",
-					headers: {
-						"Content-Type": "application/json",
-					},
-				}
-			);
-
-			const dataSolution = await responseSolution.json();
-
-			setSolution(dataSolution.solution);
+			setMessages(data.interview.messages || []);
+			setQuestion(data.questionDetails);
+			setSolution(data.solution.solution || "");
+			if (data.interview.feedback) {
+				setFeedback({ message: data.interview.feedback });
+			}
 
 			setInitialLoad(false);
 		};

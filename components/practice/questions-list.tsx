@@ -1,3 +1,5 @@
+import { getThemeColors } from "@/constants/theme";
+import { useTheme } from "@/context/theme-context";
 import { Question } from "@/types/question";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
@@ -20,6 +22,8 @@ export default function QuestionsList({
 }) {
 	const [isLoading, setIsLoading] = useState(true);
 	const router = useRouter();
+	const { theme } = useTheme();
+	const colors = getThemeColors(theme === "dark");
 
 	useEffect(() => {
 		async function fetchQuestions() {
@@ -42,12 +46,19 @@ export default function QuestionsList({
 	}, []);
 
 	const handleRenderList = ({ item }: { item: Question }) => (
-		<View style={styles.container}>
-			<Text style={styles.text}>{item.name}</Text>
+		<View
+			style={[
+				styles.container,
+				{ backgroundColor: colors.background[1] },
+			]}
+		>
+			<Text style={[styles.text, { color: colors.text }]}>
+				{item.name}
+			</Text>
 			<Pressable
 				onPress={() =>
 					router.push({
-						pathname: "/(practice)/[questionNumber]",
+						pathname: "/(tabs)/(practice)/[questionNumber]",
 						params: { questionNumber: item.questionNumber },
 					})
 				}
@@ -67,9 +78,20 @@ export default function QuestionsList({
 			data={Array.from({ length: 10 })}
 			keyExtractor={(_, index) => index.toString()}
 			renderItem={() => (
-				<View style={styles.container}>
+				<View
+					style={[
+						styles.container,
+						{ backgroundColor: colors.background[1] },
+					]}
+				>
 					<Animated.View
-						style={[styles.skeleton, { opacity: pulseAnimation }]}
+						style={[
+							styles.skeleton,
+							{
+								opacity: pulseAnimation,
+								backgroundColor: colors.border,
+							},
+						]}
 					/>
 					<View style={styles.iconContainer}>
 						<Ionicons
@@ -112,7 +134,6 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "center",
 		padding: 8,
-		backgroundColor: "#f0f0f0",
 		borderRadius: 8,
 		marginVertical: 4,
 	},
@@ -128,7 +149,6 @@ const styles = StyleSheet.create({
 		borderRadius: 100,
 	},
 	skeleton: {
-		backgroundColor: "#ccc",
 		padding: 5,
 		width: "80%",
 		height: "95%",

@@ -1,3 +1,5 @@
+import { getThemeColors } from "@/constants/theme";
+import { useTheme } from "@/context/theme-context";
 import createAccount from "@/utils/account-creation";
 import { useAuth, useSSO } from "@clerk/clerk-expo";
 import * as AuthSession from "expo-auth-session";
@@ -9,9 +11,9 @@ import {
 	Platform,
 	Pressable,
 	StyleSheet,
-	Text,
 	View,
 } from "react-native";
+import { ThemedText } from "../themed-text";
 
 export const useWarmUpBrowser = () => {
 	useEffect(() => {
@@ -34,6 +36,9 @@ export default function OAuthGitHub({ message }: { message: string }) {
 	// Use the `useSSO()` hook to access the `startSSOFlow()` method
 	const { startSSOFlow } = useSSO();
 	const { getToken } = useAuth();
+
+	const { theme } = useTheme();
+	const colors = getThemeColors(theme === "dark");
 
 	const onPress = useCallback(async () => {
 		try {
@@ -66,16 +71,25 @@ export default function OAuthGitHub({ message }: { message: string }) {
 
 	return (
 		<Pressable onPress={onPress}>
-			<View style={styles.container}>
+			<View
+				style={[
+					styles.container,
+					{
+						backgroundColor: colors.card[1],
+					},
+				]}
+			>
 				{Platform.OS === "ios" ? (
 					<Button title={message} onPress={onPress} />
 				) : (
-					<Text style={styles.button}>{message}</Text>
+					<ThemedText style={styles.button}>{message}</ThemedText>
 				)}
 				<Image
-					source={{
-						uri: "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png",
-					}}
+					source={
+						theme === "dark"
+							? require("@/assets/images/github-mark-white.png")
+							: require("@/assets/images/github-mark.png")
+					}
 					style={styles.image}
 				/>
 			</View>
@@ -90,12 +104,12 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		borderWidth: 2,
 		borderRadius: 50,
-		borderColor: "blue",
 		margin: 10,
+		padding: 4,
 	},
 	image: {
-		width: 40,
-		height: 40,
+		width: 32,
+		height: 32,
 		borderRadius: 360,
 	},
 	button: {
@@ -103,7 +117,6 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 20,
 		textAlign: "center",
 		fontSize: 16,
-		color: "blue",
 		borderRadius: 6,
 	},
 });

@@ -1,5 +1,9 @@
 import OAuthGitHub from "@/components/auth/oauth-github";
 import OAuthGoogle from "@/components/auth/oauth-google";
+import { ThemedText } from "@/components/themed-text";
+import { ThemedView } from "@/components/themed-view";
+import { getThemeColors } from "@/constants/theme";
+import { useTheme } from "@/context/theme-context";
 import createAccount from "@/utils/account-creation";
 import { useAuth, useSignIn } from "@clerk/clerk-expo";
 import { useRouter } from "expo-router";
@@ -12,7 +16,6 @@ import {
 	KeyboardAvoidingView,
 	Platform,
 	StyleSheet,
-	Text,
 	TextInput,
 	TouchableWithoutFeedback,
 	View,
@@ -24,6 +27,8 @@ export default function SignInPage() {
 	const { signIn, setActive, isLoaded } = useSignIn();
 	const { getToken } = useAuth();
 	const router = useRouter();
+	const { theme } = useTheme();
+	const colors = getThemeColors(theme === "dark");
 
 	const [emailAddress, setEmailAddress] = React.useState("");
 	const [password, setPassword] = React.useState("");
@@ -62,69 +67,95 @@ export default function SignInPage() {
 
 	return (
 		<TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-			<SafeAreaView style={styles.container}>
-				<Image
-					source={require("@/assets/images/react-logo.png")}
-					style={styles.logo}
-				/>
-				<Text style={styles.title}>Login</Text>
-				<KeyboardAvoidingView
-					behavior={Platform.OS === "ios" ? "padding" : "height"}
-					keyboardVerticalOffset={20}
-				>
-					<View style={styles.inputContainer}>
-						<Ionicons
-							name="mail-outline"
-							size={25}
-							style={styles.icon}
-						/>
-
-						<TextInput
-							autoCapitalize="none"
-							value={emailAddress}
-							keyboardType="email-address"
-							placeholder="Enter email"
-							placeholderTextColor="#888"
-							onChangeText={(emailAddress) =>
-								setEmailAddress(emailAddress)
-							}
-							style={styles.input}
-						/>
-					</View>
-				</KeyboardAvoidingView>
-				<KeyboardAvoidingView
-					behavior={Platform.OS === "ios" ? "padding" : "height"}
-					keyboardVerticalOffset={20}
-				>
-					<View style={styles.inputContainer}>
-						<Ionicons
-							name="lock-closed-outline"
-							size={25}
-							style={styles.icon}
-						/>
-						<TextInput
-							value={password}
-							placeholder="Enter password"
-							placeholderTextColor="#888"
-							secureTextEntry={true}
-							onChangeText={(password) => setPassword(password)}
-							style={styles.input}
-						/>
-					</View>
-					<Button title="Sign in" onPress={onSignInPress} />
-				</KeyboardAvoidingView>
-				<OAuthGoogle message="Sign in with Google" />
-				<OAuthGitHub message="Sign in with GitHub" />
-				<View style={{ alignItems: "center" }}>
-					<Text style={{ fontSize: 20, marginTop: 20 }}>
-						Don't have an account?
-					</Text>
-					<Button
-						title="Sign Up"
-						onPress={() => router.push("/sign-up")}
+			<ThemedView style={{ flex: 1 }}>
+				<SafeAreaView style={styles.container}>
+					<Image
+						source={require("@/assets/images/react-logo.png")}
+						style={styles.logo}
 					/>
-				</View>
-			</SafeAreaView>
+					<ThemedText style={styles.title}>Login</ThemedText>
+					<KeyboardAvoidingView
+						behavior={Platform.OS === "ios" ? "padding" : "height"}
+						keyboardVerticalOffset={20}
+					>
+						<View
+							style={[
+								styles.inputContainer,
+								{
+									backgroundColor: colors.surface,
+									borderColor: colors.text,
+									borderWidth: 2,
+								},
+							]}
+						>
+							<Ionicons
+								name="mail-outline"
+								size={25}
+								style={styles.icon}
+								color={colors.text}
+							/>
+
+							<TextInput
+								autoCapitalize="none"
+								value={emailAddress}
+								keyboardType="email-address"
+								placeholder="Enter email"
+								placeholderTextColor={colors.text}
+								onChangeText={(emailAddress) =>
+									setEmailAddress(emailAddress)
+								}
+								style={[styles.input, { color: colors.text }]}
+							/>
+						</View>
+					</KeyboardAvoidingView>
+					<KeyboardAvoidingView
+						behavior={Platform.OS === "ios" ? "padding" : "height"}
+						keyboardVerticalOffset={20}
+					>
+						<View
+							style={[
+								styles.inputContainer,
+								{
+									backgroundColor: colors.surface,
+									borderColor: colors.text,
+									borderWidth: 2,
+								},
+							]}
+						>
+							<Ionicons
+								name="lock-closed-outline"
+								size={25}
+								style={styles.icon}
+								color={colors.text}
+							/>
+							<TextInput
+								value={password}
+								placeholder="Enter password"
+								placeholderTextColor={colors.text}
+								secureTextEntry={true}
+								style={[styles.input, { color: colors.text }]}
+								onChangeText={(password) =>
+									setPassword(password)
+								}
+							/>
+						</View>
+						<Button title="Sign in" onPress={onSignInPress} />
+					</KeyboardAvoidingView>
+					<OAuthGoogle message="Sign in with Google" />
+					<OAuthGitHub message="Sign in with GitHub" />
+					<View style={{ alignItems: "center" }}>
+						<ThemedText style={{ fontSize: 20, marginTop: 20 }}>
+							Don't have an account?
+						</ThemedText>
+						<View style={{ marginTop: 10 }}>
+							<Button
+								title="Sign Up"
+								onPress={() => router.push("/sign-up")}
+							/>
+						</View>
+					</View>
+				</SafeAreaView>
+			</ThemedView>
 		</TouchableWithoutFeedback>
 	);
 }
@@ -134,7 +165,6 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: "center",
 		alignItems: "center",
-		backgroundColor: "#fff",
 		paddingHorizontal: 20,
 	},
 	logo: {
@@ -147,14 +177,12 @@ const styles = StyleSheet.create({
 		fontSize: 32,
 		marginBottom: 40,
 		fontWeight: "bold",
-		color: "black",
 	},
 	inputContainer: {
 		flexDirection: "row",
 		alignItems: "center",
 		width: "100%",
 		height: 50,
-		backgroundColor: "#f1f1f1",
 		borderRadius: 8,
 		paddingHorizontal: 10,
 		marginBottom: 20,
