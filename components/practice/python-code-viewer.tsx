@@ -51,8 +51,6 @@ export default function PythonSolution({
 			try {
 				setIsLoading(true);
 
-				console.log(questionNumber);
-
 				const response = await fetch(
 					`${process.env.EXPO_PUBLIC_BASE_URL}/solutions/?questionNumber=${questionNumber}`,
 					{
@@ -64,8 +62,6 @@ export default function PythonSolution({
 				);
 
 				const data = await response.json();
-
-				console.log(data.solution);
 
 				setSolution(data.solution);
 			} catch (error) {

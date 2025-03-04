@@ -65,7 +65,6 @@ export const handleSubmit = async ({
 		);
 
 		if (!response.ok) {
-			console.log(response);
 			const errorData = await response.json();
 			alert(errorData.error || "Failed to fetch response");
 			throw new Error(errorData.message || "Failed to fetch response");
