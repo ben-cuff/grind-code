@@ -1,4 +1,4 @@
-import { Interview } from "@/app/(tabs)/(interview)";
+import { Interview } from "@/types/interview";
 import { AntDesign } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
