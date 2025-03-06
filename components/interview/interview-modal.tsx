@@ -70,13 +70,7 @@ export default function InterviewModal({
 					]}
 				>
 					{isLoading ? (
-						<View
-							style={{
-								flex: 1,
-								alignContent: "center",
-								marginTop: 20,
-							}}
-						>
+						<View style={styles.loadingContainer}>
 							<ActivityIndicator size={"large"} />
 							<ThemedText
 								style={{ textAlign: "center", marginTop: 12 }}
@@ -141,6 +135,12 @@ const styles = StyleSheet.create({
 		borderTopLeftRadius: 20,
 		borderTopRightRadius: 20,
 	} as ViewStyle,
+	loadingContainer: {
+		flex: 1,
+		alignContent: "center",
+		marginTop: 20,
+	} as ViewStyle,
+
 	scrollView: {
 		flex: 1,
 		marginBottom: 16,
