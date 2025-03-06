@@ -14,6 +14,7 @@ import {
 	Pressable,
 	SafeAreaView,
 	ScrollView,
+	StyleSheet,
 	View,
 } from "react-native";
 
@@ -89,17 +90,7 @@ export default function LearnScreen() {
 							<Markdown style={markdownStyle}>
 								{pattern.description}
 							</Markdown>
-							<View
-								style={{
-									marginTop: 10,
-									flexDirection: "row",
-									alignItems: "center",
-									justifyContent: "space-between",
-									padding: 12,
-									borderRadius: 8,
-									height: 64,
-								}}
-							>
+							<View style={styles.pressableContainer}>
 								<ThemedText
 									style={{
 										fontSize: 16,
@@ -115,11 +106,7 @@ export default function LearnScreen() {
 									/>
 								) : (
 									<Pressable
-										style={{
-											backgroundColor: "orange",
-											padding: 6,
-											borderRadius: 1000,
-										}}
+										style={styles.pressable}
 										onPress={() => onPress(pattern)}
 									>
 										<Ionicons
@@ -137,3 +124,20 @@ export default function LearnScreen() {
 		</ThemedView>
 	);
 }
+
+const styles = StyleSheet.create({
+	pressableContainer: {
+		marginTop: 10,
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "space-between",
+		padding: 12,
+		borderRadius: 8,
+		height: 64,
+	},
+	pressable: {
+		backgroundColor: "orange",
+		padding: 6,
+		borderRadius: 1000,
+	},
+});
