@@ -136,7 +136,6 @@ export default function SignUpScreen() {
 										{
 											backgroundColor: colors.surface,
 											borderColor: colors.text,
-											borderWidth: 2,
 										},
 									]}
 								>
@@ -179,14 +178,7 @@ export default function SignUpScreen() {
 						style={styles.logo}
 					/>
 					<ThemedText style={styles.title}>Sign Up</ThemedText>
-					<View
-						style={{
-							width: "100%",
-							paddingHorizontal: 20,
-							flexShrink: 0,
-							marginBottom: 10,
-						}}
-					>
+					<View style={styles.inputArea}>
 						<KeyboardAvoidingView
 							behavior={
 								Platform.OS === "ios" ? "padding" : "height"
@@ -199,7 +191,6 @@ export default function SignUpScreen() {
 									{
 										backgroundColor: colors.surface,
 										borderColor: colors.text,
-										borderWidth: 2,
 									},
 								]}
 							>
@@ -237,7 +228,6 @@ export default function SignUpScreen() {
 									{
 										backgroundColor: colors.surface,
 										borderColor: colors.text,
-										borderWidth: 2,
 									},
 								]}
 							>
@@ -274,7 +264,6 @@ export default function SignUpScreen() {
 									{
 										backgroundColor: colors.surface,
 										borderColor: colors.text,
-										borderWidth: 2,
 									},
 								]}
 							>
@@ -327,6 +316,12 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		alignItems: "center",
 	},
+	inputArea: {
+		width: "100%",
+		paddingHorizontal: 20,
+		flexShrink: 0,
+		marginBottom: 10,
+	},
 	logo: {
 		height: 200,
 		width: 200,
@@ -346,6 +341,7 @@ const styles = StyleSheet.create({
 		borderRadius: 8,
 		paddingHorizontal: 10,
 		marginBottom: 20,
+		borderWidth: 2,
 	},
 	icon: {
 		marginRight: 10,
