@@ -1,4 +1,4 @@
-import Accordion from "@/components/interview/accordion";
+import Accordion from "@/components/accordion";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { getThemeColors } from "@/constants/theme";
