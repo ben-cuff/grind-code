@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Animated, Pressable, View } from "react-native";
+import { Animated, Pressable, StyleSheet, View } from "react-native";
 import { ThemedText } from "../themed-text";
 
 export default function Accordion({
@@ -29,14 +29,7 @@ export default function Accordion({
 
 	return (
 		<View style={{ marginVertical: 10 }}>
-			<Pressable
-				onPress={toggleAccordion}
-				style={{
-					flexDirection: "row",
-					justifyContent: "space-between",
-					alignItems: "center",
-				}}
-			>
+			<Pressable onPress={toggleAccordion} style={styles.pressable}>
 				<ThemedText style={titleStyle}>{title}</ThemedText>
 				<ThemedText style={{ fontSize: 18 }}>
 					{expanded ? "▲" : "▼"}
@@ -50,3 +43,11 @@ export default function Accordion({
 		</View>
 	);
 }
+
+const styles = StyleSheet.create({
+	pressable: {
+		flexDirection: "row",
+		justifyContent: "space-between",
+		alignItems: "center",
+	},
+});
