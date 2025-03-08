@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Animated, Pressable, StyleSheet, View } from "react-native";
-import { ThemedText } from "../themed-text";
+import { ThemedText } from "./themed-text";
 
 export default function Accordion({
 	title,
