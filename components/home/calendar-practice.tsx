@@ -48,6 +48,7 @@ export default function CalendarHeatmapPractice() {
 	}));
 
 	const endDate = new Date();
+	endDate.setDate(endDate.getDate() - 1);
 
 	return (
 		<View
