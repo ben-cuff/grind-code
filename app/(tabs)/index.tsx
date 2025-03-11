@@ -3,10 +3,12 @@ import CalendarHeatmapPractice from "@/components/home/calendar-practice";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Activity } from "@/types/activity";
+import { fetchActivity } from "@/utils/activity";
 import { useAuth } from "@clerk/clerk-expo";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
 	ActivityIndicator,
+	RefreshControl,
 	SafeAreaView,
 	ScrollView,
 	StyleSheet,
@@ -17,33 +19,39 @@ export default function HomeTab() {
 	const [isLoading, setIsLoading] = useState(true);
 	const [calendarData, setCalendarData] = useState<Activity[] | null>(null);
 	const { getToken } = useAuth();
+	const [refreshing, setRefreshing] = React.useState(false);
+
+	const onRefresh = React.useCallback(async () => {
+		setRefreshing(true);
+		setIsLoading(true);
+
+		await fetchActivity(getToken, setCalendarData);
+
+		setRefreshing(false);
+		setIsLoading(false);
+	}, [getToken]);
 
 	useEffect(() => {
-		async function getActivity() {
-			const token = await getToken();
-
-			const response = await fetch(
-				`${process.env.EXPO_PUBLIC_BASE_URL}/accounts/123/activity`,
-				{
-					method: "GET",
-					headers: {
-						Authorization: `Bearer ${token}`,
-					},
-				}
-			);
-
-			const data = await response.json();
-
-			setCalendarData(data);
+		async function loadInitialData() {
+			setIsLoading(true);
+			await fetchActivity(getToken, setCalendarData);
 			setIsLoading(false);
 		}
-		getActivity();
+		loadInitialData();
 	}, []);
 
 	return (
 		<ThemedView style={styles.container}>
 			<SafeAreaView style={styles.safeArea}>
-				<ScrollView contentContainerStyle={styles.scrollContent}>
+				<ScrollView
+					contentContainerStyle={styles.scrollContent}
+					refreshControl={
+						<RefreshControl
+							refreshing={refreshing}
+							onRefresh={onRefresh}
+						/>
+					}
+				>
 					<ThemedText style={styles.headerTitle}>
 						Dashboard
 					</ThemedText>
