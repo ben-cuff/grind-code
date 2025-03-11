@@ -2,9 +2,44 @@ import CalendarHeatmapInterviews from "@/components/home/calendar-interviews";
 import CalendarHeatmapPractice from "@/components/home/calendar-practice";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
-import { SafeAreaView, ScrollView, StyleSheet } from "react-native";
+import { Activity } from "@/types/activity";
+import { useAuth } from "@clerk/clerk-expo";
+import { useEffect, useState } from "react";
+import {
+	ActivityIndicator,
+	SafeAreaView,
+	ScrollView,
+	StyleSheet,
+	View,
+} from "react-native";
 
 export default function HomeTab() {
+	const [isLoading, setIsLoading] = useState(true);
+	const [calendarData, setCalendarData] = useState<Activity[] | null>(null);
+	const { getToken } = useAuth();
+
+	useEffect(() => {
+		async function getActivity() {
+			const token = await getToken();
+
+			const response = await fetch(
+				`${process.env.EXPO_PUBLIC_BASE_URL}/accounts/123/activity`,
+				{
+					method: "GET",
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				}
+			);
+
+			const data = await response.json();
+
+			setCalendarData(data);
+			setIsLoading(false);
+		}
+		getActivity();
+	}, []);
+
 	return (
 		<ThemedView style={styles.container}>
 			<SafeAreaView style={styles.safeArea}>
@@ -26,8 +61,23 @@ export default function HomeTab() {
 							</ThemedText>
 						</ThemedView>
 					</ThemedView>
-					<CalendarHeatmapInterviews />
-					<CalendarHeatmapPractice />
+					{isLoading || !calendarData ? (
+						<View style={styles.loadingContainer}>
+							<ActivityIndicator color={"gray"} size={"large"} />
+							<ThemedText style={styles.loadingText}>
+								Loading...
+							</ThemedText>
+						</View>
+					) : (
+						<>
+							<CalendarHeatmapInterviews
+								calendarData={calendarData!}
+							/>
+							<CalendarHeatmapPractice
+								calendarData={calendarData!}
+							/>
+						</>
+					)}
 				</ScrollView>
 			</SafeAreaView>
 		</ThemedView>
@@ -43,6 +93,7 @@ const styles = StyleSheet.create({
 	},
 	scrollContent: {
 		padding: 16,
+		flex: 1,
 	},
 	header: {
 		flexDirection: "row",
@@ -66,5 +117,16 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		lineHeight: 24,
 		marginBottom: 12,
+	},
+	loadingContainer: {
+		flex: 1,
+		alignItems: "center",
+		justifyContent: "center",
+		marginBottom: 100,
+	},
+	loadingText: {
+		textAlign: "center",
+		marginTop: 10,
+		fontSize: 16,
 	},
 });
