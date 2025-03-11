@@ -7,6 +7,7 @@ import { ThemedView } from "@/components/themed-view";
 import { getThemeColors } from "@/constants/theme";
 import { useTheme } from "@/context/theme-context";
 import { Question } from "@/types/question";
+import { useAuth } from "@clerk/clerk-expo";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
@@ -25,8 +26,30 @@ export default function PracticeProblemScreen() {
 	const [correctModal, setCorrectModal] = useState(false);
 	const [aiModal, setAiModal] = useState(false);
 	const [solutionModal, setSolutionModal] = useState(false);
+	const [initialCorrectModal, setInitialCorrectModal] = useState(false);
 	const { theme } = useTheme();
 	const colors = getThemeColors(theme === "dark");
+	const { getToken } = useAuth();
+
+	useEffect(() => {
+		async function postActivity() {
+			if (correctModal && !initialCorrectModal) {
+				const token = await getToken();
+				await fetch(
+					`${process.env.EXPO_PUBLIC_BASE_URL}/accounts/123/activity/practice`,
+					{
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json",
+							Authorization: `Bearer ${token}`,
+						},
+					}
+				);
+				setInitialCorrectModal(true);
+			}
+		}
+		postActivity();
+	}, [correctModal]);
 
 	useEffect(() => {
 		async function fetchQuestions() {

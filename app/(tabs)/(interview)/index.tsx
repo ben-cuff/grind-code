@@ -1,9 +1,12 @@
-import Accordion from "@/components/interview/accordion";
+import Accordion from "@/components/accordion";
 import InterviewButton from "@/components/interview/interview-button";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { getThemeColors } from "@/constants/theme";
 import { useTheme } from "@/context/theme-context";
+import { Interview } from "@/types/interview";
+import { Usage } from "@/types/usage";
+import { User } from "@/types/user";
 import { useAuth } from "@clerk/clerk-expo";
 import { useFocusEffect } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
@@ -18,28 +21,6 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export interface Interview {
-	id: string;
-	completed: boolean;
-	updatedAt: string;
-	questionNumber: number;
-}
-
-interface User {
-	createdAt: string;
-	email: string;
-	id: string;
-	lastLogin: string;
-	premium: boolean;
-	updatedAt: string;
-}
-
-interface Usage {
-	askAIUsage: number;
-	interviewUsage: number;
-	askAILast: Date | null;
-	interviewLast: Date | null;
-}
 export default function InterviewTab() {
 	const router = useRouter();
 	const { theme } = useTheme();
@@ -104,21 +85,9 @@ export default function InterviewTab() {
 		<ThemedView style={{ flex: 1 }}>
 			{loading ? (
 				<SafeAreaView style={styles.container}>
-					<View
-						style={{
-							flex: 1,
-							alignContent: "center",
-							justifyContent: "center",
-						}}
-					>
+					<View style={styles.loadingContainer}>
 						<ActivityIndicator size={"large"} />
-						<ThemedText
-							style={{
-								marginTop: 10,
-								fontSize: 16,
-								textAlign: "center",
-							}}
-						>
+						<ThemedText style={styles.loadingText}>
 							Loading...
 						</ThemedText>
 					</View>
@@ -214,6 +183,16 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		padding: 16,
+	},
+	loadingContainer: {
+		flex: 1,
+		alignContent: "center",
+		justifyContent: "center",
+	},
+	loadingText: {
+		marginTop: 10,
+		fontSize: 16,
+		textAlign: "center",
 	},
 	title: {
 		fontSize: 48,

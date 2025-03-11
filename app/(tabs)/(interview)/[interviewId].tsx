@@ -174,9 +174,6 @@ export default function InterviewChatDynamic() {
 										backgroundColor: colors.surfaceAlt,
 										color: colors.text,
 										borderColor: colors.border,
-										maxHeight: 100,
-										padding: 8,
-										height: "auto",
 									},
 								]}
 								multiline
@@ -279,6 +276,9 @@ const styles = StyleSheet.create({
 		borderRadius: 8,
 		paddingHorizontal: 12,
 		fontSize: 16,
+		maxHeight: 100,
+		padding: 8,
+		height: "auto",
 	},
 	buttonWrapper: {
 		width: "100%",

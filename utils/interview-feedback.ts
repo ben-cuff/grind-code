@@ -18,9 +18,8 @@ export async function handleFeedback({
 		setIsLoadingFeedback(true);
 		const token = await getToken();
 
-		const response = await fetch(
-			`${process.env.EXPO_PUBLIC_BASE_URL}/openai/feedback`,
-			{
+		const [response, _] = await Promise.all([
+			fetch(`${process.env.EXPO_PUBLIC_BASE_URL}/openai/feedback`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -32,8 +31,18 @@ export async function handleFeedback({
 						content,
 					})),
 				}),
-			}
-		);
+			}),
+			fetch(
+				`${process.env.EXPO_PUBLIC_BASE_URL}/accounts/123/activity/interview`,
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${token}`,
+					},
+				}
+			),
+		]);
 
 		const data = await response.json();
 

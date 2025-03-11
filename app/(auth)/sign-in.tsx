@@ -84,7 +84,6 @@ export default function SignInPage() {
 								{
 									backgroundColor: colors.surface,
 									borderColor: colors.text,
-									borderWidth: 2,
 								},
 							]}
 						>
@@ -118,7 +117,6 @@ export default function SignInPage() {
 								{
 									backgroundColor: colors.surface,
 									borderColor: colors.text,
-									borderWidth: 2,
 								},
 							]}
 						>
@@ -186,6 +184,7 @@ const styles = StyleSheet.create({
 		borderRadius: 8,
 		paddingHorizontal: 10,
 		marginBottom: 20,
+		borderWidth: 2,
 	},
 	icon: {
 		marginRight: 10,
