@@ -12,26 +12,7 @@ export default function HomeTab() {
 					<ThemedText style={styles.headerTitle}>
 						Dashboard
 					</ThemedText>
-
-					<ThemedView style={styles.statsContainer}>
-						<ThemedView style={styles.statCard}>
-							<ThemedText style={styles.statValue}>42</ThemedText>
-							<ThemedText style={styles.statLabel}>
-								Tasks
-							</ThemedText>
-						</ThemedView>
-						<ThemedView style={styles.statCard}>
-							<ThemedText style={styles.statValue}>7</ThemedText>
-							<ThemedText style={styles.statLabel}>
-								Completed
-							</ThemedText>
-						</ThemedView>
-					</ThemedView>
-
 					<ThemedView style={styles.sectionContainer}>
-						<ThemedText style={styles.sectionTitle}>
-							About This App
-						</ThemedText>
 						<ThemedView style={styles.appInfoContainer}>
 							<ThemedText style={styles.appInfoText}>
 								Grind Code helps you track your coding practice
@@ -73,34 +54,8 @@ const styles = StyleSheet.create({
 		fontSize: 28,
 		fontWeight: "bold",
 	},
-	statsContainer: {
-		flexDirection: "row",
-		justifyContent: "space-around",
-		marginBottom: 24,
-	},
-	statCard: {
-		backgroundColor: "#f0f0f0",
-		borderRadius: 12,
-		padding: 16,
-		width: "45%",
-		alignItems: "center",
-	},
-	statValue: {
-		fontSize: 32,
-		fontWeight: "bold",
-		marginBottom: 4,
-	},
-	statLabel: {
-		fontSize: 14,
-		color: "#666",
-	},
 	sectionContainer: {
 		marginBottom: 24,
-	},
-	sectionTitle: {
-		fontSize: 20,
-		fontWeight: "bold",
-		marginBottom: 16,
 	},
 	appInfoContainer: {
 		padding: 16,
