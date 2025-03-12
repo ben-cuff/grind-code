@@ -23,12 +23,11 @@ export default function HomeTab() {
 
 	const onRefresh = React.useCallback(async () => {
 		setRefreshing(true);
-		setIsLoading(true);
-
-		await fetchActivity(getToken, setCalendarData);
-
+		await Promise.all([
+			fetchActivity(getToken, setCalendarData),
+			new Promise(resolve => setTimeout(resolve, 1000))
+		]);
 		setRefreshing(false);
-		setIsLoading(false);
 	}, [getToken]);
 
 	useEffect(() => {
