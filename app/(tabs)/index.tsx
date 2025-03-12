@@ -78,10 +78,10 @@ export default function HomeTab() {
 					) : (
 						<>
 							<CalendarHeatmapInterviews
-								calendarData={calendarData!}
+								calendarData={calendarData}
 							/>
 							<CalendarHeatmapPractice
-								calendarData={calendarData!}
+								calendarData={calendarData}
 							/>
 						</>
 					)}
