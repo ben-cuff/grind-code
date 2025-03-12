@@ -13,10 +13,11 @@ export default function CalendarHeatmapPractice({
 	const { theme } = useTheme();
 	const colors = getThemeColors(theme === "dark");
 
-	const values = calendarData.map((item) => ({
-		date: new Date(item.date).toISOString().split("T")[0],
-		count: item.practiceCount,
-	}));
+	const values = calendarData.flatMap((item) =>
+		Array.from({ length: item.practiceCount }, () => ({
+			date: new Date(item.date).toISOString().split("T")[0],
+		}))
+	);
 
 	const endDate = new Date();
 	endDate.setDate(endDate.getDate() - 1);
@@ -30,7 +31,7 @@ export default function CalendarHeatmapPractice({
 				styles.container,
 			]}
 		>
-			<ThemedText style={styles.text}>Interview Activity</ThemedText>
+			<ThemedText style={styles.text}>Practice Activity</ThemedText>
 			<CalendarHeatmap
 				endDate={endDate}
 				numDays={90}

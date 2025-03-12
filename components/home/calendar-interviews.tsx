@@ -13,10 +13,11 @@ export default function CalendarHeatmapInterviews({
 	const { theme } = useTheme();
 	const colors = getThemeColors(theme === "dark");
 
-	const values = calendarData.map((item) => ({
-		date: new Date(item.date).toISOString().split("T")[0],
-		count: item.interviewCount,
-	}));
+	const values = calendarData.flatMap((item) =>
+		Array.from({ length: item.interviewCount }, () => ({
+			date: new Date(item.date).toISOString().split("T")[0],
+		}))
+	);
 
 	const endDate = new Date();
 	endDate.setDate(endDate.getDate() - 1);
