@@ -52,8 +52,11 @@ export default function NextProblem({
 
 						setIsLoading(false);
 						toggleCorrectModal(false);
-						router.push("/practice");
-						router.push(`/practice/${data.questionNumber}`);
+						router.push("/(tabs)/(practice)");
+						router.push({
+							pathname: "/(tabs)/(practice)/[questionNumber]",
+							params: { questionNumber: data.questionNumber },
+						});
 					}}
 				>
 					<Ionicons
