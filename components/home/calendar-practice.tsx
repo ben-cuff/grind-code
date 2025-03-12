@@ -44,6 +44,29 @@ export default function CalendarHeatmapPractice({
 					"#239a3b",
 					"#196127",
 				]}
+				onPress={(value: number) => {
+					const today = new Date();
+					const currentDayOfWeek = today.getDay();
+
+					const dayOffset =
+						currentDayOfWeek === 0 ? 7 : 7 - currentDayOfWeek;
+
+					const date = new Date();
+					date.setDate(date.getDate() - (89 - value) - dayOffset);
+					const formattedDate = date.toISOString().split("T")[0];
+					const activityForDate = calendarData.find(
+						(activity) =>
+							new Date(activity.date)
+								.toISOString()
+								.split("T")[0] === formattedDate
+					);
+
+					console.log(
+						`Date: ${formattedDate}, Practices completed: ${
+							activityForDate ? activityForDate.practiceCount : 0
+						}`
+					);
+				}}
 			/>
 		</View>
 	);
