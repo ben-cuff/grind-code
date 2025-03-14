@@ -1,5 +1,4 @@
-import CalendarHeatmapInterviews from "@/components/home/calendar-interviews";
-import CalendarHeatmapPractice from "@/components/home/calendar-practice";
+import CalendarHeatmapCombined from "@/components/home/calendar-combined";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Activity } from "@/types/activity";
@@ -25,7 +24,7 @@ export default function HomeTab() {
 		setRefreshing(true);
 		await Promise.all([
 			fetchActivity(getToken, setCalendarData),
-			new Promise(resolve => setTimeout(resolve, 1000))
+			new Promise((resolve) => setTimeout(resolve, 1000)),
 		]);
 		setRefreshing(false);
 	}, [getToken]);
@@ -77,11 +76,15 @@ export default function HomeTab() {
 						</View>
 					) : (
 						<>
-							<CalendarHeatmapInterviews
+							<CalendarHeatmapCombined
 								calendarData={calendarData}
+								title={"Interview Activity"}
+								route={"interview"}
 							/>
-							<CalendarHeatmapPractice
+							<CalendarHeatmapCombined
 								calendarData={calendarData}
+								title={"Practice Activity"}
+								route={"practice"}
 							/>
 						</>
 					)}

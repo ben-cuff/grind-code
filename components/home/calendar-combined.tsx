@@ -5,19 +5,25 @@ import { StyleSheet, View } from "react-native";
 import CalendarHeatmap from "react-native-calendar-heatmap";
 import { ThemedText } from "../themed-text";
 
-export default function CalendarHeatmapInterviews({
+export default function CalendarHeatmapCombined({
 	calendarData,
+	title,
+	route,
 }: {
 	calendarData: Activity[];
+	title: String;
+	route: string;
 }) {
 	const { theme } = useTheme();
 	const colors = getThemeColors(theme === "dark");
 
-	const values = calendarData.flatMap((item) =>
-		Array.from({ length: item.interviewCount }, () => ({
+	const values = calendarData.flatMap((item) => {
+		const count =
+			route === "practice" ? item.practiceCount : item.interviewCount;
+		return Array.from({ length: count || 0 }, () => ({
 			date: new Date(item.date).toISOString().split("T")[0],
-		}))
-	);
+		}));
+	});
 
 	const endDate = new Date();
 	endDate.setDate(endDate.getDate() - 1);
@@ -31,7 +37,7 @@ export default function CalendarHeatmapInterviews({
 				styles.container,
 			]}
 		>
-			<ThemedText style={styles.text}>Interview Activity</ThemedText>
+			<ThemedText style={styles.text}>{title}</ThemedText>
 			<CalendarHeatmap
 				endDate={endDate}
 				numDays={90}
